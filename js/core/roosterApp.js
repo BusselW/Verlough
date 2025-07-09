@@ -6,6 +6,7 @@
 // Cache buster: 2025-01-12-v7-urenperweek-color-debug-fix
 // Cache buster: 2025-01-12-v8-team-header-color-fix
 // Cache buster: 2025-01-12-v9-team-id-mapping-fix
+// Cache buster: 2025-01-12-v10-force-refresh-fix
 // Cache buster: 2025-01-12-v9-profile-cards-avatars-fix
 // Cache buster: 2025-01-12-v10-missing-css-classes-fix
 // Cache buster: 2025-01-12-v13-zittingsvrij-class-fix
