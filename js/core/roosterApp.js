@@ -9,7 +9,7 @@
 // Cache buster: 2025-01-12-v15-zv-fixes-clean
 // Cache buster: 2025-01-12-v16-urenperweek-blocks-fix
 // Cache buster: 2025-01-12-v17-filter-special-day-types-only
-// Cache buster: 2025-01-12-v19-fix-block-display-only-required-types
+// Cache buster: 2025-01-12-v20-verlof-redenen-lookup-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -914,7 +914,26 @@ const RoosterApp = () => {
                     .filter(item => item.Naam && item.Actief !== false)
                     .map(item => ({ ...item, id: item.ID, naam: item.Naam, team: teamNameToIdMap[item.Team] || '', Username: item.Username || null }));
                 setMedewerkers(medewerkersProcessed);
-                setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: new Date(v.StartDatum), EindDatum: new Date(v.EindDatum) })));
+                setVerlofItems((verlofData || []).map(v => {
+                    // Look up the corresponding Verlofredenen entry based on RedenId or Reden
+                    const verlofReden = (verlofredenenData || []).find(vr => 
+                        vr.ID == v.RedenId || vr.Title === v.Reden || vr.Naam === v.Reden
+                    );
+                    
+                    return {
+                        ...v, 
+                        StartDatum: new Date(v.StartDatum), 
+                        EindDatum: new Date(v.EindDatum),
+                        // Add shiftType info for DagCell to use
+                        shiftType: verlofReden ? {
+                            Titel: verlofReden.Title || verlofReden.Naam,
+                            Kleur: verlofReden.Kleur || '#4a90e2',
+                            AfkortingTitel: verlofReden.Afkorting || 'V'
+                        } : null,
+                        // Also add VerlofRedenId for backwards compatibility
+                        VerlofRedenId: v.RedenId
+                    };
+                }));
                 setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: new Date(z.ZittingsVrijeDagTijd), EindDatum: new Date(z.ZittingsVrijeDagTijdEind) })));
                 setCompensatieUrenItems((compensatieUrenData || []).map(c => ({
                     ...c,
