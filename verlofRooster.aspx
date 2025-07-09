@@ -751,6 +751,7 @@
                             })
                         )
                     )
+                )
                 ];
                 
                 (periodeData || []).forEach((dag, index) => {
