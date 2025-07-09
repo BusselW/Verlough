@@ -402,11 +402,13 @@
         // User Registration Check Component
         // =====================
         const UserRegistrationCheck = ({ onUserValidated, children }) => {
+            console.log('🚀 UserRegistrationCheck component initialized');
             const [isChecking, setIsChecking] = useState(true);
             const [isRegistered, setIsRegistered] = useState(false);
             const [currentUser, setCurrentUser] = useState(null);
 
             useEffect(() => {
+                console.log('📋 UserRegistrationCheck useEffect triggered');
                 checkUserRegistration();
             }, []);
 
@@ -701,6 +703,7 @@
         // Hoofd RoosterApp Component
         // =====================
         const RoosterApp = () => {
+            console.log('🏠 RoosterApp component initialized');
             const [isUserValidated, setIsUserValidated] = useState(false);
             const [weergaveType, setWeergaveType] = useState('maand');
             const [huidigJaar, setHuidigJaar] = useState(new Date().getFullYear());
@@ -2499,6 +2502,7 @@
                 );
 
                 // Wrap the entire app content with UserRegistrationCheck
+                console.log('🎯 About to render UserRegistrationCheck wrapper');
                 return h(UserRegistrationCheck, { 
                     onUserValidated: setIsUserValidated 
                 }, fragmentContent);
