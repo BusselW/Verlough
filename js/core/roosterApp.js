@@ -1668,7 +1668,9 @@ const RoosterApp = () => {
                                                 getVerlofVoorDag: getVerlofVoorDag,
                                                 getZittingsvrijVoorDag: getZittingsvrijVoorDag,
                                                 getCompensatieUrenVoorDag: getCompensatieUrenVoorDag,
+                                                getUrenPerWeekVoorDag: (username, date) => getUrenPerWeekForDate(username, date),
                                                 shiftTypes: shiftTypes,
+                                                dagenIndicators: dagenIndicators,
                                                 onCellClick: handleCellClick,
                                                 // Pass selection state to DagCell for proper styling
                                                 isSelected: isInSelection,
