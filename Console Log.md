@@ -1,4 +1,4 @@
-roosterApp.js:82  Uncaught ReferenceError: useState is not defined
+Y:
     at RoosterApp (roosterApp.js:82:51)
     at renderWithHooks (react-dom.development.js:15496:20)
     at mountIndeterminateComponent (react-dom.development.js:20113:15)
