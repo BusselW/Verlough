@@ -486,13 +486,59 @@
         console.log('Root element exists:', !!document.getElementById('root'));
         console.log('React available:', typeof React !== 'undefined');
         console.log('ReactDOM available:', typeof ReactDOM !== 'undefined');
-        root.render(h(ErrorBoundary, null, h(RoosterApp)));
+        root.render(h(ErrorBoundary, null, 
+            h(UserRegistrationCheck, { 
+                onUserValidated: (isValid) => {
+                    console.log('User validation result:', isValid);
+                    if (isValid) {
+                        console.log('✅ User validated, app ready to use');
+                    }
+                }
+            }, h(RoosterApp))
+        ));
 
         // Make functions globally available for use in other components
         window.canManageOthersEvents = canManageOthersEvents;
         window.getProfilePhotoUrl = getProfilePhotoUrl;
         window.fetchSharePointList = fetchSharePointList;
+        window.getCurrentUser = getCurrentUser;
+        window.getUserInfo = getUserInfo;
+        window.getCurrentUserGroups = getCurrentUserGroups;
+        window.isUserInAnyGroup = isUserInAnyGroup;
         window.TooltipManager = TooltipManager; // Expose TooltipManager for debugging
+        
+        // Expose navigation utility
+        window.NavigationButtons = NavigationButtons;
+        
+        // Expose all imported form components globally for dynamic usage
+        window.VerlofAanvraagForm = VerlofAanvraagForm;
+        window.CompensatieUrenForm = CompensatieUrenForm;
+        window.ZiekteMeldingForm = ZiekteMeldingForm;
+        window.ZittingsvrijForm = ZittingsvrijForm;
+        window.Modal = Modal;
+        window.DagCell = DagCell;
+        window.ContextMenu = ContextMenu;
+        window.FAB = FAB;
+        
+        // Expose utility functions
+        window.getInitialen = getInitialen;
+        window.trimLoginNaamPrefix = trimLoginNaamPrefix;
+        window.renderHorenStatus = renderHorenStatus;
+        window.getHorenStatus = getHorenStatus;
+        window.filterMedewerkersByHorenStatus = filterMedewerkersByHorenStatus;
+        
+        // Expose date/time utilities
+        window.dateTimeUtils = {
+            maandNamenVolledig,
+            getPasen,
+            getFeestdagen,
+            getWeekNummer,
+            getWekenInJaar,
+            getDagenInMaand,
+            formatteerDatum,
+            getDagenInWeek,
+            isVandaag
+        };
         
         // Expose loading logic functions for debugging and manual control
         window.LoadingLogic = LoadingLogic;
