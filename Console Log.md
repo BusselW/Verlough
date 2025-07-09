@@ -23,11 +23,16 @@ tooltipbar.js:1054    - window.feestdagVandaag() - Check if today is a feestdag
 tooltipbar.js:1055    - window.feestdagenDezeMaand() - Get all feestdagen this month
 tooltipbar.js:1056    - window.TooltipManager - Access full TooltipManager object
 tooltipbar.js:64 TooltipManager already initialized
-Verlofrooster.aspx:2526 ðŸ”§ LoadingLogic utilities added to window:
-Verlofrooster.aspx:2527    - window.LoadingLogic - Full LoadingLogic object
-Verlofrooster.aspx:2528    - window.clearLoadingCache() - Clear all cached data
-Verlofrooster.aspx:2529    - window.getLoadingStats() - Get cache statistics
-Verlofrooster.aspx:2530    - window.logLoadingStatus() - Log current loading status
+Verlofrooster.aspx:2512 ðŸŽ¯ About to render React app
+Verlofrooster.aspx:2513 Root element exists: true
+Verlofrooster.aspx:2514 React available: true
+Verlofrooster.aspx:2515 ReactDOM available: true
+Verlofrooster.aspx:2530 ðŸ”§ LoadingLogic utilities added to window:
+Verlofrooster.aspx:2531    - window.LoadingLogic - Full LoadingLogic object
+Verlofrooster.aspx:2532    - window.clearLoadingCache() - Clear all cached data
+Verlofrooster.aspx:2533    - window.getLoadingStats() - Get cache statistics
+Verlofrooster.aspx:2534    - window.logLoadingStatus() - Log current loading status
+Verlofrooster.aspx:2536 âœ… Script execution completed successfully!
 profielkaarten.js:987 Initializing ProfielKaarten...
 profielkaarten.js:813 ProfielKaarten: Initializing with selector ".medewerker-naam, .medewerker-avatar"
 profielkaarten.js:834 ProfielKaarten: Found 0 elements matching ".medewerker-naam, .medewerker-avatar"
@@ -58,3 +63,4 @@ tooltipbar.js:523 Found 0 feestdag elements
 tooltipbar.js:550 Found 0 button elements
 tooltipbar.js:583 Found 0 icon/title elements
 tooltipbar.js:594 ✅ Auto-attach tooltips completed: 0 tooltips attached
+
