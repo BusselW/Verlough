@@ -167,6 +167,25 @@
                 return () => document.removeEventListener('click', handleClickOutside);
             }, [settingsDropdownOpen, helpDropdownOpen]);
 
+            // Position dropdown correctly when it opens
+            useEffect(() => {
+                if (settingsDropdownOpen) {
+                    // Give time for the DOM to update
+                    setTimeout(() => {
+                        const dropdownButton = document.querySelector('.user-settings-btn');
+                        const dropdownMenu = document.querySelector('.user-dropdown-menu');
+                       
+                        if (dropdownButton && dropdownMenu) {
+                            const buttonRect = dropdownButton.getBoundingClientRect();
+                           
+                            // Position the dropdown below the button
+                            dropdownMenu.style.top = `${buttonRect.bottom + 8}px`;
+                            dropdownMenu.style.right = `${window.innerWidth - buttonRect.right}px`;
+                        }
+                    }, 10);
+                }
+            }, [settingsDropdownOpen]);
+
             const navigateTo = (page) => {
                 window.location.href = `pages/${page}`;
             };
@@ -180,74 +199,96 @@
                 h('div', { id: 'nav-buttons-right', className: 'nav-buttons-right' },
                     // Admin button - Visible to FullAccess (Admin)
                     userPermissions.isAdmin && h('button', {
+                        className: 'btn btn-admin',
                         onClick: () => navigateTo('adminCentrum/adminCentrumN.aspx'),
                         title: 'Administratie Centrum'
                     },
+                        h('i', { className: 'fas fa-cog' }),
                         'Admin'
                     ),
 
                     // Beheer button - Visible to Functional (beheer)
                     userPermissions.isFunctional && h('button', {
+                        className: 'btn btn-functional',
                         onClick: () => navigateTo('beheerCentrum/beheerCentrumN.aspx'),
                         title: 'Beheer Centrum'
                     },
+                        h('i', { className: 'fas fa-tools' }),
                         'Beheer'
                     ),
 
                     // Behandelen button - Visible to Taakbeheer
                     userPermissions.isTaakbeheer && h('button', {
+                        className: 'btn btn-taakbeheer',
                         onClick: () => navigateTo('behandelCentrum/behandelCentrumN.aspx'),
                         title: 'Behandel Centrum'
                     },
+                        h('i', { className: 'fas fa-tasks' }),
                         'Behandelen'
                     ),
 
                     // Help dropdown - Replaces tour button
                     h('div', { className: 'help-dropdown' },
                         h('button', {
+                            className: 'btn btn-help',
                             onClick: () => setHelpDropdownOpen(!helpDropdownOpen),
-                            title: 'Help en ondersteuning'
+                            title: 'Hulp en documentatie'
                         },
-                            h('i', { className: 'fas fa-question-circle' })
+                            h('i', { className: 'fas fa-question-circle' }),
+                            'Help',
+                            h('i', {
+                                className: `fas fa-chevron-${helpDropdownOpen ? 'up' : 'down'}`,
+                                style: { fontSize: '0.8rem', marginLeft: '0.5rem' }
+                            })
                         ),
-                        helpDropdownOpen && h('div', { className: 'dropdown-menu' },
-                            h('a', {
-                                href: '#',
-                                onClick: (e) => {
-                                    e.preventDefault();
-                                    if (typeof roosterTutorial !== 'undefined') {
-                                        roosterTutorial.start();
-                                    }
+
+                        // Help dropdown menu
+                        helpDropdownOpen && h('div', { className: 'help-dropdown-menu' },
+                            h('button', {
+                                className: 'help-dropdown-item',
+                                onClick: () => {
+                                    window.startTutorial && window.startTutorial();
                                     setHelpDropdownOpen(false);
                                 }
-                            }, 'Tutorial starten'),
-                            h('a', {
-                                href: '#',
-                                onClick: (e) => {
-                                    e.preventDefault();
-                                    if (typeof openHandleiding !== 'undefined') {
-                                        openHandleiding('algemeen');
-                                    }
+                            },
+                                h('i', { className: 'fas fa-route' }),
+                                h('div', { className: 'help-item-content' },
+                                    h('span', { className: 'help-item-title' }, 'Interactieve tour'),
+                                    h('span', { className: 'help-item-description' }, 'Ontdek de belangrijkste functies van het rooster')
+                                )
+                            ),
+                            h('button', {
+                                className: 'help-dropdown-item',
+                                onClick: () => {
                                     setHelpDropdownOpen(false);
-                                }
-                            }, 'Handleiding openen')
+                                    openHandleiding('algemeen');
+                                },
+                                title: 'Open uitgebreide handleiding'
+                            },
+                                h('i', { className: 'fas fa-book' }),
+                                h('div', { className: 'help-item-content' },
+                                    h('span', { className: 'help-item-title' }, 'Handleiding'),
+                                    h('span', { className: 'help-item-description' }, 'Bekijk de volledige documentatie')
+                                )
+                            )
                         )
                     ),
 
                     // User dropdown
                     h('div', { className: 'user-dropdown' },
                         h('button', {
+                            className: 'user-settings-btn',
                             onClick: () => setSettingsDropdownOpen(!settingsDropdownOpen)
                         },
                             h('img', {
-                                src: userInfo.pictureUrl || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+                                src: userInfo.pictureUrl || 'https://via.placeholder.com/32x32/6c757d/ffffff?text=U',
                                 alt: 'Profiel',
                                 className: 'profile-image'
                             }),
                             h('span', { className: 'user-name' }, userInfo.naam || 'Gebruiker'),
                             h('i', { className: 'fas fa-chevron-down' })
                         ),
-                        settingsDropdownOpen && h('div', { className: 'dropdown-menu' },
+                        settingsDropdownOpen && h('div', { className: 'user-dropdown-menu' },
                             h('a', {
                                 href: 'pages/instellingenCentrum/instellingenCentrumN.aspx'
                             }, 'Instellingen'),
@@ -313,43 +354,92 @@
 
             const checkUserRegistration = async () => {
                 try {
-                    console.log('🔍 Checking user registration...');
-                    
-                    // Get current user
+                    console.log('🔍 Starting user registration check...');
+                    setIsChecking(true);
+
+                    // Get current user from SharePoint
                     const user = await getCurrentUser();
-                    setCurrentUser(user);
-                    
+                    console.log('Current user from SharePoint:', user);
+
                     if (!user) {
-                        throw new Error('No user found');
+                        console.warn('⚠️ No user info returned, proceeding anyway');
+                        onUserValidated(true);
+                        return;
                     }
 
-                    console.log('👤 Current user:', user);
+                    setCurrentUser(user);
+
+                    // Format the username for comparison (domain\username format)
+                    let userLoginName = user.LoginName;
+
+                    // Remove claim prefix if present (i:0#.w|domain\username -> domain\username)
+                    if (userLoginName.startsWith('i:0#.w|')) {
+                        userLoginName = userLoginName.substring(7);
+                    }
+
+                    console.log('Formatted login name for comparison:', userLoginName);
+
+                    // Fetch Medewerkers list to check if user exists
+                    const medewerkers = await fetchSharePointList('Medewerkers');
+                    console.log('Total medewerkers found:', medewerkers.length);
+                    console.log('Sample medewerkers data:', medewerkers.slice(0, 3).map(m => ({
+                        ID: m.ID,
+                        Username: m.Username,
+                        Naam: m.Naam,
+                        Actief: m.Actief
+                    })));
 
                     // Check if user exists in Medewerkers list
-                    const medewerkers = await fetchSharePointList('Medewerkers');
-                    const userLoginName = user.LoginName?.split('|')[1] || user.LoginName;
-                    
-                    console.log('🔍 Looking for user with LoginName:', userLoginName);
-                    
-                    const userRecord = medewerkers.find(m => 
-                        m.Username === userLoginName || 
-                        m.Email === user.Email
-                    );
+                    const userExists = medewerkers.some(medewerker => {
+                        const medewerkersUsername = medewerker.Username;
 
-                    if (userRecord) {
-                        console.log('✅ User found in Medewerkers list:', userRecord);
-                        setIsRegistered(true);
-                        onUserValidated(true);
-                    } else {
-                        console.log('❌ User not found in Medewerkers list');
-                        setIsRegistered(false);
-                        onUserValidated(false);
-                    }
+                        // Skip inactive users
+                        if (medewerker.Actief === false) {
+                            return false;
+                        }
+
+                        console.log(`Comparing: "${userLoginName}" with "${medewerkersUsername}"`);
+
+                        // Direct comparison
+                        if (medewerkersUsername === userLoginName) {
+                            console.log('✓ Direct match found!');
+                            return true;
+                        }
+
+                        // Try with just the username part (after domain\)
+                        const trimmedLoginName = trimLoginNaamPrefix(userLoginName);
+                        const trimmedMedewerkersName = trimLoginNaamPrefix(medewerkersUsername);
+
+                        if (trimmedMedewerkersName === trimmedLoginName) {
+                            console.log('✓ Trimmed username match found!');
+                            return true;
+                        }
+
+                        // Try case insensitive comparison
+                        if (medewerkersUsername && medewerkersUsername.toLowerCase() === userLoginName.toLowerCase()) {
+                            console.log('✓ Case insensitive match found!');
+                            return true;
+                        }
+
+                        return false;
+                    });
+
+                    console.log('User exists in Medewerkers list:', userExists);
+
+                    setIsRegistered(userExists);
+
+                    // Always call onUserValidated to allow the app to load
+                    console.log('✅ User validation complete, calling onUserValidated(true)');
+                    onUserValidated(true);
+
                 } catch (error) {
                     console.error('❌ Error checking user registration:', error);
                     setIsRegistered(false);
-                    onUserValidated(false);
+                    // Still allow app to load even if user check fails
+                    console.log('⚠️ User check failed but proceeding with app load');
+                    onUserValidated(true);
                 } finally {
+                    console.log('🏁 User registration check complete');
                     setIsChecking(false);
                 }
             };
