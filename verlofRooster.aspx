@@ -1599,8 +1599,16 @@
                                 }
                             }
                            
-                            // Handle WeekType field (defaults to 'A' for backwards compatibility)
-                            const weekType = u.WeekType ? String(u.WeekType).trim() : 'A';
+                            // Handle WeekType field - preserve original value but normalize case
+                            let weekType = null;
+                            if (u.WeekType !== undefined && u.WeekType !== null && u.WeekType !== '') {
+                                weekType = String(u.WeekType).trim().toUpperCase();
+                                // Validate it's either A or B
+                                if (weekType !== 'A' && weekType !== 'B') {
+                                    console.error(`Invalid WeekType '${u.WeekType}' for record ID ${u.Id}, expected 'A' or 'B'`);
+                                    weekType = null;
+                                }
+                            }
                            
                             // Handle IsRotatingSchedule field (defaults to false for backwards compatibility)  
                             const isRotatingSchedule = u.IsRotatingSchedule === true || u.IsRotatingSchedule === 'true';
@@ -1994,9 +2002,11 @@
                             }
                            
                             // Find the record for this week type in this period
-                            const weekTypeRecord = selectedPeriod.records.find(record =>
-                                record.WeekType === requiredWeekType
-                            );
+                            const weekTypeRecord = selectedPeriod.records.find(record => {
+                                // Ensure case-insensitive comparison
+                                const recordWeekType = record.WeekType ? String(record.WeekType).trim().toUpperCase() : null;
+                                return recordWeekType === requiredWeekType.toUpperCase();
+                            });
                            
                             if (weekTypeRecord) {
                                 if (medewerkerId.toLowerCase().includes('rauf') || Math.random() < 0.1) {
@@ -2148,48 +2158,50 @@
 
                 // Show loading state while refreshing data or if data is not ready
                 if (loading || !periodeData || periodeData.length === 0) {
-                            return h('div', {
-                                className: 'flex items-center justify-center min-h-screen bg-gray-50',
-                                style: { fontFamily: 'Inter, sans-serif' }
-                            },
-                                h('div', { className: 'text-center' },
-                                    h('div', { className: 'loading-spinner', style: { margin: '0 auto 16px' } }),
-                                    h('h2', { className: 'text-xl font-medium text-gray-900' }, 'Rooster wordt geladen...'),
-                                    h('p', { className: 'text-gray-600 mt-2' }, 'Even geduld, we laden de roostergegevens.')
-                                )
-                            );
-                        }
+                    return h('div', {
+                        className: 'flex items-center justify-center min-h-screen bg-gray-50',
+                        style: { fontFamily: 'Inter, sans-serif' }
+                    },
+                        h('div', { className: 'text-center' },
+                            h('div', { className: 'loading-spinner', style: { margin: '0 auto 16px' } }),
+                            h('h2', { className: 'text-xl font-medium text-gray-900' }, 'Rooster wordt geladen...'),
+                            h('p', { className: 'text-gray-600 mt-2' }, 'Even geduld, we laden de roostergegevens.')
+                        )
+                    );
+                }
 
-                        // Show error state if there's an error
-                        if (error) {
-                            return h('div', {
-                                className: 'flex items-center justify-center min-h-screen bg-gray-50',
-                                style: { fontFamily: 'Inter, sans-serif' }
+                // Show error state if there's an error
+                if (error) {
+                    return h('div', {
+                        className: 'flex items-center justify-center min-h-screen bg-gray-50',
+                        style: { fontFamily: 'Inter, sans-serif' }
+                    },
+                        h('div', { className: 'max-w-md mx-auto bg-white rounded-lg shadow-lg p-8 text-center' },
+                            h('div', { className: 'mb-6' },
+                                h('div', {
+                                    className: 'mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4'
+                                },
+                                    h('i', { className: 'fas fa-exclamation-triangle text-red-600' })
+                                ),
+                                h('h2', { className: 'text-xl font-semibold text-gray-900 mb-2' }, 'Fout bij laden'),
+                                h('p', { className: 'text-gray-600' }, error)
+                            ),
+                            h('button', {
+                                className: 'bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200',
+                                onClick: () => window.location.reload()
                             },
-                                h('div', { className: 'max-w-md mx-auto bg-white rounded-lg shadow-lg p-8 text-center' },
-                                    h('div', { className: 'mb-6' },
-                                        h('div', {
-                                            className: 'mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4'
-                                        },
-                                            h('i', { className: 'fas fa-exclamation-triangle text-red-600' })
-                                        ),
-                                        h('h2', { className: 'text-xl font-semibold text-gray-900 mb-2' }, 'Fout bij laden'),
-                                        h('p', { className: 'text-gray-600' }, error)
-                                    ),
-                                    h('button', {
-                                        className: 'bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200',
-                                        onClick: () => window.location.reload()
-                                    },
-                                        h('i', { className: 'fas fa-sync-alt mr-2' }),
-                                        'Pagina Vernieuwen'
-                                    )
-                                )
-                            );
-                        }
+                                h('i', { className: 'fas fa-sync-alt mr-2' }),
+                                'Pagina Vernieuwen'
+                            )
+                        )
+                    );
+                }
 
-                        // Render de roosterkop en de medewerkerrijen
-                        const fragmentContent = h(Fragment, null,
-                    h('div', { className: 'sticky-header-container' },
+                // Render de roosterkop en de medewerkerrijen
+                return h(UserRegistrationCheck, { 
+                    onUserValidated: setIsUserValidated 
+                }, h(Fragment, null,
+                            h('div', { className: 'sticky-header-container' },
                         h('header', { id: 'header', className: 'header' },
                             h('div', { className: 'header-content' },
                                 // Left side - Melding button and title
@@ -2508,13 +2520,7 @@
                             initialData: selection && selection.itemData ? selection.itemData : {}
                         }))
                     ) // Close Fragment with all app content (table + contextMenu + FAB + 4 modals)
-                );
-
-                // Wrap the entire app content with UserRegistrationCheck
-                console.log('🎯 About to render UserRegistrationCheck wrapper');
-                return h(UserRegistrationCheck, { 
-                    onUserValidated: setIsUserValidated 
-                }, fragmentContent);
+                )); // Close UserRegistrationCheck wrapper
         }; // Close the RoosterApp function
 
             const root = ReactDOM.createRoot(document.getElementById('root'));
