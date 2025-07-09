@@ -1375,10 +1375,17 @@
                         setLoading(true);
                         setError(null);
 
-                        // Wait for configuration to be available
-                        if (!window.appConfiguratie) {
-                            console.log('⏳ Waiting for appConfiguratie...');
+                        // Wait for configuration to be available with timeout
+                        let configWaitAttempts = 0;
+                        const maxConfigWaitAttempts = 50; // 5 seconds max wait
+                        while (!window.appConfiguratie && configWaitAttempts < maxConfigWaitAttempts) {
+                            console.log(`⏳ Waiting for appConfiguratie... attempt ${configWaitAttempts + 1}/${maxConfigWaitAttempts}`);
                             await new Promise(r => setTimeout(r, 100));
+                            configWaitAttempts++;
+                        }
+
+                        if (!window.appConfiguratie) {
+                            throw new Error('Configuration not loaded after timeout');
                         }
 
                         // Check if fetchSharePointList is available
