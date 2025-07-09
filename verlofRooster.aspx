@@ -2532,6 +2532,8 @@
             console.log('   - window.clearLoadingCache() - Clear all cached data');
             console.log('   - window.getLoadingStats() - Get cache statistics');
             console.log('   - window.logLoadingStatus() - Log current loading status');
+            
+            console.log('✅ Script execution completed successfully!');
     </script>
 </body>
 </html>
