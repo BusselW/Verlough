@@ -1,6 +1,6 @@
 X:
-roosterApp.js:82  Uncaught ReferenceError: useState is not defined
-    at RoosterApp (roosterApp.js:82:51)
+roosterApp.js:1540  Uncaught ReferenceError: UserValidation is not defined
+    at RoosterApp (roosterApp.js:1540:22)
     at renderWithHooks (react-dom.development.js:15496:20)
     at mountIndeterminateComponent (react-dom.development.js:20113:15)
     at beginWork (react-dom.development.js:21636:18)
@@ -10,7 +10,7 @@ roosterApp.js:82  Uncaught ReferenceError: useState is not defined
     at beginWork$1 (react-dom.development.js:27500:9)
     at performUnitOfWork (react-dom.development.js:26609:14)
     at workLoopSync (react-dom.development.js:26515:7)
-RoosterApp @ roosterApp.js:82
+RoosterApp @ roosterApp.js:1540
 renderWithHooks @ react-dom.development.js:15496
 mountIndeterminateComponent @ react-dom.development.js:20113
 beginWork @ react-dom.development.js:21636
@@ -25,8 +25,8 @@ performConcurrentWorkOnRoot @ react-dom.development.js:25787
 workLoop @ react.development.js:2653
 flushWork @ react.development.js:2626
 performWorkUntilDeadline @ react.development.js:2920
-roosterApp.js:82  Uncaught ReferenceError: useState is not defined
-    at RoosterApp (roosterApp.js:82:51)
+roosterApp.js:1540  Uncaught ReferenceError: UserValidation is not defined
+    at RoosterApp (roosterApp.js:1540:22)
     at renderWithHooks (react-dom.development.js:15496:20)
     at mountIndeterminateComponent (react-dom.development.js:20113:15)
     at beginWork (react-dom.development.js:21636:18)
@@ -36,7 +36,7 @@ roosterApp.js:82  Uncaught ReferenceError: useState is not defined
     at beginWork$1 (react-dom.development.js:27500:9)
     at performUnitOfWork (react-dom.development.js:26609:14)
     at workLoopSync (react-dom.development.js:26515:7)
-RoosterApp @ roosterApp.js:82
+RoosterApp @ roosterApp.js:1540
 renderWithHooks @ react-dom.development.js:15496
 mountIndeterminateComponent @ react-dom.development.js:20113
 beginWork @ react-dom.development.js:21636
@@ -54,7 +54,7 @@ flushWork @ react.development.js:2626
 performWorkUntilDeadline @ react.development.js:2920
 react-dom.development.js:18714  The above error occurred in the <RoosterApp> component:
 
-    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/CPW/Rooster/js/core/roosterApp.js:82:51)
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/CPW/Rooster/js/core/roosterApp.js:118:51)
     at div
     at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/CPW/Rooster/verlofRoosterN.aspx:345:42)
     at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/CPW/Rooster/verlofRoosterN.aspx:315:17)
@@ -75,8 +75,8 @@ performConcurrentWorkOnRoot @ react-dom.development.js:25858
 workLoop @ react.development.js:2653
 flushWork @ react.development.js:2626
 performWorkUntilDeadline @ react.development.js:2920
-verlofRoosterN.aspx:324  Error Boundary gevangen fout: ReferenceError: useState is not defined
-    at RoosterApp (roosterApp.js:82:51)
+verlofRoosterN.aspx:324  Error Boundary gevangen fout: ReferenceError: UserValidation is not defined
+    at RoosterApp (roosterApp.js:1540:22)
     at renderWithHooks (react-dom.development.js:15496:20)
     at mountIndeterminateComponent (react-dom.development.js:20113:15)
     at beginWork (react-dom.development.js:21636:18)
