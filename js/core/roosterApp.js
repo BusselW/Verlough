@@ -1,6 +1,7 @@
 // Import React and necessary hooks and utilities
 // Cache buster: 2025-07-09-v3-uservalidation-fix
 // Cache buster: 2025-01-12-v4-react-key-props-fix
+// Cache buster: 2025-01-12-v5-user-validation-startup-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -116,7 +117,7 @@ const RoosterApp = () => {
         return cells;
     };
     console.log('🏠 RoosterApp component initialized');
-    const [isUserValidated, setIsUserValidated] = useState(false);
+    const [isUserValidated, setIsUserValidated] = useState(true);
     const [weergaveType, setWeergaveType] = useState('maand');
     const [huidigJaar, setHuidigJaar] = useState(new Date().getFullYear());
     const [huidigMaand, setHuidigMaand] = useState(new Date().getMonth());

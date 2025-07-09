@@ -487,18 +487,9 @@
         console.log('React available:', typeof React !== 'undefined');
         console.log('ReactDOM available:', typeof ReactDOM !== 'undefined');
         root.render(h(ErrorBoundary, null, 
-            h(UserRegistrationCheck, { 
-                onUserValidated: (isValid) => {
-                    console.log('User validation result:', isValid);
-                    if (isValid) {
-                        console.log('✅ User validated, app ready to use');
-                    }
-                }
-            }, 
-                h('div', { className: 'app-container' },
-                    h(NavigationButtons),
-                    h(RoosterApp)
-                )
+            h('div', { className: 'app-container' },
+                h(NavigationButtons),
+                h(RoosterApp)
             )
         ));
 
