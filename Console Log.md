@@ -1,22 +1,23 @@
-roosterApp.js:1578  Uncaught ReferenceError: createHeaderCells is not defined
-    at RoosterApp (roosterApp.js:1578:29)
-    at renderWithHooks (react-dom.development.js:15496:20)
-    at mountIndeterminateComponent (react-dom.development.js:20113:15)
-    at beginWork (react-dom.development.js:21636:18)
-    at HTMLUnknownElement.callCallback (react-dom.development.js:4151:16)
-    at Object.invokeGuardedCallbackDev (react-dom.development.js:4200:18)
-    at invokeGuardedCallback (react-dom.development.js:4264:33)
-    at beginWork$1 (react-dom.development.js:27500:9)
-    at performUnitOfWork (react-dom.development.js:26609:14)
-    at workLoopSync (react-dom.development.js:26515:7)
-RoosterApp @ roosterApp.js:1578
-renderWithHooks @ react-dom.development.js:15496
-mountIndeterminateComponent @ react-dom.development.js:20113
-beginWork @ react-dom.development.js:21636
-callCallback @ react-dom.development.js:4151
-invokeGuardedCallbackDev @ react-dom.development.js:4200
-invokeGuardedCallback @ react-dom.development.js:4264
-beginWork$1 @ react-dom.development.js:27500
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
 performUnitOfWork @ react-dom.development.js:26609
 workLoopSync @ react-dom.development.js:26515
 renderRootSync @ react-dom.development.js:26483
@@ -24,80 +25,3936 @@ performConcurrentWorkOnRoot @ react-dom.development.js:25787
 workLoop @ react.development.js:2653
 flushWork @ react.development.js:2626
 performWorkUntilDeadline @ react.development.js:2920
-roosterApp.js:1578  Uncaught ReferenceError: createHeaderCells is not defined
-    at RoosterApp (roosterApp.js:1578:29)
-    at renderWithHooks (react-dom.development.js:15496:20)
-    at mountIndeterminateComponent (react-dom.development.js:20113:15)
-    at beginWork (react-dom.development.js:21636:18)
-    at HTMLUnknownElement.callCallback (react-dom.development.js:4151:16)
-    at Object.invokeGuardedCallbackDev (react-dom.development.js:4200:18)
-    at invokeGuardedCallback (react-dom.development.js:4264:33)
-    at beginWork$1 (react-dom.development.js:27500:9)
-    at performUnitOfWork (react-dom.development.js:26609:14)
-    at workLoopSync (react-dom.development.js:26515:7)
-RoosterApp @ roosterApp.js:1578
-renderWithHooks @ react-dom.development.js:15496
-mountIndeterminateComponent @ react-dom.development.js:20113
-beginWork @ react-dom.development.js:21636
-callCallback @ react-dom.development.js:4151
-invokeGuardedCallbackDev @ react-dom.development.js:4200
-invokeGuardedCallback @ react-dom.development.js:4264
-beginWork$1 @ react-dom.development.js:27500
-performUnitOfWork @ react-dom.development.js:26609
-workLoopSync @ react-dom.development.js:26515
-renderRootSync @ react-dom.development.js:26483
-recoverFromConcurrentError @ react-dom.development.js:25899
-performConcurrentWorkOnRoot @ react-dom.development.js:25799
-workLoop @ react.development.js:2653
-flushWork @ react.development.js:2626
-performWorkUntilDeadline @ react.development.js:2920
-react-dom.development.js:18714  The above error occurred in the <RoosterApp> component:
-
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
     at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
     at div
     at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
     at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
     at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
-
-React will try to recreate this component tree from scratch using the error boundary you provided, ErrorBoundary.
-logCapturedError @ react-dom.development.js:18714
-callback @ react-dom.development.js:18782
-callCallback @ react-dom.development.js:15046
-commitUpdateQueue @ react-dom.development.js:15067
-commitLayoutEffectOnFiber @ react-dom.development.js:23413
-commitLayoutMountEffects_complete @ react-dom.development.js:24737
-commitLayoutEffects_begin @ react-dom.development.js:24723
-commitLayoutEffects @ react-dom.development.js:24661
-commitRootImpl @ react-dom.development.js:26872
-commitRoot @ react-dom.development.js:26731
-finishConcurrentRender @ react-dom.development.js:25941
-performConcurrentWorkOnRoot @ react-dom.development.js:25858
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
 workLoop @ react.development.js:2653
 flushWork @ react.development.js:2626
 performWorkUntilDeadline @ react.development.js:2920
-VerlofroosterN.aspx:388  Error Boundary gevangen fout: ReferenceError: createHeaderCells is not defined
-    at RoosterApp (roosterApp.js:1578:29)
-    at renderWithHooks (react-dom.development.js:15496:20)
-    at mountIndeterminateComponent (react-dom.development.js:20113:15)
-    at beginWork (react-dom.development.js:21636:18)
-    at beginWork$1 (react-dom.development.js:27475:16)
-    at performUnitOfWork (react-dom.development.js:26609:14)
-    at workLoopSync (react-dom.development.js:26515:7)
-    at renderRootSync (react-dom.development.js:26483:9)
-    at recoverFromConcurrentError (react-dom.development.js:25899:22)
-    at performConcurrentWorkOnRoot (react-dom.development.js:25799:24) {componentStack: '\n    at RoosterApp (https://som.org.om.local/sites…PW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)'}
-componentDidCatch @ VerlofroosterN.aspx:388
-callback @ react-dom.development.js:18795
-callCallback @ react-dom.development.js:15046
-commitUpdateQueue @ react-dom.development.js:15067
-commitLayoutEffectOnFiber @ react-dom.development.js:23413
-commitLayoutMountEffects_complete @ react-dom.development.js:24737
-commitLayoutEffects_begin @ react-dom.development.js:24723
-commitLayoutEffects @ react-dom.development.js:24661
-commitRootImpl @ react-dom.development.js:26872
-commitRoot @ react-dom.development.js:26731
-finishConcurrentRender @ react-dom.development.js:25941
-performConcurrentWorkOnRoot @ react-dom.development.js:25858
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at div
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19196
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
+workLoop @ react.development.js:2653
+flushWork @ react.development.js:2626
+performWorkUntilDeadline @ react.development.js:2920
+react-dom.development.js:73  Warning: Encountered two children with the same key, `[object Object]`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.
+    at tr
+    at thead
+    at table
+    at div
+    at main
+    at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/js/core/roosterApp.js:71:40)
+    at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:409:42)
+    at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:379:17)
+    at App (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/cpw/Rooster/VerlofroosterN.aspx:713:59)
+printWarning @ react-dom.development.js:73
+error @ react-dom.development.js:47
+warnOnInvalidKey @ react-dom.development.js:13539
+reconcileChildrenArray @ react-dom.development.js:13576
+reconcileChildFibers @ react-dom.development.js:14067
+reconcileChildren @ react-dom.development.js:19203
+updateHostComponent @ react-dom.development.js:19963
+beginWork @ react-dom.development.js:21667
+beginWork$1 @ react-dom.development.js:27475
+performUnitOfWork @ react-dom.development.js:26609
+workLoopSync @ react-dom.development.js:26515
+renderRootSync @ react-dom.development.js:26483
+performConcurrentWorkOnRoot @ react-dom.development.js:25787
 workLoop @ react.development.js:2653
 flushWork @ react.development.js:2626
 performWorkUntilDeadline @ react.development.js:2920
