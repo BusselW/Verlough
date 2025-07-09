@@ -171,7 +171,10 @@ const RoosterApp = () => {
         if (!loading && medewerkers.length > 0) {
             setTimeout(() => {
                 if (typeof ProfielKaarten !== 'undefined' && ProfielKaarten.init) {
+                    console.log('🔄 Initializing ProfielKaarten after data load');
                     ProfielKaarten.init();
+                } else {
+                    console.warn('ProfielKaarten not available');
                 }
             }, 500);
         }
@@ -184,6 +187,12 @@ const RoosterApp = () => {
             setTimeout(() => {
                 console.log('🔄 Triggering tooltip re-attachment after data load');
                 TooltipManager.autoAttachTooltips();
+                
+                // Re-initialize profile cards
+                if (typeof ProfielKaarten !== 'undefined' && ProfielKaarten.init) {
+                    console.log('🔄 Re-initializing ProfielKaarten after DOM update');
+                    ProfielKaarten.init();
+                }
                 
                 // Dispatch custom event for any components listening
                 const event = new CustomEvent('react-update', {
@@ -1584,8 +1593,25 @@ const RoosterApp = () => {
                                         // Employee name cell
                                         h('td', { className: 'medewerker-naam' },
                                             h('div', { className: 'medewerker-info' },
-                                                h('span', { className: 'naam' }, medewerker.Title || medewerker.naam),
-                                                medewerker.Functie && h('span', { className: 'functie' }, medewerker.Functie)
+                                                h('div', { className: 'medewerker-avatar-container' },
+                                                    h('img', {
+                                                        className: 'medewerker-avatar',
+                                                        src: getProfilePhotoUrl(medewerker.Username) || `https://placehold.co/40x40/4a90e2/ffffff?text=${getInitialen(medewerker.Title || medewerker.naam)}`,
+                                                        alt: medewerker.Title || medewerker.naam,
+                                                        onError: (e) => {
+                                                            e.target.src = `https://placehold.co/40x40/4a90e2/ffffff?text=${getInitialen(medewerker.Title || medewerker.naam)}`;
+                                                        }
+                                                    })
+                                                ),
+                                                h('div', { className: 'medewerker-details' },
+                                                    h('span', { 
+                                                        className: 'naam medewerker-naam',
+                                                        'data-username': medewerker.Username,
+                                                        'data-medewerker': medewerker.Title || medewerker.naam
+                                                    }, medewerker.Title || medewerker.naam),
+                                                    medewerker.Functie && h('span', { className: 'functie' }, medewerker.Functie),
+                                                    renderHorenStatus && renderHorenStatus(medewerker)
+                                                )
                                             )
                                         ),
                                         // Calendar cells for each day using DagCell component
