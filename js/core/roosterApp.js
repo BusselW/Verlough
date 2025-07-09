@@ -11,6 +11,7 @@
 // Cache buster: 2025-01-12-v17-filter-special-day-types-only
 // Cache buster: 2025-01-12-v20-verlof-redenen-lookup-fix
 // Cache buster: 2025-01-12-v21-verlof-start-end-blocks-and-css-fix
+// Cache buster: 2025-01-12-v22-urenperweek-block-css-classes-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -1477,18 +1478,18 @@ const RoosterApp = () => {
         };
 
         const gegroepeerdeData = useMemo(() => {
-            const gefilterdeMedewerkers = medewerkers.filter(m => (!zoekTerm || m.naam.toLowerCase().includes(zoekTerm.toLowerCase())) && (!geselecteerdTeam || m.team === geselecteerdTeam));
+            const gefilterdeMedewerkers = medewerkers.filter(m => (!zoekTerm || (m.Naam || m.naam || '').toLowerCase().includes(zoekTerm.toLowerCase())) && (!geselecteerdTeam || m.team === geselecteerdTeam));
             
-            // Sort medewerkers by Title column from Medewerkers SharePoint list based on sortDirection
+            // Sort medewerkers by Naam column from Medewerkers SharePoint list based on sortDirection
             const gesorteerdeFilters = gefilterdeMedewerkers.sort((a, b) => {
-                // Use the Title field from the SharePoint Medewerkers list specifically
-                const titleA = (a.Title || a.Naam || a.naam || 'Onbekend').toLowerCase().trim();
-                const titleB = (b.Title || b.Naam || b.naam || 'Onbekend').toLowerCase().trim();
+                // Use the Naam field from the SharePoint Medewerkers list specifically
+                const naamA = (a.Naam || a.naam || 'Onbekend').toLowerCase().trim();
+                const naamB = (b.Naam || b.naam || 'Onbekend').toLowerCase().trim();
                 
                 if (sortDirection === 'asc') {
-                    return titleA.localeCompare(titleB, 'nl', { numeric: true, sensitivity: 'base' });
+                    return naamA.localeCompare(naamB, 'nl', { numeric: true, sensitivity: 'base' });
                 } else {
-                    return titleB.localeCompare(titleA, 'nl', { numeric: true, sensitivity: 'base' });
+                    return naamB.localeCompare(naamA, 'nl', { numeric: true, sensitivity: 'base' });
                 }
             });
             
@@ -1652,18 +1653,18 @@ const RoosterApp = () => {
                                             h('div', { className: 'medewerker-info' },
                                                 h('img', {
                                                     className: 'medewerker-avatar',
-                                                    src: getProfilePhotoUrl(medewerker.Username) || `https://placehold.co/40x40/4a90e2/ffffff?text=${getInitialen(medewerker.Title || medewerker.naam)}`,
-                                                    alt: medewerker.Title || medewerker.naam,
+                                                    src: getProfilePhotoUrl(medewerker.Username) || `https://placehold.co/40x40/4a90e2/ffffff?text=${getInitialen(medewerker.Naam || medewerker.naam)}`,
+                                                    alt: medewerker.Naam || medewerker.naam,
                                                     onError: (e) => {
-                                                        e.target.src = `https://placehold.co/40x40/4a90e2/ffffff?text=${getInitialen(medewerker.Title || medewerker.naam)}`;
+                                                        e.target.src = `https://placehold.co/40x40/4a90e2/ffffff?text=${getInitialen(medewerker.Naam || medewerker.naam)}`;
                                                     }
                                                 }),
                                                 h('div', null,
                                                     h('span', { 
                                                         className: 'medewerker-naam',
                                                         'data-username': medewerker.Username,
-                                                        'data-medewerker': medewerker.Title || medewerker.naam
-                                                    }, medewerker.Title || medewerker.naam),
+                                                        'data-medewerker': medewerker.Naam || medewerker.naam
+                                                    }, medewerker.Naam || medewerker.naam),
                                                     medewerker.Functie && h('span', { className: 'medewerker-functie' }, medewerker.Functie)
                                                 ),
                                                 renderHorenStatus && renderHorenStatus(medewerker)
@@ -1715,7 +1716,7 @@ const RoosterApp = () => {
                                                     dag: dateObj,
                                                     medewerker: {
                                                         ...medewerker,
-                                                        Naam: medewerker.Title || medewerker.naam,
+                                                        Naam: medewerker.Naam || medewerker.naam,
                                                         Username: medewerker.Username
                                                     },
                                                     getVerlofVoorDag,
@@ -1735,7 +1736,7 @@ const RoosterApp = () => {
                                                     className: `dag-cel ${dateObj.getDay() === 0 || dateObj.getDay() === 6 ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isInSelection ? 'selected' : ''} ${isFirstClick ? 'first-click' : ''}`.trim(),
                                                     'data-feestdag': feestdagNaam || undefined,
                                                     'data-datum': dateObj.toISOString().split('T')[0],
-                                                    'data-medewerker': medewerker.Title || medewerker.naam,
+                                                    'data-medewerker': medewerker.Naam || medewerker.naam,
                                                     onContextMenu: (e) => showContextMenu(e, {
                                                         medewerker,
                                                         dag: dateObj,
@@ -1752,7 +1753,7 @@ const RoosterApp = () => {
                                                             backgroundColor: dagenIndicators[urenPerWeekData[`${dayName}Soort`]]?.kleur || '#cccccc'
                                                         },
                                                         'data-afkorting': urenPerWeekData[`${dayName}Soort`],
-                                                        'data-medewerker': medewerker.Title || medewerker.naam,
+                                                        'data-medewerker': medewerker.Naam || medewerker.naam,
                                                         'data-type': 'urenperweek'
                                                     }, urenPerWeekData[`${dayName}Soort`])
                                                 );

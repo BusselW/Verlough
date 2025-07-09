@@ -1244,6 +1244,9 @@ td.medewerker-kolom {
     width: 100% !important;
     display: block !important;
     margin: 0 !important;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Additional team header fixes to prevent spacing issues */
@@ -1369,6 +1372,19 @@ td.medewerker-kolom {
 .urenperweek-blok {
     /* Background color will be set dynamically via style attribute based on type */
     border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Specific colors for UrenPerWeek types (if not set via dagenIndicators data) */
+.urenperweek-blok[data-afkorting="VVO"] {
+    background-color: #3498db !important; /* Blue for Vaste Vrije Ochtend */
+}
+
+.urenperweek-blok[data-afkorting="VVD"] {
+    background-color: #e74c3c !important; /* Red for Vaste Vrije Dag */
+}
+
+.urenperweek-blok[data-afkorting="VVM"] {
+    background-color: #f39c12 !important; /* Orange for Vaste Vrije Middag */
 }
 
 .urenperweek-blok:hover {
