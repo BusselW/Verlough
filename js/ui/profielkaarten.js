@@ -989,3 +989,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 export default ProfielKaarten;
+
+console.log('ProfielKaarten module loaded successfully.');
