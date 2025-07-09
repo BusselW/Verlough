@@ -7,6 +7,7 @@
 // Cache buster: 2025-01-12-v10-missing-css-classes-fix
 // Cache buster: 2025-01-12-v13-zittingsvrij-class-fix
 // Cache buster: 2025-01-12-v15-zv-fixes-clean
+// Cache buster: 2025-01-12-v16-urenperweek-blocks-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -1640,13 +1641,11 @@ const RoosterApp = () => {
                                             const dateObj = dag instanceof Date ? dag : new Date(dag);
                                             // Add holiday information to the day object for DagCell
                                             const feestdagNaam = feestdagen[dateObj.toISOString().split('T')[0]];
-                                            const dagMitFeestdag = {
-                                                ...dateObj,
-                                                isFeestdag: !!feestdagNaam,
-                                                feestdagNaam: feestdagNaam,
-                                                isWeekend: dateObj.getDay() === 0 || dateObj.getDay() === 6
-                                            };
-
+                                            
+                                            // Get UrenPerWeek data for this day
+                                            const urenPerWeekData = getUrenPerWeekForDate(medewerker.Username, dateObj);
+                                            const dayName = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'][dateObj.getDay()];
+                                            
                                             // Check if this cell is in current selection
                                             const isInSelection = selection && 
                                                 selection.medewerkerId === medewerker.Username &&
@@ -1657,27 +1656,74 @@ const RoosterApp = () => {
                                                 firstClickData.medewerker.Username === medewerker.Username &&
                                                 firstClickData.dag.getTime() === dateObj.getTime();
 
-                                            return h(DagCell, {
+                                            // Get all data for this cell
+                                            const verlofItem = getVerlofVoorDag(medewerker.Username, dateObj);
+                                            const zittingsvrijItem = getZittingsvrijVoorDag(medewerker.Username, dateObj);
+                                            const compensatieUrenVoorDag = getCompensatieUrenVoorDag(medewerker.Username, dateObj);
+                                            
+                                            // Create custom cell with UrenPerWeek support
+                                            return h('td', {
                                                 key: `${medewerker.id}-${dagIndex}`,
-                                                dag: dateObj,
-                                                medewerker: {
-                                                    ...medewerker,
-                                                    Naam: medewerker.Title || medewerker.naam || medewerker.Name
-                                                },
-                                                onContextMenu: showContextMenu,
-                                                getVerlofVoorDag: getVerlofVoorDag,
-                                                getZittingsvrijVoorDag: getZittingsvrijVoorDag,
-                                                getCompensatieUrenVoorDag: getCompensatieUrenVoorDag,
-                                                getUrenPerWeekVoorDag: (username, date) => getUrenPerWeekForDate(username, date),
-                                                shiftTypes: shiftTypes,
-                                                dagenIndicators: dagenIndicators,
-                                                onCellClick: handleCellClick,
-                                                // Pass selection state to DagCell for proper styling
-                                                isSelected: isInSelection,
-                                                isFirstClick: isFirstClick,
-                                                // Pass additional data attributes
-                                                feestdagNaam: feestdagNaam
-                                            });
+                                                className: `dag-cel ${dateObj.getDay() === 0 || dateObj.getDay() === 6 ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isInSelection ? 'selected' : ''} ${isFirstClick ? 'first-click' : ''}`.trim(),
+                                                'data-feestdag': feestdagNaam || undefined,
+                                                'data-datum': dateObj.toISOString().split('T')[0],
+                                                'data-medewerker': medewerker.Title || medewerker.naam,
+                                                onContextMenu: (e) => showContextMenu(e, {
+                                                    medewerker,
+                                                    dag: dateObj,
+                                                    verlofItem,
+                                                    zittingsvrijItem,
+                                                    compensatieUren: compensatieUrenVoorDag
+                                                }),
+                                                onClick: () => {
+                                                    const itemToEdit = verlofItem || zittingsvrijItem || 
+                                                        (compensatieUrenVoorDag.length > 0 ? compensatieUrenVoorDag[0] : null);
+                                                    handleCellClick(medewerker, dateObj, itemToEdit);
+                                                }
+                                            },
+                                                // Render verlof blocks
+                                                verlofItem && h('div', {
+                                                    className: `verlof-blok start-blok ${verlofItem.Status?.toLowerCase() === 'ziek' ? 'ziekte-blok' : ''}`,
+                                                    style: { 
+                                                        backgroundColor: verlofItem.Status?.toLowerCase() === 'ziek' ? '#e74c3c' : 
+                                                            (shiftTypes[verlofItem.VerlofRedenId]?.kleur || '#4a90e2')
+                                                    },
+                                                    'data-afkorting': verlofItem.Status?.toLowerCase() === 'ziek' ? 'ZK' : 
+                                                        (shiftTypes[verlofItem.VerlofRedenId]?.afkorting || 'V'),
+                                                    'data-medewerker': medewerker.Title || medewerker.naam,
+                                                    'data-status': verlofItem.Status
+                                                }, verlofItem.Status?.toLowerCase() === 'ziek' ? 'ZK' : 
+                                                    (shiftTypes[verlofItem.VerlofRedenId]?.afkorting || 'V')),
+                                                
+                                                // Render zittingsvrij blocks  
+                                                zittingsvrijItem && h('div', {
+                                                    className: 'verlof-blok start-blok zittingsvrij-blok',
+                                                    style: { backgroundColor: '#8e44ad' },
+                                                    'data-afkorting': 'ZV',
+                                                    'data-medewerker': medewerker.Title || medewerker.naam
+                                                }, 'ZV'),
+                                                
+                                                // Render UrenPerWeek blocks
+                                                urenPerWeekData && urenPerWeekData[`${dayName}Soort`] && h('div', {
+                                                    className: 'dag-indicator-blok',
+                                                    style: { 
+                                                        backgroundColor: dagenIndicators[urenPerWeekData[`${dayName}Soort`]]?.kleur || '#cccccc'
+                                                    },
+                                                    'data-afkorting': urenPerWeekData[`${dayName}Soort`],
+                                                    'data-medewerker': medewerker.Title || medewerker.naam
+                                                }, urenPerWeekData[`${dayName}Soort`]),
+                                                
+                                                // Render compensatie blocks
+                                                ...compensatieUrenVoorDag.map(comp => h('div', {
+                                                    key: comp.ID,
+                                                    className: 'compensatie-uur-blok',
+                                                    'data-medewerker': medewerker.Title || medewerker.naam
+                                                }, h('img', {
+                                                    src: './icons/compensatieuren/neutraleuren.svg',
+                                                    className: 'compensatie-icon-svg',
+                                                    alt: 'compensatie'
+                                                })))
+                                            );
                                         })
                                     )
                                 )
