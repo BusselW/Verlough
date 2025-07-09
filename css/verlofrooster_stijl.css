@@ -1241,15 +1241,8 @@ td.medewerker-kolom {
     position: sticky;
     left: 0;
     z-index: 6;
-    border: none !important; /* Ensure no borders on team headers */
-    box-shadow: none !important; /* Remove any shadows */
-    text-align: left !important; /* Align text to the left */
-    width: 100% !important;
-    display: block !important;
-    margin: 0 !important;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    border: none; /* Ensure no borders on team headers */
+    box-shadow: none; /* Remove any shadows */
 }
 
 /* Additional team header fixes to prevent spacing issues */

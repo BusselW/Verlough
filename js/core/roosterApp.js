@@ -149,7 +149,7 @@ const RoosterApp = () => {
         return cells;
     };
     console.log('🏠 RoosterApp component initialized');
-    const [isUserValidated, setIsUserValidated] = useState(true);
+    const [isUserValidated, setIsUserValidated] = useState(false);
     const [weergaveType, setWeergaveType] = useState('maand');
     const [huidigJaar, setHuidigJaar] = useState(new Date().getFullYear());
     const [huidigMaand, setHuidigMaand] = useState(new Date().getMonth());

@@ -481,92 +481,32 @@
         // =====================
 
         // Render the application
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        console.log('🎯 About to render React app');
-        console.log('Root element exists:', !!document.getElementById('root'));
-        console.log('React available:', typeof React !== 'undefined');
-        console.log('ReactDOM available:', typeof ReactDOM !== 'undefined');
-        root.render(h(ErrorBoundary, null,
-            h('div', { className: 'sticky-header-container' },
-                h('header', { id: 'header', className: 'header' },
-                    h('div', { className: 'header-content' },
-                        // Left side - Melding button and title
-                        h('div', { className: 'header-left' },
-                            h('button', {
-                                className: 'btn btn-melding',
-                                onClick: () => window.location.href = 'pages/meldingMaken.aspx',
-                                title: 'Melding Maken'
-                            },
-                                h('i', { className: 'fas fa-exclamation-triangle' }),
-                                'Melding'
-                            ),
-                            h('h1', null, 'Verlofrooster')
-                        ),
-                        // Right side - Permission-based navigation
-                        h(NavigationButtons)
-                    )
-                )
-            ),
-            h(RoosterApp)
-        ));
+        const App = () => {
+            const [isUserValidated, setIsUserValidated] = useState(false);
 
-        // Make functions globally available for use in other components
-        window.canManageOthersEvents = canManageOthersEvents;
-        window.getProfilePhotoUrl = getProfilePhotoUrl;
-        window.fetchSharePointList = fetchSharePointList;
-        window.getCurrentUser = getCurrentUser;
-        window.getUserInfo = getUserInfo;
-        window.getCurrentUserGroups = getCurrentUserGroups;
-        window.isUserInAnyGroup = isUserInAnyGroup;
-        window.TooltipManager = TooltipManager; // Expose TooltipManager for debugging
-        
-        // Expose navigation utility
-        window.NavigationButtons = NavigationButtons;
-        
-        // Expose all imported form components globally for dynamic usage
-        window.VerlofAanvraagForm = VerlofAanvraagForm;
-        window.CompensatieUrenForm = CompensatieUrenForm;
-        window.ZiekteMeldingForm = ZiekteMeldingForm;
-        window.ZittingsvrijForm = ZittingsvrijForm;
-        window.Modal = Modal;
-        window.DagCell = DagCell;
-        window.ContextMenu = ContextMenu;
-        window.FAB = FAB;
-        
-        // Expose utility functions
-        window.getInitialen = getInitialen;
-        window.trimLoginNaamPrefix = trimLoginNaamPrefix;
-        window.renderHorenStatus = renderHorenStatus;
-        window.getHorenStatus = getHorenStatus;
-        window.filterMedewerkersByHorenStatus = filterMedewerkersByHorenStatus;
-        
-        // Expose date/time utilities
-        window.dateTimeUtils = {
-            maandNamenVolledig,
-            getPasen,
-            getFeestdagen,
-            getWeekNummer,
-            getWekenInJaar,
-            getDagenInMaand,
-            formatteerDatum,
-            getDagenInWeek,
-            isVandaag
+            // In the new structure, RoosterApp will handle its own visibility
+            // based on the validation prop. We just need to pass the state.
+            return h(ErrorBoundary, null,
+                h('div', { className: 'sticky-header-container' },
+                    h('header', { id: 'header', className: 'header' },
+                        h('div', { className: 'header-content' },
+                            h(NavigationButtons)
+                        )
+                    )
+                ),
+                h(UserRegistrationCheck, { onUserValidated: setIsUserValidated },
+                    // RoosterApp will now only render its content when isUserValidated is true.
+                    // The component itself is always rendered to manage its own state.
+                    h(RoosterApp, { isUserValidated: isUserValidated })
+                )
+            );
         };
-        
-        // Expose loading logic functions for debugging and manual control
-        window.LoadingLogic = LoadingLogic;
-        window.clearLoadingCache = clearAllCache;
-        window.getLoadingStats = LoadingLogic.getCacheStats;
-        window.logLoadingStatus = logLoadingStatus;
-        
-        console.log('🔧 LoadingLogic utilities added to window:');
-        console.log('   - window.LoadingLogic - Full LoadingLogic object');
-        console.log('   - window.clearLoadingCache() - Clear all cached data');
-        console.log('   - window.getLoadingStats() - Get cache statistics');
-        console.log('   - window.logLoadingStatus() - Log current loading status');
-        
-        console.log('✅ Script execution completed successfully!');
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(h(App));
+        console.log('🎯 React app rendered');
     </script>
 </body>
+
 </html>
 
