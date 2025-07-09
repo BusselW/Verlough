@@ -2067,8 +2067,8 @@
                     return d >= s && d <= e;
                 }
 
-                // Show loading state while refreshing data
-                if (loading) {
+                // Show loading state while refreshing data or if data is not ready
+                if (loading || !periodeData || periodeData.length === 0) {
                             return h('div', {
                                 className: 'flex items-center justify-center min-h-screen bg-gray-50',
                                 style: { fontFamily: 'Inter, sans-serif' }
