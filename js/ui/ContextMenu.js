@@ -321,3 +321,5 @@ export default ContextMenu;
 
 // Export the permission utility functions for use in other components
 export { canManageOthersEvents, canUserModifyItem };
+
+console.log("ContextMenu component loaded successfully.");

@@ -286,3 +286,5 @@ export default {
     initializePagePermissions,
     executeWithPermission
 };
+
+console.log("UI Permissions module loaded successfully.");

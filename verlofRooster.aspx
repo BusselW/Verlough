@@ -2170,7 +2170,7 @@
                                 style: { '--day-count': periodeData.length }
                             },
                                 h('thead', { className: 'rooster-thead' },
-                                    h('tr', null, 
+                                    h('tr', null,
                                         h('th', { className: 'medewerker-kolom', id: 'medewerker-kolom' }, 
                                             h('div', { 
                                                 className: 'medewerker-header-container',

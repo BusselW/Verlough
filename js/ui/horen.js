@@ -66,3 +66,5 @@ export function filterMedewerkersByHorenStatus(medewerkers, horenStatus) {
         medewerker && medewerker.Horen === horenStatus
     );
 }
+
+console.log("Horen module loaded successfully.");

@@ -262,3 +262,5 @@ const DagCell = ({ dag, medewerker, onContextMenu, getVerlofVoorDag, getZittings
 
 export default DagCell;
 export { renderCompensatieMomenten };
+
+console.log("DagCell component loaded successfully.");
