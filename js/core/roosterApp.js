@@ -3,6 +3,7 @@
 // Cache buster: 2025-01-12-v4-react-key-props-fix
 // Cache buster: 2025-01-12-v5-user-validation-startup-fix
 // Cache buster: 2025-01-12-v6-complete-ui-structure-fix
+// Cache buster: 2025-01-12-v7-dagcell-integration-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -1448,72 +1449,6 @@ const RoosterApp = () => {
             return d >= s && d <= e;
         }
 
-        // Create calendar cell content with all items and indicators
-        function createCellContent(medewerker, dag) {
-            const urenVoorDag = getUrenPerWeekForDate(medewerker.Username, dag);
-            const verlofItem = getVerlofVoorDag(medewerker.Username, dag);
-            const zittingsvrijItem = getZittingsvrijVoorDag(medewerker.Username, dag);
-            const compensatieItems = getCompensatieUrenVoorDag(medewerker.Username, dag);
-            const compensatieMomenten = getCompensatieMomentenVoorDag(dag);
-
-            const medewerkersCompensatieMomenten = compensatieMomenten.filter(moment => moment.item.MedewerkerID === medewerker.Username);
-            const heeftCompensatie = compensatieItems.length > 0 || medewerkersCompensatieMomenten.length > 0;
-            const inSelection = isDateInSelection(dag, medewerker.Username);
-
-            const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-            const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
-
-            let cellClasses = `cal-cell ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${inSelection ? 'geselecteerd' : ''}`;
-            if (verlofItem) cellClasses += ` verlof verlof-${verlofItem.Status?.toLowerCase()}`;
-            if (zittingsvrijItem) cellClasses += ' zittingsvrij';
-
-            const cellContent = [];
-
-            // Add work schedule hours if available
-            if (urenVoorDag) {
-                const dagNaam = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'][dag.getDay()];
-                const urenVeld = `Uren${dagNaam}`;
-                const uren = urenVoorDag[urenVeld];
-                if (uren) {
-                    cellContent.push(h('div', { className: 'cal-uren' }, uren));
-                }
-            }
-
-            // Add verlof display
-            if (verlofItem) {
-                const verlofType = shiftTypes[verlofItem.RedenId];
-                const statusClass = `status-${verlofItem.Status?.toLowerCase()}`;
-                cellContent.push(h('div', { 
-                    className: `cal-verlof ${statusClass}`,
-                    style: { backgroundColor: verlofType?.kleur }
-                }, verlofType?.afkorting || 'V'));
-            }
-
-            // Add zittingsvrij display
-            if (zittingsvrijItem) {
-                cellContent.push(h('div', { className: 'cal-zittingsvrij' }, 'ZV'));
-            }
-
-            // Add compensatie items display
-            if (compensatieItems.length > 0) {
-                compensatieItems.forEach(item => {
-                    const startTime = new Date(item.StartCompensatieUren);
-                    const endTime = new Date(item.EindeCompensatieUren);
-                    const timeDisplay = `${startTime.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}-${endTime.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}`;
-                    
-                    cellContent.push(h('div', { 
-                        className: 'cal-compensatie',
-                        onClick: (e) => {
-                            e.stopPropagation();
-                            handleCellClick(medewerker, dag, item);
-                        }
-                    }, timeDisplay));
-                });
-            }
-
-            return cellContent;
-        }
-
         // Main calendar cell click handler
         function handleCalendarCellClick(medewerker, dag) {
             return (e) => {
@@ -1626,59 +1561,63 @@ const RoosterApp = () => {
                             h('tr', { key: 'header-row' }, createHeaderCells())
                         ),
                         h('tbody', null,
-                        Object.entries(gegroepeerdeData).map(([teamId, teamMedewerkers]) => [
-                            // Team header row
-                            h('tr', { 
-                                key: `team-${teamId}`,
-                                className: 'team-header-row'
-                            },
-                                h('td', { 
-                                    colSpan: periodeData.length + 1,
-                                    className: 'team-header',
-                                    style: { backgroundColor: teamId === 'geen_team' ? '#f3f4f6' : teams.find(t => t.id === teamId)?.kleur }
-                                },
-                                    teamId === 'geen_team' ? 'Zonder team' : teams.find(t => t.id === teamId)?.naam
-                                )
-                            ),
-                            // Employee rows for this team
-                            ...teamMedewerkers.map(medewerker => 
+                            Object.entries(gegroepeerdeData).map(([teamId, teamMedewerkers]) => [
+                                // Team header row
                                 h('tr', { 
-                                    key: `medewerker-${medewerker.id}`,
-                                    className: 'medewerker-row'
+                                    key: `team-${teamId}`,
+                                    className: 'team-header-row'
                                 },
-                                    // Employee name cell
-                                    h('td', { className: 'medewerker-naam' },
-                                        h('div', { className: 'medewerker-info' },
-                                            h('span', { className: 'naam' }, medewerker.Title || medewerker.naam),
-                                            medewerker.Functie && h('span', { className: 'functie' }, medewerker.Functie)
-                                        )
-                                    ),
-                                    // Calendar cells for each day using DagCell component
-                                    ...periodeData.map((dag, dagIndex) => {
-                                        // Add holiday information to the day object for DagCell
-                                        const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
-                                        const dagMitFeestdag = {
-                                            ...dag,
-                                            isFeestdag: !!feestdagNaam,
-                                            feestdagNaam: feestdagNaam,
-                                            isWeekend: dag.getDay() === 0 || dag.getDay() === 6
-                                        };
+                                    h('td', { 
+                                        colSpan: periodeData.length + 1,
+                                        className: 'team-header',
+                                        style: { backgroundColor: teamId === 'geen_team' ? '#f3f4f6' : teams.find(t => t.id === teamId)?.kleur }
+                                    },
+                                        teamId === 'geen_team' ? 'Zonder team' : teams.find(t => t.id === teamId)?.naam
+                                    )
+                                ),
+                                // Employee rows for this team
+                                ...teamMedewerkers.map(medewerker => 
+                                    h('tr', { 
+                                        key: `medewerker-${medewerker.id}`,
+                                        className: 'medewerker-row'
+                                    },
+                                        // Employee name cell
+                                        h('td', { className: 'medewerker-naam' },
+                                            h('div', { className: 'medewerker-info' },
+                                                h('span', { className: 'naam' }, medewerker.Title || medewerker.naam),
+                                                medewerker.Functie && h('span', { className: 'functie' }, medewerker.Functie)
+                                            )
+                                        ),
+                                        // Calendar cells for each day using DagCell component
+                                        ...periodeData.map((dag, dagIndex) => {
+                                            // Add holiday information to the day object for DagCell
+                                            const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
+                                            const dagMitFeestdag = {
+                                                ...dag,
+                                                isFeestdag: !!feestdagNaam,
+                                                feestdagNaam: feestdagNaam,
+                                                isWeekend: dag.getDay() === 0 || dag.getDay() === 6
+                                            };
 
-                                        return h(DagCell, {
-                                            key: `${medewerker.id}-${dagIndex}`,
-                                            dag: dagMitFeestdag,
-                                            medewerker: medewerker,
-                                            onContextMenu: showContextMenu,
-                                            getVerlofVoorDag: getVerlofVoorDag,
-                                            getZittingsvrijVoorDag: getZittingsvrijVoorDag,
-                                            getCompensatieUrenVoorDag: getCompensatieUrenVoorDag,
-                                            shiftTypes: shiftTypes,
-                                            onCellClick: handleCellClick
-                                        });
-                                    })
+                                            return h(DagCell, {
+                                                key: `${medewerker.id}-${dagIndex}`,
+                                                dag: dagMitFeestdag,
+                                                medewerker: {
+                                                    ...medewerker,
+                                                    Naam: medewerker.Title || medewerker.naam || medewerker.Name
+                                                },
+                                                onContextMenu: showContextMenu,
+                                                getVerlofVoorDag: getVerlofVoorDag,
+                                                getZittingsvrijVoorDag: getZittingsvrijVoorDag,
+                                                getCompensatieUrenVoorDag: getCompensatieUrenVoorDag,
+                                                shiftTypes: shiftTypes,
+                                                onCellClick: handleCellClick
+                                            });
+                                        })
+                                    )
                                 )
-                            )
-                        ]).flat()
+                            ]).flat()
+                        )
                     )
                 )
             ),
