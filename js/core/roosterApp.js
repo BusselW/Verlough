@@ -4,6 +4,7 @@
 // Cache buster: 2025-01-12-v5-user-validation-startup-fix
 // Cache buster: 2025-01-12-v6-complete-ui-structure-fix
 // Cache buster: 2025-01-12-v9-profile-cards-avatars-fix
+// Cache buster: 2025-01-12-v10-missing-css-classes-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -37,6 +38,25 @@ import ProfielKaarten from '../ui/profielkaarten.js';
 
 // Get React hooks from global React object
 const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
+
+/**
+ * RoosterApp - Main React component for the roster application
+ * 
+ * CSS Classes Reference:
+ * =====================
+ * Main Structure: .sticky-header-container, .toolbar, .main-content, .table-responsive-wrapper
+ * Table: .rooster-table, .rooster-thead, .medewerker-kolom, .dag-kolom, .team-header-row
+ * Interactions: .selected, .first-click (applied via DagCell)
+ * Content Blocks: .verlof-blok, .compensatie-uur-blok, .zittingsvrij-blok, .dag-indicator-blok (via DagCell)
+ * Status Classes: .status-nieuw, .status-goedgekeurd, .status-afgekeurd (via DagCell)
+ * View States: .week-view, .maand-view, .weekend, .feestdag, .vandaag
+ * 
+ * Data Attributes Reference:
+ * =========================
+ * Cell Data: data-datum, data-medewerker, data-feestdag
+ * Content Data: data-afkorting, data-status, data-startdatum, data-einddatum, data-toelichting (via DagCell)
+ * Navigation: data-weergave
+ */
 
 const RoosterApp = () => {
     // Helper function to create header cells
@@ -1627,6 +1647,16 @@ const RoosterApp = () => {
                                                 isWeekend: dateObj.getDay() === 0 || dateObj.getDay() === 6
                                             };
 
+                                            // Check if this cell is in current selection
+                                            const isInSelection = selection && 
+                                                selection.medewerkerId === medewerker.Username &&
+                                                isDateInSelection(dateObj, medewerker.Username);
+                                            
+                                            // Check if this is the first click cell
+                                            const isFirstClick = firstClickData && 
+                                                firstClickData.medewerker.Username === medewerker.Username &&
+                                                firstClickData.dag.getTime() === dateObj.getTime();
+
                                             return h(DagCell, {
                                                 key: `${medewerker.id}-${dagIndex}`,
                                                 dag: dateObj,
@@ -1639,7 +1669,12 @@ const RoosterApp = () => {
                                                 getZittingsvrijVoorDag: getZittingsvrijVoorDag,
                                                 getCompensatieUrenVoorDag: getCompensatieUrenVoorDag,
                                                 shiftTypes: shiftTypes,
-                                                onCellClick: handleCellClick
+                                                onCellClick: handleCellClick,
+                                                // Pass selection state to DagCell for proper styling
+                                                isSelected: isInSelection,
+                                                isFirstClick: isFirstClick,
+                                                // Pass additional data attributes
+                                                feestdagNaam: feestdagNaam
                                             });
                                         })
                                     )

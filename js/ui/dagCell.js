@@ -96,8 +96,11 @@ const renderCompensatieMomenten = (compensatieMomenten, options = {}) => {
  * @param {function} props.getCompensatieUrenVoorDag - Functie om compensatie-uren op te halen.
  * @param {object} props.shiftTypes - Beschikbare shift types.
  * @param {function} props.onCellClick - Functie voor cel klik.
+ * @param {boolean} props.isSelected - Of deze cel geselecteerd is.
+ * @param {boolean} props.isFirstClick - Of deze cel de eerste klik is.
+ * @param {string} props.feestdagNaam - Naam van de feestdag (indien van toepassing).
  */
-const DagCell = ({ dag, medewerker, onContextMenu, getVerlofVoorDag, getZittingsvrijVoorDag, getCompensatieUrenVoorDag, shiftTypes, onCellClick }) => {
+const DagCell = ({ dag, medewerker, onContextMenu, getVerlofVoorDag, getZittingsvrijVoorDag, getCompensatieUrenVoorDag, shiftTypes, onCellClick, isSelected, isFirstClick, feestdagNaam }) => {
     const cellRef = useRef(null);
     const verlofItem = getVerlofVoorDag(medewerker.Username, dag);
     const zittingsvrijItem = getZittingsvrijVoorDag(medewerker.Username, dag);
@@ -209,7 +212,7 @@ const DagCell = ({ dag, medewerker, onContextMenu, getVerlofVoorDag, getZittings
     };
 
     return h('td', {
-        className: `dag-cel ${isWeekend ? 'weekend' : ''} ${isFeestdag ? 'feestdag' : ''}`,
+        className: `dag-cel ${isWeekend ? 'weekend' : ''} ${isFeestdag ? 'feestdag' : ''} ${isSelected ? 'selected' : ''} ${isFirstClick ? 'first-click' : ''}`.trim(),
         'data-feestdag': isFeestdag ? feestdagNaam : undefined,
         'data-datum': dag.toISOString ? dag.toISOString().split('T')[0] : dag.toString(),
         'data-medewerker': medewerker.Naam,
