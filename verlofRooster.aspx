@@ -2243,7 +2243,7 @@
                                             );
                                         })
                                     )
-                                ),
+                                ), // Close thead
                                 h('tbody', null,
                                     (gegroepeerdeData ? Object.keys(gegroepeerdeData) : []).map(teamId => {
                                         const team = (teams || []).find(t => t.id === teamId) || { id: 'geen_team', naam: 'Geen Team', kleur: '#ccc' };
