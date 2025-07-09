@@ -3,7 +3,7 @@
 // Cache buster: 2025-01-12-v4-react-key-props-fix
 // Cache buster: 2025-01-12-v5-user-validation-startup-fix
 // Cache buster: 2025-01-12-v6-complete-ui-structure-fix
-// Cache buster: 2025-01-12-v8-date-object-fix
+// Cache buster: 2025-01-12-v9-profile-cards-avatars-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
