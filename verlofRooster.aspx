@@ -750,12 +750,12 @@
                                 style: { fontSize: '10px' }
                             })
                         )
-                    )
+                    ))
                 ];
                 
                 (periodeData || []).forEach((dag, index) => {
                     const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-                    const feestdagNaam = checkIsFeestdag(dag);
+                    const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
                     const isToday = isVandaag(dag);
                     const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''}`;
                    
@@ -1449,7 +1449,7 @@
                         items: menuItems,
                         onClose: () => setContextMenu(null)
                     });
-                }
+                } // Close showContextMenu function
 
                 // FAB handler that uses the same selection logic as ContextMenu
                 // This ensures that when a user makes a selection (click 1/click 2),
@@ -2070,7 +2070,6 @@
                     return compensatieMomentenByDate[key] || [];
                 }, [compensatieMomentenByDate]);
 
-                const checkIsFeestdag = useCallback((datum) => feestdagen[datum.toISOString().split('T')[0]], [feestdagen]);
                 const getVerlofVoorDag = useCallback((medewerkerUsername, datum) => {
                     if (!medewerkerUsername) return null;
                     const datumCheck = new Date(datum).setHours(12, 0, 0, 0);
@@ -2319,7 +2318,7 @@
 
                                                         return dagenMetBlokInfo.map(({ dag, item, isStart, isEnd, isMiddle, compensatieMomenten }) => {
                                                             const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-                                                            const feestdagNaam = checkIsFeestdag(dag);
+                                                            const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
                                                             const isSelected = isDateInSelection(dag, medewerker.Username);
                                                             const isToday = isVandaag(dag);
                                                             const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''} ${isSelected ? 'selected' : ''}`;
@@ -2520,7 +2519,7 @@
                             initialData: selection && selection.itemData ? selection.itemData : {}
                         }))
                     ) // Close Fragment with all app content (table + contextMenu + FAB + 4 modals)
-                )); // Close UserRegistrationCheck wrapper
+                ); // Close UserRegistrationCheck wrapper
         }; // Close the RoosterApp function
 
             const root = ReactDOM.createRoot(document.getElementById('root'));
