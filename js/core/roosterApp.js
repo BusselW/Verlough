@@ -70,6 +70,44 @@ const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } 
 
 const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
     console.log('🏠 RoosterApp component initialized');
+
+    // Helper function to create header cells
+    const createHeaderCells = () => {
+        if (!periodeData || periodeData.length === 0) return [];
+
+        if (weergaveType === 'maand') {
+            return periodeData.map(dag => {
+                const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
+                const isToday = isVandaag(dag);
+                const feestdag = feestdagen[formatteerDatum(dag)];
+
+                return h('th', {
+                    key: formatteerDatum(dag),
+                    className: `dag-kolom ${isWeekend ? 'weekend' : ''} ${isToday ? 'vandaag' : ''} ${feestdag ? 'feestdag' : ''}`,
+                    title: feestdag || ''
+                },
+                    h('div', { className: 'dag-nummer' }, dag.getDate()),
+                    h('div', { className: 'dag-naam' }, dag.toLocaleDateString('nl-NL', { weekday: 'short' }))
+                );
+            });
+        } else { // week view
+            return periodeData.map(dag => {
+                const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
+                const isToday = isVandaag(dag);
+                const feestdag = feestdagen[formatteerDatum(dag)];
+
+                return h('th', {
+                    key: formatteerDatum(dag),
+                    className: `dag-kolom ${isWeekend ? 'weekend' : ''} ${isToday ? 'vandaag' : ''} ${feestdag ? 'feestdag' : ''}`,
+                    title: feestdag || ''
+                },
+                    h('div', { className: 'dag-nummer' }, dag.getDate()),
+                    h('div', { className: 'dag-naam' }, dag.toLocaleDateString('nl-NL', { weekday: 'short' }))
+                );
+            });
+        }
+    };
+
     const [isUserValidated, setIsUserValidated] = useState(propIsUserValidated);
 
     useEffect(() => {
@@ -1643,7 +1681,7 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                             // Ensure dag is a proper Date object
                                             const dateObj = dag instanceof Date ? dag : new Date(dag);
                                             // Add holiday information to the day object for DagCell
-                                            const feestdagNaam = feestdagen[dateObj.toISOString().split('T')[0]];
+                                            const feestdagNaam = feestdagen[formatteerDatum(dag)];
                                             
                                             // Get UrenPerWeek data for this day
                                             const urenPerWeekData = getUrenPerWeekForDate(medewerker.Username, dateObj);
