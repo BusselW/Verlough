@@ -3,6 +3,7 @@
 // Cache buster: 2025-01-12-v4-react-key-props-fix
 // Cache buster: 2025-01-12-v5-user-validation-startup-fix
 // Cache buster: 2025-01-12-v6-complete-ui-structure-fix
+// Cache buster: 2025-01-12-v7-urenperweek-color-debug-fix
 // Cache buster: 2025-01-12-v9-profile-cards-avatars-fix
 // Cache buster: 2025-01-12-v10-missing-css-classes-fix
 // Cache buster: 2025-01-12-v13-zittingsvrij-class-fix
@@ -1035,6 +1036,12 @@ const RoosterApp = () => {
                     }
                     return acc;
                 }, {});
+                
+                console.log('🎨 DagenIndicators loaded:', {
+                    raw: dagenIndicatorsData,
+                    mapped: indicatorsMapped
+                });
+                
                 setDagenIndicators(indicatorsMapped);
 
                 console.log('✅ Data processing complete!');
@@ -1750,7 +1757,21 @@ const RoosterApp = () => {
                                                     hasSpecialDay && h('div', {
                                                         className: 'dag-indicator-blok urenperweek-blok',
                                                         style: { 
-                                                            backgroundColor: dagenIndicators[urenPerWeekData[`${dayName}Soort`]]?.kleur || '#cccccc'
+                                                            backgroundColor: (() => {
+                                                                const dayType = urenPerWeekData[`${dayName}Soort`];
+                                                                const indicator = dagenIndicators[dayType];
+                                                                const color = indicator?.kleur || '#cccccc';
+                                                                // Debug logging for color resolution
+                                                                if (Math.random() < 0.1) { // Only log 10% of the time to avoid spam
+                                                                    console.log(`🎨 UrenPerWeek color for ${dayType}:`, {
+                                                                        dayType,
+                                                                        indicator,
+                                                                        color,
+                                                                        allIndicators: Object.keys(dagenIndicators)
+                                                                    });
+                                                                }
+                                                                return color;
+                                                            })()
                                                         },
                                                         'data-afkorting': urenPerWeekData[`${dayName}Soort`],
                                                         'data-medewerker': medewerker.Naam || medewerker.naam,
