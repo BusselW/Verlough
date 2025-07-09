@@ -113,38 +113,67 @@
                         if (currentUser) {
                             // Get medewerker naam from Medewerkers list
                             const medewerkers = await fetchSharePointList('Medewerkers');
-                            const medewerker = medewerkers.find(m => 
-                                m.Username === (currentUser.LoginName?.split('|')[1] || currentUser.LoginName)
+                            const medewerker = medewerkers.find(m =>
+                                m.MedewerkerID && currentUser.LoginName &&
+                                m.MedewerkerID.toLowerCase().includes(currentUser.LoginName.split('|')[1]?.toLowerCase())
                             );
 
                             setUserInfo({
-                                naam: medewerker?.Naam || currentUser.Title || 'Onbekend',
-                                pictureUrl: getProfilePhotoUrl(currentUser),
+                                naam: medewerker?.Naam || currentUser.Title || 'Gebruiker',
+                                pictureUrl: currentUser.PictureURL || 'https://via.placeholder.com/32x32/6c757d/ffffff?text=U',
                                 loading: false,
-                                teamLeader: medewerker?.TeamLeader || null,
-                                teamLeaderLoading: false
+                                teamLeaderLoading: true,
+                                teamLeader: null
                             });
+                           
+                            // Get team leader info
+                            try {
+                                if (medewerker && medewerker.Username) {
+                                    const teamLeader = await linkInfo.getTeamLeaderForEmployee(medewerker.Username);
+                                    if (teamLeader) {
+                                        setUserInfo(prevState => ({
+                                            ...prevState,
+                                            teamLeader: teamLeader.Title || teamLeader.Naam || teamLeader.Username,
+                                            teamLeaderLoading: false
+                                        }));
+                                    } else {
+                                        setUserInfo(prevState => ({
+                                            ...prevState,
+                                            teamLeaderLoading: false
+                                        }));
+                                    }
+                                }
+                            } catch (error) {
+                                console.error('Error loading team leader info:', error);
+                                setUserInfo(prevState => ({
+                                    ...prevState,
+                                    teamLeaderLoading: false
+                                }));
+                            }
                         } else {
                             setUserInfo({
-                                naam: 'Onbekend',
-                                pictureUrl: '',
-                                loading: false,
-                                teamLeader: null,
-                                teamLeaderLoading: false
+                                naam: 'Gebruiker',
+                                pictureUrl: 'https://via.placeholder.com/32x32/6c757d/ffffff?text=U',
+                                loading: false
                             });
                         }
 
                         console.log('User data loaded:', { permissions: { isAdmin, isFunctional, isTaakbeheer }, userInfo });
 
+                        // Debug: Log current user and medewerkers for troubleshooting
+                        console.log('DEBUG - Current user details:', {
+                            LoginName: currentUser?.LoginName,
+                            Title: currentUser?.Title,
+                            Email: currentUser?.Email
+                        });
+
                     } catch (error) {
                         console.error('Error loading user data:', error);
                         setUserPermissions(prev => ({ ...prev, loading: false }));
                         setUserInfo({
-                            naam: 'Fout bij laden',
-                            pictureUrl: '',
-                            loading: false,
-                            teamLeader: null,
-                            teamLeaderLoading: false
+                            naam: 'Gebruiker',
+                            pictureUrl: 'https://via.placeholder.com/32x32/6c757d/ffffff?text=U',
+                            loading: false
                         });
                     }
                 };
@@ -268,39 +297,74 @@
                                 h('i', { className: 'fas fa-book' }),
                                 h('div', { className: 'help-item-content' },
                                     h('span', { className: 'help-item-title' }, 'Handleiding'),
-                                    h('span', { className: 'help-item-description' }, 'Bekijk de volledige documentatie')
+                                    h('span', { className: 'help-item-description' }, 'Uitgebreide documentatie en instructies')
+                                )
+                            ),
+                            h('button', {
+                                className: 'help-dropdown-item disabled',
+                                title: 'Binnenkort beschikbaar'
+                            },
+                                h('i', { className: 'fas fa-question' }),
+                                h('div', { className: 'help-item-content' },
+                                    h('span', { className: 'help-item-title' }, 'FAQ'),
+                                    h('span', { className: 'help-item-description' }, 'Veelgestelde vragen (binnenkort)')
                                 )
                             )
                         )
                     ),
 
-                    // User dropdown
-                    h('div', { className: 'user-dropdown' },
+                    // User Settings Dropdown - Visible to everyone
+                    h('div', { id: 'user-dropdown', className: 'user-dropdown' },
                         h('button', {
-                            className: 'user-settings-btn',
-                            onClick: () => setSettingsDropdownOpen(!settingsDropdownOpen)
+                            className: 'btn btn-settings user-settings-btn',
+                            onClick: () => setSettingsDropdownOpen(!settingsDropdownOpen),
+                            title: 'Gebruikersinstellingen'
                         },
                             h('img', {
-                                src: userInfo.pictureUrl || 'https://via.placeholder.com/32x32/6c757d/ffffff?text=U',
-                                alt: 'Profiel',
-                                className: 'profile-image'
-                            }),
-                            h('span', { className: 'user-name' }, userInfo.naam || 'Gebruiker'),
-                            h('i', { className: 'fas fa-chevron-down' })
-                        ),
-                        settingsDropdownOpen && h('div', { className: 'user-dropdown-menu' },
-                            h('a', {
-                                href: 'pages/instellingenCentrum/instellingenCentrumN.aspx'
-                            }, 'Instellingen'),
-                            h('div', { className: 'dropdown-divider' }),
-                            h('a', {
-                                href: '#',
-                                onClick: (e) => {
-                                    e.preventDefault();
-                                    // Add logout functionality here if needed
-                                    alert('Uitloggen functionaliteit nog niet geïmplementeerd');
+                                className: 'user-avatar-small',
+                                src: userInfo.pictureUrl,
+                                alt: userInfo.naam,
+                                onError: (e) => {
+                                    e.target.src = 'https://via.placeholder.com/32x32/6c757d/ffffff?text=U';
                                 }
-                            }, 'Uitloggen')
+                            }),
+                            h('span', { className: 'user-name' }, userInfo.naam),
+                            userInfo.teamLeader && h('span', {
+                                className: 'user-teamleader',
+                                style: {
+                                    fontSize: '0.7rem',
+                                    color: '#b0b0b0',
+                                    display: 'block',
+                                    lineHeight: '1',
+                                    position: 'absolute',
+                                    bottom: '3px',
+                                    left: '40px'
+                                },
+                                title: `Je teamleider is ${userInfo.teamLeader}`
+                            }, `TL: ${userInfo.teamLeader}`),
+                            h('i', {
+                                className: `fas fa-chevron-${settingsDropdownOpen ? 'up' : 'down'}`,
+                                style: { fontSize: '0.8rem', marginLeft: '0.5rem' }
+                            })
+                        ),
+
+                        // Dropdown menu
+                        settingsDropdownOpen && h('div', { className: 'user-dropdown-menu' },
+                            h('div', { className: 'dropdown-item-group' },
+                h('button', {
+                    className: 'dropdown-item',
+                    onClick: () => {
+                        navigateTo('instellingenCentrum/instellingenCentrumN.aspx');
+                        setSettingsDropdownOpen(false);
+                    }
+                },
+                    h('i', { className: 'fas fa-user-edit' }),
+                    h('div', { className: 'dropdown-item-content' },
+                        h('span', { className: 'dropdown-item-title' }, 'Persoonlijke instellingen'),
+                        h('span', { className: 'dropdown-item-description' }, 'Beheer uw profiel, werktijden en voorkeuren')
+                    )
+                )
+                            )
                         )
                     )
                 )
@@ -349,6 +413,7 @@
             const [currentUser, setCurrentUser] = useState(null);
 
             useEffect(() => {
+                console.log('📋 UserRegistrationCheck useEffect triggered');
                 checkUserRegistration();
             }, []);
 
@@ -448,25 +513,188 @@
                 window.location.href = 'pages/instellingenCentrum/registratieCentrumN.aspx';
             };
 
-            if (isChecking) {
-                return h('div', { className: 'loading-container' },
-                    h('div', { className: 'loading-spinner' }),
-                    h('p', null, 'Gebruiker valideren...')
+            // Show registration overlay if user is not registered
+            if (!isRegistered && !isChecking) {
+                return h('div', null,
+                    // Show dimmed app content in background
+                    children,
+                    // Registration overlay
+                    h('div', {
+                        style: {
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            zIndex: 9999,
+                            fontFamily: 'Inter, sans-serif'
+                        }
+                    },
+                        h('div', {
+                            style: {
+                                maxWidth: '480px',
+                                width: '90%',
+                                backgroundColor: 'white',
+                                borderRadius: '12px',
+                                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                                padding: '32px',
+                                textAlign: 'center'
+                            }
+                        },
+                            // Icon
+                            h('div', {
+                                style: {
+                                    margin: '0 auto 24px',
+                                    width: '64px',
+                                    height: '64px',
+                                    backgroundColor: '#fef3c7',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }
+                            },
+                                h('i', {
+                                    className: 'fas fa-user-plus',
+                                    style: {
+                                        fontSize: '24px',
+                                        color: '#d97706'
+                                    }
+                                })
+                            ),
+                            // Title
+                            h('h2', {
+                                style: {
+                                    fontSize: '24px',
+                                    fontWeight: '600',
+                                    color: '#111827',
+                                    marginBottom: '12px'
+                                }
+                            }, 'Account Registratie Vereist'),
+                            // Description
+                            h('p', {
+                                style: {
+                                    fontSize: '16px',
+                                    color: '#6b7280',
+                                    marginBottom: '24px',
+                                    lineHeight: '1.5'
+                                }
+                            }, `Hallo ${currentUser?.Title || 'gebruiker'}! Om het verlofrooster te kunnen gebruiken, moet je eerst je account registreren en instellen.`),
+                            // Call to action
+                            h('button', {
+                                onClick: redirectToRegistration,
+                                style: {
+                                    width: '100%',
+                                    backgroundColor: '#3b82f6',
+                                    color: 'white',
+                                    fontWeight: '500',
+                                    fontSize: '16px',
+                                    padding: '12px 24px',
+                                    borderRadius: '8px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    marginBottom: '16px',
+                                    transition: 'background-color 0.2s'
+                                },
+                                onMouseEnter: (e) => e.target.style.backgroundColor = '#2563eb',
+                                onMouseLeave: (e) => e.target.style.backgroundColor = '#3b82f6'
+                            },
+                                h('i', { className: 'fas fa-arrow-right', style: { marginRight: '8px' } }),
+                                'Ga naar Registratie'
+                            ),
+                            // Secondary action
+                            h('button', {
+                                onClick: checkUserRegistration,
+                                style: {
+                                    width: '100%',
+                                    backgroundColor: '#f3f4f6',
+                                    color: '#374151',
+                                    fontWeight: '500',
+                                    fontSize: '14px',
+                                    padding: '8px 16px',
+                                    borderRadius: '6px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    transition: 'background-color 0.2s'
+                                },
+                                onMouseEnter: (e) => e.target.style.backgroundColor = '#e5e7eb',
+                                onMouseLeave: (e) => e.target.style.backgroundColor = '#f3f4f6'
+                            },
+                                h('i', { className: 'fas fa-sync-alt', style: { marginRight: '8px' } }),
+                                'Opnieuw Controleren'
+                            ),
+                            // User info
+                            currentUser && h('div', {
+                                style: {
+                                    marginTop: '24px',
+                                    paddingTop: '16px',
+                                    borderTop: '1px solid #e5e7eb'
+                                }
+                            },
+                                h('p', {
+                                    style: {
+                                        fontSize: '12px',
+                                        color: '#9ca3af'
+                                    }
+                                }, `Ingelogd als: ${currentUser.LoginName}`)
+                            )
+                        )
+                    )
                 );
             }
 
-            if (!isRegistered) {
-                return h('div', { className: 'registration-required' },
-                    h('div', { className: 'registration-card' },
-                        h('h2', null, 'Registratie vereist'),
-                        h('p', null, 'Je bent nog niet geregistreerd in het systeem.'),
-                        h('p', null, 'Klik op de knop hieronder om je te registreren.'),
-                        h('button', {
-                            onClick: redirectToRegistration,
-                            className: 'register-button'
-                        }, 'Registreren'),
-                        currentUser && h('div', { className: 'user-info' },
-                            h('small', null, `Ingelogd als: ${currentUser.Title || currentUser.LoginName}`)
+            // Show loading overlay while checking
+            if (isChecking) {
+                return h('div', null,
+                    // Show dimmed app content in background
+                    children,
+                    // Loading overlay
+                    h('div', {
+                        style: {
+                            position: 'fixed',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            zIndex: 9999,
+                            fontFamily: 'Inter, sans-serif'
+                        }
+                    },
+                        h('div', {
+                            style: {
+                                backgroundColor: 'white',
+                                borderRadius: '12px',
+                                padding: '32px',
+                                textAlign: 'center',
+                                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+                            }
+                        },
+                            h('div', { 
+                                className: 'loading-spinner', 
+                                style: { margin: '0 auto 16px' } 
+                            }),
+                            h('h2', {
+                                style: {
+                                    fontSize: '18px',
+                                    fontWeight: '500',
+                                    color: '#111827',
+                                    marginBottom: '8px'
+                                }
+                            }, 'Gebruiker valideren...'),
+                            h('p', {
+                                style: {
+                                    fontSize: '14px',
+                                    color: '#6b7280'
+                                }
+                            }, 'Even geduld, we controleren je toegangsrechten.')
                         )
                     )
                 );
@@ -487,17 +715,11 @@
             // In the new structure, RoosterApp will handle its own visibility
             // based on the validation prop. We just need to pass the state.
             return h(ErrorBoundary, null,
-                h('div', { className: 'sticky-header-container' },
-                    h('header', { id: 'header', className: 'header' },
-                        h('div', { className: 'header-content' },
-                            h(NavigationButtons)
-                        )
+                h(Fragment, null,
+                    h(NavigationButtons, null),
+                    h(UserRegistrationCheck, { onUserValidated: setIsUserValidated },
+                        h(RoosterApp, { isUserValidated: isUserValidated })
                     )
-                ),
-                h(UserRegistrationCheck, { onUserValidated: setIsUserValidated },
-                    // RoosterApp will now only render its content when isUserValidated is true.
-                    // The component itself is always rendered to manage its own state.
-                    h(RoosterApp, { isUserValidated: isUserValidated })
                 )
             );
         };
