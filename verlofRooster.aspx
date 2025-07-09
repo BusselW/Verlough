@@ -2215,7 +2215,8 @@
                                                 })
                                             )
                                         ),
-                                        periodeData.map(dag => {
+                                        // Add safety check for periodeData
+                                        (periodeData || []).length > 0 ? periodeData.map(dag => {
                                             const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
                                             const feestdagNaam = checkIsFeestdag(dag);
                                             const isToday = isVandaag(dag);
@@ -2241,7 +2242,7 @@
                                                     isToday && h('div', { className: 'vandaag-indicator' })
                                                 )
                                             );
-                                        })
+                                        }) : [] // Empty array if no data
                                     )
                                 ), // Close thead
                                 h('tbody', null,
