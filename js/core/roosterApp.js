@@ -1419,7 +1419,19 @@ const RoosterApp = () => {
         const getVerlofVoorDag = useCallback((medewerkerUsername, datum) => {
             if (!medewerkerUsername) return null;
             const datumCheck = new Date(datum).setHours(12, 0, 0, 0);
-            return verlofItems.find(v => v.MedewerkerID === medewerkerUsername && v.Status !== 'Afgewezen' && datumCheck >= new Date(v.StartDatum).setHours(12, 0, 0, 0) && datumCheck <= new Date(v.EindDatum).setHours(12, 0, 0, 0));
+            const verlofItem = verlofItems.find(v => v.MedewerkerID === medewerkerUsername && v.Status !== 'Afgewezen' && datumCheck >= new Date(v.StartDatum).setHours(12, 0, 0, 0) && datumCheck <= new Date(v.EindDatum).setHours(12, 0, 0, 0));
+            
+            if (!verlofItem) return null;
+            
+            // Add start/end block properties for proper display
+            const startDate = new Date(verlofItem.StartDatum).setHours(12, 0, 0, 0);
+            const endDate = new Date(verlofItem.EindDatum).setHours(12, 0, 0, 0);
+            
+            return {
+                ...verlofItem,
+                isStartBlok: datumCheck === startDate,
+                isEindBlok: datumCheck === endDate
+            };
         }, [verlofItems]);
 
         const getZittingsvrijVoorDag = useCallback((medewerkerUsername, datum) => {

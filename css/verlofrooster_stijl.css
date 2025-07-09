@@ -1333,6 +1333,59 @@ td.medewerker-kolom {
     border-right: 1px dashed rgba(255, 255, 255, 0.35);
 }
 
+/* Dag indicator blocks (Zittingsvrij, UrenPerWeek types like VVO/VVD/VVM)
+   ========================================================================== */
+
+.dag-indicator-blok {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 4px;
+    transition: box-shadow 0.3s ease, border 0.3s ease;
+}
+
+/* Zittingsvrij specific styling */
+.zittingsvrij-blok {
+    background-color: #8e44ad !important; /* Purple color for zittingsvrij */
+}
+
+.zittingsvrij-blok:hover {
+    background-color: #7d3c98 !important;
+    box-shadow: 0 0 8px rgba(142, 68, 173, 0.4);
+}
+
+/* UrenPerWeek block styling */
+.urenperweek-blok {
+    /* Background color will be set dynamically via style attribute based on type */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.urenperweek-blok:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    filter: brightness(0.9);
+}
+
+/* Ziekte block styling (red background) */
+.ziekte-blok {
+    background-color: #e74c3c !important; /* Red color for ziekte */
+}
+
+.ziekte-blok:hover {
+    background-color: #c0392b !important;
+    box-shadow: 0 0 8px rgba(231, 76, 60, 0.4);
+}
+
 /* Compensatie-uren Styling
    ========================================================================== */
 
