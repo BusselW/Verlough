@@ -2,6 +2,7 @@
 // Cache buster: 2025-07-09-v3-uservalidation-fix
 // Cache buster: 2025-01-12-v4-react-key-props-fix
 // Cache buster: 2025-01-12-v5-user-validation-startup-fix
+// Cache buster: 2025-01-12-v6-complete-ui-structure-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -1578,68 +1579,59 @@ const RoosterApp = () => {
             );
         }
 
-        // Main calendar rendering
-        return h('div', { className: 'rooster-container' },
-            // Header with navigation
-            h('div', { className: 'rooster-header' },
-                h('div', { className: 'periode-navigatie' },
-                    h('button', { onClick: vorige, className: 'nav-button' }, '‹'),
-                    h('h2', { className: 'periode-titel' }, 
-                        weergaveType === 'week' 
-                            ? `Week ${huidigWeek}, ${huidigJaar}`
-                            : `${maandNamenVolledig[huidigMaand]} ${huidigJaar}`
+        // Main calendar rendering with complete UI structure
+        return h(Fragment, null,
+            h('div', { className: 'sticky-header-container' },
+                h('div', { id: 'toolbar', className: 'toolbar' },
+                    h('div', { className: 'toolbar-content' },
+                        h('div', { id: 'periode-navigatie', className: 'periode-navigatie' },
+                            h('button', { onClick: vorige }, h('i', { className: 'fas fa-chevron-left' })),
+                            h('div', { className: 'periode-display' }, weergaveType === 'week' ? `Week ${huidigWeek}, ${huidigJaar}` : `${maandNamenVolledig[huidigMaand]} ${huidigJaar}`),
+                            h('button', { onClick: volgende }, h('i', { className: 'fas fa-chevron-right' })),
+                            h('div', { 'data-weergave': weergaveType, className: 'weergave-toggle', style: { marginLeft: '2rem' } },
+                                h('span', { className: 'glider' }),
+                                h('button', { className: 'weergave-optie', onClick: () => setWeergaveType('week') }, 'Week'),
+                                h('button', { className: 'weergave-optie', onClick: () => setWeergaveType('maand') }, 'Maand')
+                            )
+                        ),
+                        h('div', { id: 'filter-groep', className: 'filter-groep' },
+                            h('input', { type: 'text', className: 'zoek-input', placeholder: 'Zoek medewerker...', value: zoekTerm, onChange: (e) => setZoekTerm(e.target.value) }),
+                            h('select', { className: 'filter-select', value: geselecteerdTeam, onChange: (e) => setGeselecteerdTeam(e.target.value) },
+                                h('option', { value: '' }, 'Alle teams'),
+                                (teams || []).map(team => h('option', { key: team.id, value: team.id }, team.naam))
+                            )
+                        )
                     ),
-                    h('button', { onClick: volgende, className: 'nav-button' }, '›')
-                ),
-                h('div', { className: 'weergave-controls' },
-                    h('button', {
-                        className: `weergave-button ${weergaveType === 'maand' ? 'active' : ''}`,
-                        onClick: () => setWeergaveType('maand')
-                    }, 'Maand'),
-                    h('button', {
-                        className: `weergave-button ${weergaveType === 'week' ? 'active' : ''}`,
-                        onClick: () => setWeergaveType('week')
-                    }, 'Week')
+                    Object.keys(shiftTypes).length > 0 && h('div', { id: 'legenda-container', className: 'legenda-container' },
+                        h('span', { className: 'legenda-titel' }, 'Legenda:'),
+                        Object.values(shiftTypes || {}).map(type => h('div', { key: type.id, className: 'legenda-item' },
+                            h('div', { className: 'legenda-kleur', style: { backgroundColor: type.kleur } }),
+                            h('span', null, `${type.afkorting} - ${type.label}`)
+                        )),
+                        Object.values(dagenIndicators || {}).map(indicator => h('div', { key: indicator.Title, className: 'legenda-item' },
+                            h('div', { className: 'legenda-kleur', style: { backgroundColor: indicator.kleur } }),
+                            h('span', null, `${indicator.Title} - ${indicator.Beschrijving}`)
+                        ))
+                    )
                 )
             ),
-
-            // Filter controls
-            h('div', { className: 'filter-controls' },
-                h('input', {
-                    type: 'text',
-                    placeholder: 'Zoek medewerker...',
-                    value: zoekTerm,
-                    onChange: (e) => setZoekTerm(e.target.value),
-                    className: 'search-input'
-                }),
-                h('select', {
-                    value: geselecteerdTeam,
-                    onChange: (e) => setGeselecteerdTeam(e.target.value),
-                    className: 'team-select'
-                },
-                    h('option', { value: '' }, 'Alle teams'),
-                    teams.map(team => h('option', { key: team.id, value: team.id }, team.naam))
-                )
-            ),
-
-            // Selection tooltip
-            showTooltip && selection && h('div', { className: 'selection-tooltip' },
-                `Geselecteerd: ${selection.start.toLocaleDateString()} - ${selection.end.toLocaleDateString()}`
-            ),
-
-            // Main calendar table
-            h('div', { className: 'rooster-table-container' },
-                h('table', { className: 'rooster-table' },
-                    h('thead', null,
-                        h('tr', { key: 'header-row' }, createHeaderCells())
-                    ),
-                    h('tbody', null,
+            h('main', { className: 'main-content' },
+                h('div', { className: 'table-responsive-wrapper' },
+                    h('table', {
+                        id: 'rooster-table',
+                        className: `rooster-table ${weergaveType}-view`,
+                        style: { '--day-count': periodeData.length }
+                    },
+                        h('thead', { className: 'rooster-thead' },
+                            h('tr', { key: 'header-row' }, createHeaderCells())
+                        ),
+                        h('tbody', null,
                         Object.entries(gegroepeerdeData).map(([teamId, teamMedewerkers]) => [
                             // Team header row
                             h('tr', { 
                                 key: `team-${teamId}`,
                                 className: 'team-header-row'
-                                                       },
+                            },
                                 h('td', { 
                                     colSpan: periodeData.length + 1,
                                     className: 'team-header',
@@ -1680,8 +1672,11 @@ const RoosterApp = () => {
                                                 if (compensatieItems.length > 0) classes += ' heeft-compensatie';
                                                 return classes;
                                             })(),
-                                            onClick: handleCalendarCellClick(medewerker, dag),
-                                            onContextMenu: handleCalendarCellClick(medewerker, dag)
+                                            onClick: () => handleCellClick(medewerker, dag),
+                                            onContextMenu: (e) => {
+                                                e.preventDefault();
+                                                showContextMenu(e, medewerker, dag);
+                                            }
                                         },
                                             createCellContent(medewerker, dag)
                                         )
@@ -1700,42 +1695,83 @@ const RoosterApp = () => {
                 items: contextMenu.items,
                 onClose: contextMenu.onClose
             }),
+            
+            // FAB
+            h(FAB, {
+                id: 'fab-container',
+                actions: [
+                    {
+                        label: 'Verlof aanvragen',
+                        icon: 'fa-calendar-plus',
+                        onClick: () => setIsVerlofModalOpen(true)
+                    },
+                    {
+                        label: 'Ziek melden',
+                        icon: 'fa-notes-medical',
+                        onClick: () => setIsZiekModalOpen(true)
+                    },
+                    {
+                        label: 'Compensatieuren doorgeven',
+                        icon: 'fa-clock',
+                        onClick: () => setIsCompensatieModalOpen(true)
+                    },
+                    {
+                        label: 'Zittingsvrij maken',
+                        icon: 'fa-gavel',
+                        onClick: () => setIsZittingsvrijModalOpen(true)
+                    }
+                ]
+            }),
 
             // Modals
-            isVerlofModalOpen && h(VerlofModal, {
+            h(Modal, {
                 isOpen: isVerlofModalOpen,
                 onClose: () => setIsVerlofModalOpen(false),
-                onSubmit: handleVerlofSubmit,
-                selection: selection,
+                title: selection && selection.itemData ? "Verlof Bewerken" : "Verlof Aanvragen"
+            }, h(VerlofAanvraagForm, {
+                onClose: () => setIsVerlofModalOpen(false),
                 medewerkers: medewerkers,
+                verlofItems: verlofItems,
                 shiftTypes: shiftTypes,
-                ziekteRedenId: ziekteRedenId
-            }),
-
-            isZiekModalOpen && h(ZiekteModal, {
-                isOpen: isZiekModalOpen,
-                onClose: () => setIsZiekModalOpen(false),
-                onSubmit: handleZiekteSubmit,
                 selection: selection,
-                medewerkers: medewerkers,
-                ziekteRedenId: ziekteRedenId
-            }),
-
-            isCompensatieModalOpen && h(CompensatieModal, {
+                initialData: selection && selection.itemData ? selection.itemData : {},
+                onSubmit: handleVerlofSubmit
+            })),
+            h(Modal, {
                 isOpen: isCompensatieModalOpen,
                 onClose: () => setIsCompensatieModalOpen(false),
-                onSubmit: handleCompensatieSubmit,
+                title: selection && selection.itemData ? "Compensatie Uren Bewerken" : "Compensatie Uren Aanvragen"
+            }, h(CompensatieUrenForm, {
+                onClose: () => setIsCompensatieModalOpen(false),
+                medewerkers: medewerkers,
+                compensatieUrenItems: compensatieUrenItems,
                 selection: selection,
-                medewerkers: medewerkers
-            }),
-
-            isZittingsvrijModalOpen && h(ZittingsvrijModal, {
+                initialData: selection && selection.itemData ? selection.itemData : {},
+                onSubmit: handleCompensatieSubmit
+            })),
+            h(Modal, {
+                isOpen: isZiekModalOpen,
+                onClose: () => setIsZiekModalOpen(false),
+                title: selection && selection.itemData ? "Ziekmelding Bewerken" : "Ziek Melden"
+            }, h(ZiekteMeldingForm, {
+                onClose: () => setIsZiekModalOpen(false),
+                onSubmit: handleZiekteSubmit,
+                medewerkers: medewerkers,
+                selection: selection,
+                initialData: selection && selection.itemData ? selection.itemData : {},
+                ziekteRedenId: ziekteRedenId
+            })),
+            h(Modal, {
                 isOpen: isZittingsvrijModalOpen,
                 onClose: () => setIsZittingsvrijModalOpen(false),
+                title: selection && selection.itemData ? "Zittingsvrij Bewerken" : "Zittingsvrij Maken"
+            }, h(ZittingsvrijForm, {
+                onClose: () => setIsZittingsvrijModalOpen(false),
                 onSubmit: handleZittingsvrijSubmit,
+                medewerkers: medewerkers,
                 selection: selection,
-                medewerkers: medewerkers
-            })
+                initialData: selection && selection.itemData ? selection.itemData : {}
+            }))
         );
     };
 
