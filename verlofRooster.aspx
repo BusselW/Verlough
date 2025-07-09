@@ -686,7 +686,63 @@
             return children;
         };
 
-        // RoosterApp component is now imported as a module from ./js/core/roosterApp.js
+        // =====================
+        // Hoofd RoosterApp Component
+        // =====================
+        const RoosterApp = () => {
+            console.log('🏠 RoosterApp component initialized');
+            const [isUserValidated, setIsUserValidated] = useState(false);
+            const [weergaveType, setWeergaveType] = useState('maand');
+
+            return h('div', null, 'RoosterApp placeholder - imported from module');
+        };
+            const [huidigJaar, setHuidigJaar] = useState(new Date().getFullYear());
+            const [huidigMaand, setHuidigMaand] = useState(new Date().getMonth());
+            const [medewerkers, setMedewerkers] = useState([]);
+            const [teams, setTeams] = useState([]);
+            const [shiftTypes, setShiftTypes] = useState({});
+            const [verlofItems, setVerlofItems] = useState([]);
+            const [feestdagen, setFeestdagen] = useState({});
+            const [loading, setLoading] = useState(false); // Start with false, let data loading set this to true
+            const [error, setError] = useState(null);
+            const [huidigWeek, setHuidigWeek] = useState(getWeekNummer(new Date()));
+            const [zoekTerm, setZoekTerm] = useState('');
+            const [geselecteerdTeam, setGeselecteerdTeam] = useState('');
+            const [sortDirection, setSortDirection] = useState('asc'); // 'asc' for A-Z, 'desc' for Z-A
+            const [zittingsvrijItems, setZittingsvrijItems] = useState([]);
+            const [compensatieUrenItems, setCompensatieUrenItems] = useState([]);
+            const [urenPerWeekItems, setUrenPerWeekItems] = useState([]);
+            const [dagenIndicators, setDagenIndicators] = useState({});
+            const [contextMenu, setContextMenu] = useState(null);
+            const [currentUser, setCurrentUser] = useState(null);
+            const [isVerlofModalOpen, setIsVerlofModalOpen] = useState(false);
+            const [isCompensatieModalOpen, setIsCompensatieModalOpen] = useState(false);
+            const [isZiekModalOpen, setIsZiekModalOpen] = useState(false);
+            const [isZittingsvrijModalOpen, setIsZittingsvrijModalOpen] = useState(false);
+
+            // Debug modal state changes
+            useEffect(() => {
+                console.log('🏠 Modal state changed:', {
+                    compensatie: isCompensatieModalOpen,
+                    zittingsvrij: isZittingsvrijModalOpen,
+                    verlof: isVerlofModalOpen,
+                    ziek: isZiekModalOpen
+                });
+            }, [isCompensatieModalOpen, isZittingsvrijModalOpen, isVerlofModalOpen, isZiekModalOpen]);
+            const [selection, setSelection] = useState(null);
+            const [showTooltip, setShowTooltip] = useState(false);
+            const [tooltipTimeout, setTooltipTimeout] = useState(null);
+            const [firstClickData, setFirstClickData] = useState(null);
+           
+            // Initialize the tooltip manager when the component mounts
+            useEffect(() => {
+                // Make sure TooltipManager is initialized
+                console.log('🔍 Initializing TooltipManager from RoosterApp');
+                TooltipManager.init();
+            }, []);
+           
+            // Initialize profile cards after data is loaded
+            useEffect(() => {
                 if (!loading && medewerkers.length > 0) {
                     setTimeout(() => {
                         if (typeof ProfielKaarten !== 'undefined' && ProfielKaarten.init) {
@@ -776,536 +832,7 @@
                 setIsZittingsvrijModalOpen(true);
             }, []);
 
-            // Calendar cell click handler with two-click selection support
-            function handleCellClick(medewerker, dag, specificItem = null) {
-                // If a specific item is provided (e.g., compensatie item), open the appropriate modal directly
-                if (specificItem) {
-                    console.log('Opening modal for specific item:', specificItem);
-                    const { type } = (() => {
-                        if ('RedenId' in specificItem) return { type: 'verlof' };
-                        if ('ZittingsVrijeDagTijd' in specificItem) return { type: 'zittingsvrij' };
-                        if ('StartCompensatieUren' in specificItem) return { type: 'compensatie' };
-                        if ('Status' in specificItem && specificItem.Status === 'Ziek') return { type: 'ziekte' };
-                        return { type: null };
-                    })();
-
-                    const targetMedewerker = medewerkers.find(m => m.Username === medewerker.Username);
-
-                    if (type === 'compensatie') {
-                        setSelection({
-                            start: new Date(specificItem.StartCompensatieUren),
-                            end: new Date(specificItem.EindeCompensatieUren),
-                            medewerkerId: specificItem.MedewerkerID,
-                            itemData: specificItem,
-                            medewerkerData: targetMedewerker
-                        });
-                        setIsCompensatieModalOpen(true);
-                        return;
-                    } else if (type === 'verlof') {
-                        setSelection({
-                            start: new Date(specificItem.StartDatum),
-                            end: new Date(specificItem.EindDatum),
-                            medewerkerId: specificItem.MedewerkerID,
-                            itemData: specificItem,
-                            medewerkerData: targetMedewerker
-                        });
-                        setIsVerlofModalOpen(true);
-                        return;
-                    } else if (type === 'zittingsvrij') {
-                        setSelection({
-                            start: new Date(specificItem.StartDatum),
-                            end: new Date(specificItem.EindDatum),
-                            medewerkerId: specificItem.Gebruikersnaam,
-                            itemData: specificItem,
-                            medewerkerData: targetMedewerker
-                        });
-                        setIsZittingsvrijModalOpen(true);
-                        return;
-                    } else if (type === 'ziekte') {
-                        setSelection({
-                            start: new Date(specificItem.StartDatum),
-                            end: new Date(specificItem.EindDatum),
-                            medewerkerId: specificItem.MedewerkerID,
-                            itemData: specificItem,
-                            medewerkerData: targetMedewerker
-                        });
-                        setIsZiekModalOpen(true);
-                        return;
-                    }
-                }
-
-                // Regular cell click behavior (date range selection)
-                if (!firstClickData) {
-                    // First click: Set start of selection
-                    setFirstClickData({ medewerker, dag });
-                    setSelection({ start: dag, end: dag, medewerkerId: medewerker.Username });
-
-                    // Show tooltip after first click
-                    setShowTooltip(true);
-
-                    // Auto-hide tooltip after 5 seconds
-                    if (tooltipTimeout) {
-                        clearTimeout(tooltipTimeout);
-                    }
-
-                    const timeout = setTimeout(() => {
-                        setShowTooltip(false);
-                    }, 5000);
-                    setTooltipTimeout(timeout);
-
-                } else if (firstClickData.medewerker.Username === medewerker.Username) {
-                    // Second click on same employee: Set end of selection
-                    const startDate = new Date(firstClickData.dag);
-                    const endDate = new Date(dag);
-                    const actualStart = startDate <= endDate ? startDate : endDate;
-                    const actualEnd = startDate <= endDate ? endDate : startDate;
-
-                    setSelection({
-                        start: actualStart,
-                        end: actualEnd,
-                        medewerkerId: medewerker.Username
-                    });
-                    setFirstClickData(null); // Reset for next selection
-                    setShowTooltip(false); // Hide tooltip after selection is complete
-
-                    if (tooltipTimeout) {
-                        clearTimeout(tooltipTimeout);
-                        setTooltipTimeout(null);
-                    }
-                } else {
-                    // Click on different employee: Start new selection
-                    setFirstClickData({ medewerker, dag });
-                    setSelection({ start: dag, end: dag, medewerkerId: medewerker.Username });
-
-                    // Show tooltip for this new selection too
-                    setShowTooltip(true);
-
-                    // Auto-hide tooltip after 5 seconds
-                    if (tooltipTimeout) {
-                        clearTimeout(tooltipTimeout);
-                    }
-
-                    const timeout = setTimeout(() => {
-                        setShowTooltip(false);
-                    }, 5000);
-                    setTooltipTimeout(timeout);
-                }
-            }
-
-            // Context menu handler
-            async function showContextMenu(e, medewerker, dag, item) {
-                console.log('showContextMenu called:', {
-                    medewerker: medewerker?.Username,
-                    dag: dag.toDateString(),
-                    item: item?.ID,
-                    hasItem: !!item,
-                    itemType: item ? Object.keys(item).filter(key => ['RedenId', 'StartCompensatieUren', 'ZittingsVrijeDagTijd'].includes(key)) : 'none'
-                });
-
-                // Additional debugging: check what compensatie items exist for this day
-                const debugCompensatieItems = getCompensatieUrenVoorDag(medewerker.Username, dag);
-                if (debugCompensatieItems.length > 0) {
-                    console.log(`Found ${debugCompensatieItems.length} compensatie items for ${medewerker.Username} on ${dag.toDateString()}:`, debugCompensatieItems);
-                }
-
-                // Helper to determine item type and list
-                function getItemTypeAndList(item) {
-                    if (!item) return { type: null, list: null };
-
-                    console.log('getItemTypeAndList called with item:', item);
-
-                    if ('RedenId' in item) {
-                        console.log('Detected verlof item');
-                        return { type: 'verlof', list: 'Verlof' };
-                    }
-                    if ('ZittingsVrijeDagTijd' in item) {
-                        console.log('Detected zittingsvrij item');
-                        return { type: 'zittingsvrij', list: 'IncidenteelZittingVrij' };
-                    }
-                    if ('StartCompensatieUren' in item) {
-                        console.log('Detected compensatie item');
-                        return { type: 'compensatie', list: 'CompensatieUren' };
-                    }
-                    if ('Status' in item && item.Status === 'Ziek') {
-                        console.log('Detected ziekte item');
-                        return { type: 'ziekte', list: 'Verlof' };
-                    }
-
-                    console.log('No item type detected, item keys:', Object.keys(item));
-                    return { type: null, list: null };
-                }
-
-                // Check if this is a direct compensatie item click
-                const { type: itemType } = getItemTypeAndList(item);
-                const isDirectCompensatieClick = itemType === 'compensatie';
-
-                const menuItems = [
-                    {
-                        label: 'Nieuw',
-                        icon: 'fa-plus',
-                        subItems: [
-                            {
-                                label: 'Verlof aanvragen',
-                                icon: 'fa-calendar-plus',
-                                onClick: () => {
-                                    console.log('Verlof aanvragen clicked');
-                                    // Use selected date range if available, otherwise use clicked day
-                                    const startDate = selection && selection.medewerkerId === medewerker.Username ? selection.start : dag;
-                                    const endDate = selection && selection.medewerkerId === medewerker.Username ? selection.end : dag;
-                                    const targetMedewerker = medewerkers.find(m => m.Username === medewerker.Username);
-
-                                    setSelection({
-                                        start: startDate,
-                                        end: endDate,
-                                        medewerkerId: medewerker.Username,
-                                        medewerkerData: targetMedewerker
-                                    });
-                                    setIsVerlofModalOpen(true);
-                                    setContextMenu(null);
-                                }
-                            },
-                            {
-                                label: 'Ziek melden',
-                                icon: 'fa-notes-medical',
-                                onClick: () => {
-                                    console.log('Ziek melden clicked');
-                                    // Use selected date range if available, otherwise use clicked day
-                                    const startDate = selection && selection.medewerkerId === medewerker.Username ? selection.start : dag;
-                                    const endDate = selection && selection.medewerkerId === medewerker.Username ? selection.end : dag;
-                                    const targetMedewerker = medewerkers.find(m => m.Username === medewerker.Username);
-
-                                    setSelection({
-                                        start: startDate,
-                                        end: endDate,
-                                        medewerkerId: medewerker.Username,
-                                        medewerkerData: targetMedewerker
-                                    });
-                                    setIsZiekModalOpen(true);
-                                    setContextMenu(null);
-                                }
-                            },
-                            {
-                                label: 'Compensatieuren doorgeven',
-                                icon: './icons/compensatieuren/neutraleuren.svg',
-                                iconType: 'svg',
-                                onClick: () => {
-                                    console.log('📝 Context menu: Compensatieuren doorgeven clicked');
-                                    // Use selected date range if available, otherwise use clicked day
-                                    const startDate = selection && selection.medewerkerId === medewerker.Username ? selection.start : dag;
-                                    const endDate = selection && selection.medewerkerId === medewerker.Username ? selection.end : dag;
-                                    const targetMedewerker = medewerkers.find(m => m.Username === medewerker.Username);
-
-                                    setSelection({
-                                        start: startDate,
-                                        end: endDate,
-                                        medewerkerId: medewerker.Username,
-                                        medewerkerData: targetMedewerker
-                                    });
-                                    console.log('📝 Opening compensatie modal...');
-                                    setIsCompensatieModalOpen(true);
-                                    setContextMenu(null);
-                                }
-                            },
-                            {
-                                label: 'Zittingsvrij maken',
-                                icon: 'fa-gavel',
-                                onClick: () => {
-                                    console.log('🔵 Context menu: Zittingsvrij maken clicked');
-                                    console.log('🔵 Current selection:', selection);
-                                    console.log('🔵 Current modal states before:', {
-                                        compensatie: isCompensatieModalOpen,
-                                        zittingsvrij: isZittingsvrijModalOpen,
-                                        verlof: isVerlofModalOpen,
-                                        ziek: isZiekModalOpen
-                                    });
-
-                                    // Use selected date range if available, otherwise use clicked day
-                                    const startDate = selection && selection.medewerkerId === medewerker.Username ? selection.start : dag;
-                                    const endDate = selection && selection.medewerkerId === medewerker.Username ? selection.end : dag;
-                                    const targetMedewerker = medewerkers.find(m => m.Username === medewerker.Username);
-
-                                    setSelection({
-                                        start: startDate,
-                                        end: endDate,
-                                        medewerkerId: medewerker.Username,
-                                        medewerkerData: targetMedewerker
-                                    });
-                                    console.log('🔵 Opening zittingsvrij modal ONLY...');
-                                    setIsZittingsvrijModalOpen(true);
-                                    setContextMenu(null);
-                                }
-                                // Removed requiredGroups - now everyone can see this option
-                            }
-                        ]
-                    }
-                ];
-
-                // Check for compensatie uren items on this day, but only show submenu if this wasn't a direct compensatie click
-                const compensatieItemsForDay = getCompensatieUrenVoorDag(medewerker.Username, dag);
-                if (compensatieItemsForDay.length > 0 && !isDirectCompensatieClick) {
-                    console.log(`Found ${compensatieItemsForDay.length} compensatie items, checking permissions...`);
-
-                    // Check if user has permission to modify ANY of the compensatie items
-                    const currentUsername = currentUser?.LoginName?.split('|')[1] || currentUser?.LoginName;
-                    const hasPrivilegedAccess = await canManageOthersEvents();
-
-                    const modifiableItems = compensatieItemsForDay.filter(compItem => {
-                        const itemOwner = compItem.MedewerkerID;
-                        const isOwnItem = itemOwner === currentUsername;
-                        return isOwnItem || hasPrivilegedAccess;
-                    });
-
-                    console.log(`User can modify ${modifiableItems.length} out of ${compensatieItemsForDay.length} compensatie items`);
-
-                    // Only show submenu if user can modify at least one compensatie item
-                    if (modifiableItems.length > 0) {
-                        console.log(`Adding compensatie uren submenu for ${modifiableItems.length} modifiable items`);
-
-                        // Add a submenu for compensatie uren items (only the ones user can modify)
-                        const compensatieSubItems = modifiableItems.map((compItem, index) => {
-                            const startDate = new Date(compItem.StartCompensatieUren);
-                            const endDate = new Date(compItem.EindeCompensatieUren);
-                            const description = compItem.Omschrijving || `Compensatie uren ${index + 1}`;
-
-                            return {
-                                label: `${description} (${startDate.toLocaleDateString()})`,
-                                icon: 'fa-edit',
-                                onClick: async () => {
-                                    console.log('Compensatie item selected from submenu:', compItem);
-
-                                    // Check permissions for this specific compensatie item
-                                    const currentUsername = currentUser?.LoginName?.split('|')[1] || currentUser?.LoginName;
-                                    const itemOwner = compItem.MedewerkerID;
-                                    const isOwnItem = itemOwner === currentUsername;
-                                    const hasPrivilegedAccess = await canManageOthersEvents();
-                                    const canModify = isOwnItem || hasPrivilegedAccess;
-
-                                    if (canModify) {
-                                        // Open edit modal for this compensatie item
-                                        const targetMedewerker = medewerkers.find(m => m.Username === compItem.MedewerkerID);
-                                        setSelection({
-                                            start: startDate,
-                                            end: endDate,
-                                            medewerkerId: compItem.MedewerkerID,
-                                            itemData: compItem,
-                                            medewerkerData: targetMedewerker
-                                        });
-                                        setIsCompensatieModalOpen(true);
-                                    } else {
-                                        alert('Je hebt geen rechten om dit item te bewerken.');
-                                    }
-                                    setContextMenu(null);
-                                }
-                            };
-                        });
-
-                        // Add delete submenu for compensatie uren (only for modifiable items)
-                        const deleteSubItems = modifiableItems.map((compItem, index) => {
-                            const description = compItem.Omschrijving || `Compensatie uren ${index + 1}`;
-
-                            return {
-                                label: `${description}`,
-                                icon: 'fa-trash',
-                                onClick: async () => {
-                                    console.log('Delete compensatie item selected:', compItem);
-
-                                    // Double-check permissions for this specific compensatie item
-                                    const currentUsername = currentUser?.LoginName?.split('|')[1] || currentUser?.LoginName;
-                                    const itemOwner = compItem.MedewerkerID;
-                                    const isOwnItem = itemOwner === currentUsername;
-                                    const hasPrivilegedAccess = await canManageOthersEvents();
-                                    const canModify = isOwnItem || hasPrivilegedAccess;
-
-                                    if (canModify) {
-                                        if (confirm(`Weet je zeker dat je "${description}" wilt verwijderen?`)) {
-                                            try {
-                                                await deleteSharePointListItem('CompensatieUren', compItem.ID);
-                                                refreshData();
-                                            } catch (err) {
-                                                console.error('Error deleting compensatie item:', err);
-                                                alert('Fout bij verwijderen: ' + err.message);
-                                            }
-                                        }
-                                    } else {
-                                        alert('Je hebt geen rechten om dit item te verwijderen.');
-                                    }
-                                    setContextMenu(null);
-                                }
-                            };
-                        });
-
-                        // Add compensatie uren management submenu (only show count of modifiable items)
-                        menuItems.push({
-                            label: `Compensatie Uren (${modifiableItems.length})`,
-                            icon: './icons/compensatieuren/neutraleuren.svg',
-                            iconType: 'svg',
-                            subItems: [
-                                {
-                                    label: 'Bewerken',
-                                    icon: 'fa-edit',
-                                    subItems: compensatieSubItems
-                                },
-                                {
-                                    label: 'Verwijderen',
-                                    icon: 'fa-trash',
-                                    subItems: deleteSubItems
-                                }
-                            ]
-                        });
-                    }
-                }
-                    // Only add edit/delete/comment options if there's a primary item (verlof/zittingsvrij)
-                    if (item) {
-                        console.log('Adding edit/delete/comment options for item:', item);
-
-                        // Check if user can modify this item
-                        const currentUsername = currentUser?.LoginName?.split('|')[1] || currentUser?.LoginName;
-                        const itemOwner = item.MedewerkerID || item.Gebruikersnaam;
-
-                        // If currentUser is not available yet, skip permission check for now
-                        if (!currentUser || !currentUsername) {
-                            console.log('Current user not available yet, skipping edit/delete options');
-                        } else {
-                            const isOwnItem = itemOwner === currentUsername;
-                            const hasPrivilegedAccess = await canManageOthersEvents();
-                            const canModify = isOwnItem || hasPrivilegedAccess;
-
-                            console.log('Permission check:', { currentUsername, itemOwner, isOwnItem, hasPrivilegedAccess, canModify });
-
-                            if (canModify) {
-                                menuItems.push(
-                                    {
-                                        label: 'Bewerken',
-                                        icon: 'fa-edit',
-                                        onClick: () => {
-                                            console.log('Bewerken clicked for item:', item);
-                                            const { type } = getItemTypeAndList(item);
-                                            const targetMedewerker = medewerkers.find(m =>
-                                                m.Username === (type === 'zittingsvrij' ? item.Gebruikersnaam : item.MedewerkerID)
-                                            );
-
-                                            if (type === 'verlof') {
-                                                setSelection({
-                                                    start: new Date(item.StartDatum),
-                                                    end: new Date(item.EindDatum),
-                                                    medewerkerId: item.MedewerkerID,
-                                                    itemData: item,
-                                                    medewerkerData: targetMedewerker
-                                                });
-                                                setIsVerlofModalOpen(true);
-                                            } else if (type === 'ziekte') {
-                                                setSelection({
-                                                    start: new Date(item.StartDatum),
-                                                    end: new Date(item.EindDatum),
-                                                    medewerkerId: item.MedewerkerID,
-                                                    itemData: item,
-                                                    medewerkerData: targetMedewerker
-                                                });
-                                                setIsZiekModalOpen(true);
-                                            } else if (type === 'compensatie') {
-                                                setSelection({
-                                                    start: new Date(item.StartCompensatieUren),
-                                                    end: new Date(item.EindeCompensatieUren),
-                                                    medewerkerId: item.MedewerkerID,
-                                                    itemData: item,
-                                                    medewerkerData: targetMedewerker
-                                                });
-                                                setIsCompensatieModalOpen(true);
-                                            } else if (type === 'zittingsvrij') {
-                                                setSelection({
-                                                    start: new Date(item.StartDatum),
-                                                    end: new Date(item.EindDatum),
-                                                    medewerkerId: item.Gebruikersnaam,
-                                                    itemData: item,
-                                                    medewerkerData: targetMedewerker
-                                                });
-                                                setIsZittingsvrijModalOpen(true);
-                                            } else {
-                                                alert('Kan dit item niet bewerken.');
-                                            }
-                                            setContextMenu(null);
-                                        }
-                                    },
-                                    {
-                                        label: 'Verwijderen',
-                                        icon: 'fa-trash',
-                                        onClick: async () => {
-                                            console.log('Verwijderen clicked for item:', item);
-                                            const { list } = getItemTypeAndList(item);
-                                            if (!list) {
-                                                alert('Kan dit item niet verwijderen.');
-                                                setContextMenu(null);
-                                                return;
-                                            }
-                                            if (confirm('Weet je zeker dat je dit item wilt verwijderen?')) {
-                                                try {
-                                                    await deleteSharePointListItem(list, item.ID);
-                                                    refreshData();
-                                                } catch (err) {
-                                                    console.error('Error deleting item:', err);
-                                                    alert('Fout bij verwijderen: ' + err.message);
-                                                }
-                                            }
-                                            setContextMenu(null);
-                                        }
-                                    },
-                                    {
-                                        label: 'Commentaar aanpassen',
-                                        icon: 'fa-comment-edit',
-                                        onClick: async () => {
-                                            console.log('Commentaar aanpassen clicked for item:', item);
-                                            const { list, type } = getItemTypeAndList(item);
-                                            if (!list) {
-                                                alert('Kan commentaar niet aanpassen voor dit item.');
-                                                setContextMenu(null);
-                                                return;
-                                            }
-                                            let currentComment = '';
-                                            if (type === 'verlof') currentComment = item.Omschrijving || '';
-                                            else if (type === 'ziekte') currentComment = item.Omschrijving || '';
-                                            else if (type === 'compensatie') currentComment = item.Omschrijving || '';
-                                            else if (type === 'zittingsvrij') currentComment = item.Opmerking || '';
-                                            else currentComment = '';
-                                            const newComment = prompt('Voer nieuw commentaar in:', currentComment);
-                                            if (newComment !== null) {
-                                                try {
-                                                    let updateObj = {};
-                                                    if (type === 'zittingsvrij') updateObj = { Opmerking: newComment };
-                                                    else updateObj = { Omschrijving: newComment };
-                                                    await updateSharePointListItem(list, item.ID, updateObj);
-                                                    refreshData();
-                                                } catch (err) {
-                                                    console.error('Error updating comment:', err);
-                                                    alert('Fout bij opslaan van commentaar: ' + err.message);
-                                                }
-                                            }
-                                            setContextMenu(null);
-                                        }
-                                    }
-                                );
-                            }
-                        }
-                    }
-
-                    menuItems.push({
-                        label: 'Annuleren',
-                        icon: 'fa-times',
-                        onClick: () => {
-                            console.log('Annuleren clicked');
-                            setContextMenu(null);
-                        }
-                    });
-
-                    console.log('Final context menu items:', menuItems);
-                    setContextMenu({
-                        x: e.clientX,
-                        y: e.clientY,
-                        items: menuItems,
-                        onClose: () => setContextMenu(null)
-                    });
-                } // Close showContextMenu function
-
-                // FAB handler that uses the same selection logic as ContextMenu
+            // FAB handler that uses the same selection logic as ContextMenu
                 // This ensures that when a user makes a selection (click 1/click 2),
                 // that selection range is passed to the forms when using the FAB
                 function handleZittingsvrijMaken() {
@@ -1697,8 +1224,7 @@
                                     Id: r.Id,
                                     WeekType: r.WeekType,
                                     IsRotatingSchedule: r.IsRotatingSchedule,
-                                    Ingangsdatum: r.Ingangsdatum?.toLocaleDateString(),
-                                    CycleStartDate: r.CycleStartDate?.toLocaleDateString()
+                                    CycleStartDate: r.CycleStartDate ? new Date(r.CycleStartDate).toLocaleDateString() : 'None'
                                 }))
                             );
                         }
@@ -2333,7 +1859,7 @@
                         }))
                     ) // Close Fragment with all app content (table + contextMenu + FAB + 4 modals)
                 ); // Close UserRegistrationCheck wrapper
-        }; // Close the RoosterApp function
+
 
             const root = ReactDOM.createRoot(document.getElementById('root'));
             console.log('🎯 About to render React app');
