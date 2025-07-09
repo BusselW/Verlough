@@ -1575,63 +1575,51 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                         className: `rooster-table ${weergaveType}-view`,
                         style: { '--day-count': periodeData.length }
                     },
-                        h('thead', { className: 'rooster-thead' },
+                        h('thead', { key: 'rooster-header' },
                             h('tr', { key: 'header-row' },
-                                periodeData.map((dag, index) => {
-                                    if (!(dag instanceof Date) || isNaN(dag)) {
-                                        console.error("Invalid date object in periodeData at index:", index, dag);
+                                h('th', { key: 'medewerker-header', className: 'medewerker-kolom' }, 'Medewerker'),
+                                ...periodeData.map((dag, index) => {
+                                    const dateObj = dag instanceof Date ? dag : new Date(dag);
+                                    if (isNaN(dateObj.getTime())) {
+                                        console.error("Invalid date object for header at index:", index, dag);
                                         return null;
                                     }
-
-                                    const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-                                    const isToday = isVandaag(dag);
-                                    const formattedDate = formatteerDatum(dag);
-                                    const feestdag = feestdagen[formattedDate];
+                                    const formattedDate = formatteerDatum(dateObj);
+                                    const dayName = getDayName(dateObj.getDay()).substring(0, 2);
+                                    const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
+                                    const feestdagNaam = feestdagen[formattedDate];
 
                                     return h('th', {
-                                        key: index, // Use index for a simple, guaranteed unique key
-                                        className: `dag-kolom ${isWeekend ? 'weekend' : ''} ${isToday ? 'vandaag' : ''} ${feestdag ? 'feestdag' : ''}`,
-                                        title: feestdag || ''
+                                        key: `header-cell-${index}`, // Explicitly create a unique string key
+                                        className: `dag-header ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''}`.trim(),
+                                        'data-feestdag': feestdagNaam || undefined
                                     },
-                                        h('div', { className: 'dag-nummer' }, dag.getDate()),
-                                        h('div', { className: 'dag-naam' }, dag.toLocaleDateString('nl-NL', { weekday: 'short' }))
+                                        h('div', { className: 'dag-info' },
+                                            h('span', { className: 'dag-naam' }, dayName),
+                                            h('span', { className: 'dag-nummer' }, dateObj.getDate())
+                                        )
                                     );
-                                }).filter(Boolean)
+                                }).filter(Boolean) // Filter out any nulls from invalid dates
                             )
                         ),
-                        h('tbody', null,
-                            Object.entries(gegroepeerdeData).map(([teamId, teamMedewerkers]) => {
-                                // Validate teamId and teamMedewerkers before rendering
-                                if (!teamId || typeof teamId !== 'string') {
-                                    console.error('Invalid teamId detected, skipping render for this team:', teamId);
-                                    return null; // Skip rendering this entry
-                                }
-                                if (!Array.isArray(teamMedewerkers)) {
-                                    console.error('teamMedewerkers is not an array for teamId:', teamId);
+                        h('tbody', { key: 'rooster-body' },
+                            teams.map(teamId => {
+                                const team = teamConfig.find(t => t.id === teamId);
+                                if (!team) return null;
+
+                                const teamMedewerkers = medewerkers.filter(m => m.teamId === teamId);
+                                if (teamMedewerkers.length === 0) {
                                     return null;
                                 }
 
-                                const teamInfo = teamId === 'geen_team' ? { naam: 'Zonder team', kleur: '#f3f4f6' } : teams.find(t => String(t.id) === String(teamId));
-                                if (!teamInfo) {
-                                    console.warn(`Could not find team info for teamId: ${teamId}`);
-                                }
-
-                                const teamHeader = h('tr', {
-                                    key: `team-header-${teamId}`, // Ensure key is unique and a string
-                                    className: 'team-rij'
-                                }, h('td', {
-                                    colSpan: periodeData.length + 1,
-                                    className: 'team-header',
-                                    style: {
-                                        backgroundColor: teamInfo?.kleur || '#6c757d'
-                                    }
-                                }, teamInfo?.naam || `Team ${teamId}`));
+                                const teamHeader = h('tr', { key: `team-header-${teamId}` },
+                                    h('td', { colSpan: periodeData.length + 1, className: 'team-header' }, team.naam)
+                                );
 
                                 const employeeRows = teamMedewerkers.map(medewerker => {
-                                    // Validate medewerker object and its id
                                     if (!medewerker || typeof medewerker.id === 'undefined' || medewerker.id === null) {
                                         console.error('Invalid medewerker object or missing ID, skipping render:', medewerker);
-                                        return null; // Skip rendering this employee
+                                        return null;
                                     }
                                     const medewerkerKey = `medewerker-${medewerker.id}`;
 
@@ -1639,8 +1627,7 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                         key: medewerkerKey,
                                         className: 'medewerker-rij'
                                     },
-                                        // Employee name cell
-                                        h('td', { className: 'medewerker-kolom' },
+                                        h('td', { key: `medewerker-info-${medewerker.id}`, className: 'medewerker-kolom' },
                                             h('div', { className: 'medewerker-info' },
                                                 h('img', {
                                                     className: 'medewerker-avatar',
@@ -1665,6 +1652,11 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                         ...periodeData.map((dag, dagIndex) => {
                                             // Ensure dag is a proper Date object
                                             const dateObj = dag instanceof Date ? dag : new Date(dag);
+                                            if (isNaN(dateObj.getTime())) {
+                                                console.error("Invalid date object for medewerker:", medewerker.id, "at index:", dagIndex, dag);
+                                                return null;
+                                            }
+                                            const cellKey = `${medewerker.id}-${dateObj.toISOString().split('T')[0]}`;
                                             // Add holiday information to the day object for DagCell
                                             const feestdagNaam = feestdagen[formatteerDatum(dag)];
 
@@ -1703,7 +1695,7 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                             if (hasVerlofOrZiekte || hasZittingsvrij || hasCompensatie) {
                                                 // Use DagCell for standard blocks
                                                 return h(DagCell, {
-                                                    key: `${medewerker.id}-${formatteerDatum(dateObj)}`,
+                                                    key: cellKey,
                                                     dag: dateObj,
                                                     medewerker: {
                                                         ...medewerker,
@@ -1723,7 +1715,7 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                             } else {
                                                 // Custom cell for UrenPerWeek or empty cells
                                                 return h('td', {
-                                                    key: `${medewerker.id}-${formatteerDatum(dateObj)}`,
+                                                    key: cellKey,
                                                     className: `dag-cel ${dateObj.getDay() === 0 || dateObj.getDay() === 6 ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isInSelection ? 'selected' : ''} ${isFirstClick ? 'first-click' : ''}`.trim(),
                                                     'data-feestdag': feestdagNaam || undefined,
                                                     'data-datum': dateObj.toISOString().split('T')[0],
@@ -1763,103 +1755,19 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                                     }, urenPerWeekData[`${dayName}Soort`])
                                                 );
                                             }
-                                        })
+                                        }).filter(Boolean) // Filter out nulls from invalid dates
                                     );
                                 });
 
                                 // Return a React Fragment containing the header and rows for this team
-                                return h(Fragment, { key: `team-fragment-${teamId}` }, [teamHeader, ...employeeRows]);
+                                return h(Fragment, { key: `team-fragment-${teamId}` }, [teamHeader, ...employeeRows.filter(Boolean)]);
                             }).filter(Boolean) // Filter out any null entries from validation
                         )
                     )
                 )
-            ),
-
-            // Context menu
-            contextMenu && h(ContextMenu, {
-                x: contextMenu.x,
-                y: contextMenu.y,
-                items: contextMenu.items,
-                onClose: contextMenu.onClose
-            }),
-            
-            // FAB
-            h(FAB, {
-                id: 'fab-container',
-                actions: [
-                    {
-                        label: 'Verlof aanvragen',
-                        icon: 'fa-calendar-plus',
-                        onClick: () => setIsVerlofModalOpen(true)
-                    },
-                    {
-                        label: 'Ziek melden',
-                        icon: 'fa-notes-medical',
-                        onClick: () => setIsZiekModalOpen(true)
-                    },
-                    {
-                        label: 'Compensatieuren doorgeven',
-                        icon: 'fa-clock',
-                        onClick: () => setIsCompensatieModalOpen(true)
-                    },
-                    {
-                        label: 'Zittingsvrij maken',
-                        icon: 'fa-gavel',
-                        onClick: () => setIsZittingsvrijModalOpen(true)
-                    }
-                ]
-            }),
-
-            // Modals
-            h(Modal, {
-                isOpen: isVerlofModalOpen,
-                onClose: () => setIsVerlofModalOpen(false),
-                title: selection && selection.itemData ? "Verlof Bewerken" : "Verlof Aanvragen"
-            }, h(VerlofAanvraagForm, {
-                onClose: () => setIsVerlofModalOpen(false),
-                medewerkers: medewerkers,
-                verlofItems: verlofItems,
-                shiftTypes: shiftTypes,
-                selection: selection,
-                initialData: selection && selection.itemData ? selection.itemData : {},
-                onSubmit: handleVerlofSubmit
-            })),
-            h(Modal, {
-                isOpen: isCompensatieModalOpen,
-                onClose: () => setIsCompensatieModalOpen(false),
-                title: selection && selection.itemData ? "Compensatie Uren Bewerken" : "Compensatie Uren Aanvragen"
-            }, h(CompensatieUrenForm, {
-                onClose: () => setIsCompensatieModalOpen(false),
-                medewerkers: medewerkers,
-                compensatieUrenItems: compensatieUrenItems,
-                selection: selection,
-                initialData: selection && selection.itemData ? selection.itemData : {},
-                onSubmit: handleCompensatieSubmit
-            })),
-            h(Modal, {
-                isOpen: isZiekModalOpen,
-                onClose: () => setIsZiekModalOpen(false),
-                title: selection && selection.itemData ? "Ziekmelding Bewerken" : "Ziek Melden"
-            }, h(ZiekteMeldingForm, {
-                onClose: () => setIsZiekModalOpen(false),
-                onSubmit: handleZiekteSubmit,
-                medewerkers: medewerkers,
-                selection: selection,
-                initialData: selection && selection.itemData ? selection.itemData : {},
-                ziekteRedenId: ziekteRedenId
-            })),
-            h(Modal, {
-                isOpen: isZittingsvrijModalOpen,
-                onClose: () => setIsZittingsvrijModalOpen(false),
-                title: selection && selection.itemData ? "Zittingsvrij Bewerken" : "Zittingsvrij Maken"
-            }, h(ZittingsvrijForm, {
-                onClose: () => setIsZittingsvrijModalOpen(false),
-                onSubmit: handleZittingsvrijSubmit,
-                medewerkers: medewerkers,
-                selection: selection,
-                initialData: selection && selection.itemData ? selection.itemData : {}
-            }))
+            )
         );
-    };
+    }
+}
 
-    export default RoosterApp;
+export default RoosterApp;

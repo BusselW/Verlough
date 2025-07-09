@@ -104,11 +104,29 @@ export const getDagenInMaand = (maand, jaar) => {
 };
 
 /**
- * Format a date to show Dutch day name and day number
+ * Format a date object to YYYY-MM-DD string
  * @param {Date} datum - The date to format
- * @returns {Object} Object with dagNaam (day name) and dagNummer (day number)
+ * @returns {string} Formatted date string
  */
 export const formatteerDatum = (datum) => {
+    if (!(datum instanceof Date) || isNaN(datum)) {
+        // Handle invalid date input gracefully
+        console.error("Invalid date provided to formatteerDatum:", datum);
+        return 'invalid-date';
+    }
+    const jaar = datum.getFullYear();
+    const maand = (datum.getMonth() + 1).toString().padStart(2, '0');
+    const dag = datum.getDate().toString().padStart(2, '0');
+    return `${jaar}-${maand}-${dag}`;
+};
+
+
+/**
+ * Get the name of the day in Dutch
+ * @param {Date} datum - The date to get the day name for
+ * @returns {string} The Dutch day name (e.g., "Ma" for Monday)
+ */
+export const getDagNaam = (datum) => {
     // Get day name based on index
     let dagNaam;
     switch (datum.getDay()) {
@@ -122,10 +140,7 @@ export const formatteerDatum = (datum) => {
         default: dagNaam = "";
     }
 
-    return {
-        dagNaam: dagNaam,
-        dagNummer: datum.getDate()
-    };
+    return dagNaam;
 };
 
 /**
@@ -168,3 +183,5 @@ export const isVandaag = (datum) => {
         datumCheck.getMonth() === vandaag.getMonth() &&
         datumCheck.getFullYear() === vandaag.getFullYear();
 };
+
+console.log("Date and Time Utilities loaded successfully.");
