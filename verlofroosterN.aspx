@@ -712,13 +712,13 @@
         const App = () => {
             const [isUserValidated, setIsUserValidated] = useState(false);
 
-            // In the new structure, RoosterApp will handle its own visibility
-            // based on the validation prop. We just need to pass the state.
             return h(ErrorBoundary, null,
                 h(Fragment, null,
                     h(NavigationButtons, null),
                     h(UserRegistrationCheck, { onUserValidated: setIsUserValidated },
-                        h(RoosterApp, { isUserValidated: isUserValidated })
+                        // Conditionally render RoosterApp only when the user is validated.
+                        // This prevents the app from trying to load data prematurely.
+                        isUserValidated ? h(RoosterApp, { isUserValidated: true }) : null
                     )
                 )
             );
