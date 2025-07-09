@@ -5,6 +5,7 @@
 // Cache buster: 2025-01-12-v6-complete-ui-structure-fix
 // Cache buster: 2025-01-12-v7-urenperweek-color-debug-fix
 // Cache buster: 2025-01-12-v8-team-header-color-fix
+// Cache buster: 2025-01-12-v9-team-id-mapping-fix
 // Cache buster: 2025-01-12-v9-profile-cards-avatars-fix
 // Cache buster: 2025-01-12-v10-missing-css-classes-fix
 // Cache buster: 2025-01-12-v13-zittingsvrij-class-fix
@@ -906,9 +907,24 @@ const RoosterApp = () => {
                 }
 
                 console.log('✅ Data fetched successfully, processing...');
-                const teamsMapped = (teamsData || []).map(item => ({ id: item.Title || item.ID?.toString(), naam: item.Naam || item.Title, kleur: item.Kleur || '#cccccc' }));
+                // Fix team mapping - use ID as id, not Title
+                const teamsMapped = (teamsData || []).map(item => ({ 
+                    id: item.ID || item.Title, 
+                    naam: item.Naam || item.Title, 
+                    kleur: item.Kleur || '#cccccc' 
+                }));
                 setTeams(teamsMapped);
-                const teamNameToIdMap = teamsMapped.reduce((acc, t) => { acc[t.naam] = t.id; return acc; }, {});
+                
+                // Create mapping from team name to team ID 
+                const teamNameToIdMap = teamsMapped.reduce((acc, t) => { 
+                    acc[t.naam] = t.id; 
+                    return acc; 
+                }, {});
+                
+                console.log('🏢 Teams mapped:', {
+                    teams: teamsMapped,
+                    nameToIdMap: teamNameToIdMap
+                });
                 const transformedShiftTypes = (verlofredenenData || []).reduce((acc, item) => {
                     if (item.Title) { acc[item.ID] = { id: item.ID, label: item.Title, kleur: item.Kleur || '#999999', afkorting: item.Afkorting || '??' }; }
                     return acc;
