@@ -128,6 +128,8 @@ performConcurrentWorkOnRoot @ react-dom.development.js:25787
 workLoop @ react.development.js:2653
 flushWork @ react.development.js:2626
 performWorkUntilDeadline @ react.development.js:2920
+
+NOTES: Fixed by adding proper key props and restoring DagCell integration for better UI structure.
  ProfielKaarten: Found 0 elements matching ".medewerker-naam, .medewerker-avatar"
  🏠 Modal state changed: {compensatie: false, zittingsvrij: false, verlof: false, ziek: false}
  🔍 Initializing TooltipManager from RoosterApp

@@ -3,7 +3,7 @@
 // Cache buster: 2025-01-12-v4-react-key-props-fix
 // Cache buster: 2025-01-12-v5-user-validation-startup-fix
 // Cache buster: 2025-01-12-v6-complete-ui-structure-fix
-// Cache buster: 2025-01-12-v7-dagcell-integration-fix
+// Cache buster: 2025-01-12-v8-date-object-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -1590,18 +1590,20 @@ const RoosterApp = () => {
                                         ),
                                         // Calendar cells for each day using DagCell component
                                         ...periodeData.map((dag, dagIndex) => {
+                                            // Ensure dag is a proper Date object
+                                            const dateObj = dag instanceof Date ? dag : new Date(dag);
                                             // Add holiday information to the day object for DagCell
-                                            const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
+                                            const feestdagNaam = feestdagen[dateObj.toISOString().split('T')[0]];
                                             const dagMitFeestdag = {
-                                                ...dag,
+                                                ...dateObj,
                                                 isFeestdag: !!feestdagNaam,
                                                 feestdagNaam: feestdagNaam,
-                                                isWeekend: dag.getDay() === 0 || dag.getDay() === 6
+                                                isWeekend: dateObj.getDay() === 0 || dateObj.getDay() === 6
                                             };
 
                                             return h(DagCell, {
                                                 key: `${medewerker.id}-${dagIndex}`,
-                                                dag: dagMitFeestdag,
+                                                dag: dateObj,
                                                 medewerker: {
                                                     ...medewerker,
                                                     Naam: medewerker.Title || medewerker.naam || medewerker.Name
