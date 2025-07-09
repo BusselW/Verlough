@@ -71,43 +71,6 @@ const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } 
 const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
     console.log('🏠 RoosterApp component initialized');
 
-    // Helper function to create header cells
-    const createHeaderCells = () => {
-        if (!periodeData || periodeData.length === 0) return [];
-
-        if (weergaveType === 'maand') {
-            return periodeData.map(dag => {
-                const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-                const isToday = isVandaag(dag);
-                const feestdag = feestdagen[formatteerDatum(dag)];
-
-                return h('th', {
-                    key: formatteerDatum(dag),
-                    className: `dag-kolom ${isWeekend ? 'weekend' : ''} ${isToday ? 'vandaag' : ''} ${feestdag ? 'feestdag' : ''}`,
-                    title: feestdag || ''
-                },
-                    h('div', { className: 'dag-nummer' }, dag.getDate()),
-                    h('div', { className: 'dag-naam' }, dag.toLocaleDateString('nl-NL', { weekday: 'short' }))
-                );
-            });
-        } else { // week view
-            return periodeData.map(dag => {
-                const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-                const isToday = isVandaag(dag);
-                const feestdag = feestdagen[formatteerDatum(dag)];
-
-                return h('th', {
-                    key: formatteerDatum(dag),
-                    className: `dag-kolom ${isWeekend ? 'weekend' : ''} ${isToday ? 'vandaag' : ''} ${feestdag ? 'feestdag' : ''}`,
-                    title: feestdag || ''
-                },
-                    h('div', { className: 'dag-nummer' }, dag.getDate()),
-                    h('div', { className: 'dag-naam' }, dag.toLocaleDateString('nl-NL', { weekday: 'short' }))
-                );
-            });
-        }
-    };
-
     const [isUserValidated, setIsUserValidated] = useState(propIsUserValidated);
 
     useEffect(() => {
@@ -1613,45 +1576,67 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                         style: { '--day-count': periodeData.length }
                     },
                         h('thead', { className: 'rooster-thead' },
-                            h('tr', { key: 'header-row' }, createHeaderCells())
+                            h('tr', { key: 'header-row' },
+                                periodeData.map((dag, index) => {
+                                    if (!(dag instanceof Date) || isNaN(dag)) {
+                                        console.error("Invalid date object in periodeData at index:", index, dag);
+                                        return null;
+                                    }
+
+                                    const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
+                                    const isToday = isVandaag(dag);
+                                    const formattedDate = formatteerDatum(dag);
+                                    const feestdag = feestdagen[formattedDate];
+
+                                    return h('th', {
+                                        key: index, // Use index for a simple, guaranteed unique key
+                                        className: `dag-kolom ${isWeekend ? 'weekend' : ''} ${isToday ? 'vandaag' : ''} ${feestdag ? 'feestdag' : ''}`,
+                                        title: feestdag || ''
+                                    },
+                                        h('div', { className: 'dag-nummer' }, dag.getDate()),
+                                        h('div', { className: 'dag-naam' }, dag.toLocaleDateString('nl-NL', { weekday: 'short' }))
+                                    );
+                                }).filter(Boolean)
+                            )
                         ),
                         h('tbody', null,
-                            Object.entries(gegroepeerdeData).map(([teamId, teamMedewerkers]) => [
-                                // Team header row
-                                h('tr', { 
-                                    key: `team-${teamId}`,
+                            Object.entries(gegroepeerdeData).map(([teamId, teamMedewerkers]) => {
+                                // Validate teamId and teamMedewerkers before rendering
+                                if (!teamId || typeof teamId !== 'string') {
+                                    console.error('Invalid teamId detected, skipping render for this team:', teamId);
+                                    return null; // Skip rendering this entry
+                                }
+                                if (!Array.isArray(teamMedewerkers)) {
+                                    console.error('teamMedewerkers is not an array for teamId:', teamId);
+                                    return null;
+                                }
+
+                                const teamInfo = teamId === 'geen_team' ? { naam: 'Zonder team', kleur: '#f3f4f6' } : teams.find(t => String(t.id) === String(teamId));
+                                if (!teamInfo) {
+                                    console.warn(`Could not find team info for teamId: ${teamId}`);
+                                }
+
+                                const teamHeader = h('tr', {
+                                    key: `team-header-${teamId}`, // Ensure key is unique and a string
                                     className: 'team-rij'
-                                },
-                                    h('td', { 
-                                        colSpan: periodeData.length + 1,
-                                        className: 'team-header',
-                                        style: { 
-                                            backgroundColor: (() => {
-                                                const teamColor = teamId === 'geen_team' ? '#f3f4f6' : teams.find(t => t.id === teamId)?.kleur;
-                                                const fallbackColor = '#6c757d'; // Gray fallback
-                                                const finalColor = teamColor || fallbackColor;
-                                                
-                                                // Debug logging
-                                                if (Math.random() < 0.3) { // Log 30% of the time
-                                                    console.log(`🎨 Team header color for ${teamId}:`, {
-                                                        teamId,
-                                                        teamColor,
-                                                        finalColor,
-                                                        allTeams: teams.map(t => ({ id: t.id, naam: t.naam, kleur: t.kleur }))
-                                                    });
-                                                }
-                                                
-                                                return finalColor;
-                                            })()
-                                        }
-                                    },
-                                        teamId === 'geen_team' ? 'Zonder team' : teams.find(t => t.id === teamId)?.naam
-                                    )
-                                ),
-                                // Employee rows for this team
-                                ...teamMedewerkers.map(medewerker => 
-                                    h('tr', { 
-                                        key: `medewerker-${medewerker.id}`,
+                                }, h('td', {
+                                    colSpan: periodeData.length + 1,
+                                    className: 'team-header',
+                                    style: {
+                                        backgroundColor: teamInfo?.kleur || '#6c757d'
+                                    }
+                                }, teamInfo?.naam || `Team ${teamId}`));
+
+                                const employeeRows = teamMedewerkers.map(medewerker => {
+                                    // Validate medewerker object and its id
+                                    if (!medewerker || typeof medewerker.id === 'undefined' || medewerker.id === null) {
+                                        console.error('Invalid medewerker object or missing ID, skipping render:', medewerker);
+                                        return null; // Skip rendering this employee
+                                    }
+                                    const medewerkerKey = `medewerker-${medewerker.id}`;
+
+                                    return h('tr', {
+                                        key: medewerkerKey,
                                         className: 'medewerker-rij'
                                     },
                                         // Employee name cell
@@ -1666,7 +1651,7 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                                     }
                                                 }),
                                                 h('div', null,
-                                                    h('span', { 
+                                                    h('span', {
                                                         className: 'medewerker-naam',
                                                         'data-username': medewerker.Username,
                                                         'data-medewerker': medewerker.Naam || medewerker.naam
@@ -1682,18 +1667,18 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                             const dateObj = dag instanceof Date ? dag : new Date(dag);
                                             // Add holiday information to the day object for DagCell
                                             const feestdagNaam = feestdagen[formatteerDatum(dag)];
-                                            
+
                                             // Get UrenPerWeek data for this day
                                             const urenPerWeekData = getUrenPerWeekForDate(medewerker.Username, dateObj);
                                             const dayName = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'][dateObj.getDay()];
-                                            
+
                                             // Check if this cell is in current selection
-                                            const isInSelection = selection && 
+                                            const isInSelection = selection &&
                                                 selection.medewerkerId === medewerker.Username &&
                                                 isDateInSelection(dateObj, medewerker.Username);
-                                            
+
                                             // Check if this is the first click cell
-                                            const isFirstClick = firstClickData && 
+                                            const isFirstClick = firstClickData &&
                                                 firstClickData.medewerker.Username === medewerker.Username &&
                                                 firstClickData.dag.getTime() === dateObj.getTime();
 
@@ -1701,24 +1686,24 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                             const verlofItem = getVerlofVoorDag(medewerker.Username, dateObj);
                                             const zittingsvrijItem = getZittingsvrijVoorDag(medewerker.Username, dateObj);
                                             const compensatieUrenVoorDag = getCompensatieUrenVoorDag(medewerker.Username, dateObj);
-                                            
+
                                             // Check if UrenPerWeek type should be shown (only VVO, VVD, VVM)
-                                            const shouldShowUrenPerWeek = urenPerWeekData && 
-                                                urenPerWeekData[`${dayName}Soort`] && 
+                                            const shouldShowUrenPerWeek = urenPerWeekData &&
+                                                urenPerWeekData[`${dayName}Soort`] &&
                                                 ['VVO', 'VVD', 'VVM'].includes(urenPerWeekData[`${dayName}Soort`]);
-                                            
+
                                             // Only show blocks for: Verlof, Ziekte, Compensatieuren, Zittingsvrij, VVO/VVD/VVM
                                             // Normal working days (like "Normaal") should NOT show a tag/block
                                             const hasVerlofOrZiekte = verlofItem;
                                             const hasZittingsvrij = zittingsvrijItem;
                                             const hasCompensatie = compensatieUrenVoorDag && compensatieUrenVoorDag.length > 0;
                                             const hasSpecialDay = shouldShowUrenPerWeek;
-                                            
+
                                             // Use DagCell for verlof/ziekte/zittingsvrij/compensatie, custom rendering for UrenPerWeek
                                             if (hasVerlofOrZiekte || hasZittingsvrij || hasCompensatie) {
                                                 // Use DagCell for standard blocks
                                                 return h(DagCell, {
-                                                    key: `${medewerker.id}-${dagIndex}`,
+                                                    key: `${medewerker.id}-${formatteerDatum(dateObj)}`,
                                                     dag: dateObj,
                                                     medewerker: {
                                                         ...medewerker,
@@ -1738,7 +1723,7 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                             } else {
                                                 // Custom cell for UrenPerWeek or empty cells
                                                 return h('td', {
-                                                    key: `${medewerker.id}-${dagIndex}`,
+                                                    key: `${medewerker.id}-${formatteerDatum(dateObj)}`,
                                                     className: `dag-cel ${dateObj.getDay() === 0 || dateObj.getDay() === 6 ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isInSelection ? 'selected' : ''} ${isFirstClick ? 'first-click' : ''}`.trim(),
                                                     'data-feestdag': feestdagNaam || undefined,
                                                     'data-datum': dateObj.toISOString().split('T')[0],
@@ -1755,13 +1740,13 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                                     // Only render UrenPerWeek blocks for VVO, VVD, VVM
                                                     hasSpecialDay && h('div', {
                                                         className: 'dag-indicator-blok urenperweek-blok',
-                                                        style: { 
+                                                        style: {
                                                             backgroundColor: (() => {
                                                                 const dayType = urenPerWeekData[`${dayName}Soort`];
                                                                 const indicator = dagenIndicators[dayType];
                                                                 const color = indicator?.kleur || '#cccccc';
                                                                 // Debug logging for color resolution
-                                                                if (Math.random() < 0.1) { // Only log 10% of the time to avoid spam
+                                                                if (Math.random() < 0.05) { // Reduce logging frequency
                                                                     console.log(`🎨 UrenPerWeek color for ${dayType}:`, {
                                                                         dayType,
                                                                         indicator,
@@ -1779,9 +1764,12 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                                 );
                                             }
                                         })
-                                    )
-                                )
-                            ]).flat()
+                                    );
+                                });
+
+                                // Return a React Fragment containing the header and rows for this team
+                                return h(Fragment, { key: `team-fragment-${teamId}` }, [teamHeader, ...employeeRows]);
+                            }).filter(Boolean) // Filter out any null entries from validation
                         )
                     )
                 )
