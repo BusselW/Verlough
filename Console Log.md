@@ -1,4 +1,6 @@
-Y:
+X: 
+
+roosterApp.js:1540  Uncaught ReferenceError: UserValidation is not defined
     at RoosterApp (roosterApp.js:1540:22)
     at renderWithHooks (react-dom.development.js:15496:20)
     at mountIndeterminateComponent (react-dom.development.js:20113:15)
