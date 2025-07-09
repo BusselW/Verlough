@@ -25,7 +25,7 @@ import {
     formatteerDatum, 
     getDagenInWeek, 
     isVandaag,
-    getDayName
+    getDagNaam
 } from '../utils/dateTimeUtils.js';
 import { getInitialen, getProfilePhotoUrl } from '../utils/userUtils.js';
 import { calculateWeekType } from '../services/scheduleLogic.js';
@@ -1432,6 +1432,19 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
 
         const gegroepeerdeData = useMemo(() => {
             
+            // Filter medewerkers based on search term and selected team
+            let gefilterdeMedewerkers = medewerkers;
+
+            if (zoekTerm) {
+                gefilterdeMedewerkers = gefilterdeMedewerkers.filter(m =>
+                    (m.Naam || m.naam || '').toLowerCase().includes(zoekTerm.toLowerCase())
+                );
+            }
+
+            if (geselecteerdTeam) {
+                gefilterdeMedewerkers = gefilterdeMedewerkers.filter(m => m.team === geselecteerdTeam);
+            }
+
             // Sort medewerkers by Naam column from Medewerkers SharePoint list based on sortDirection
             const gesorteerdeFilters = gefilterdeMedewerkers.sort((a, b) => {
                 // Use the Naam field from the SharePoint Medewerkers list specifically
@@ -1586,7 +1599,7 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                                         return null;
                                     }
                                     const formattedDate = formatteerDatum(dateObj);
-                                    const dayName = getDayName(dateObj.getDay()).substring(0, 2);
+                                    const dayName = getDagNaam(dateObj).substring(0, 2);
                                     const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
                                     const feestdagNaam = feestdagen[formattedDate];
 
@@ -1655,8 +1668,8 @@ const RoosterApp = ({ isUserValidated: propIsUserValidated = false }) => {
                         )
                     )
                 )
-            )
-        );
-}
+        )
+    );
+};
 
 export default RoosterApp;

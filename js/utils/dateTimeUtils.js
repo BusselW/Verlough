@@ -184,4 +184,12 @@ export const isVandaag = (datum) => {
         datumCheck.getFullYear() === vandaag.getFullYear();
 };
 
+export function getWeekNummer(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    return weekNo;
+}
+
 console.log("Date and Time Utilities loaded successfully.");
