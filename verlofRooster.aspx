@@ -687,77 +687,10 @@
         };
 
         // =====================
-        // Hoofd RoosterApp Component
+        // RoosterApp is now imported from module
         // =====================
-        const RoosterApp = () => {
-            console.log('🏠 RoosterApp component initialized');
-            const [isUserValidated, setIsUserValidated] = useState(false);
-            const [weergaveType, setWeergaveType] = useState('maand');
-
-            return h('div', null, 'RoosterApp placeholder - imported from module');
-        };
-            const [huidigJaar, setHuidigJaar] = useState(new Date().getFullYear());
-            const [huidigMaand, setHuidigMaand] = useState(new Date().getMonth());
-            const [medewerkers, setMedewerkers] = useState([]);
-            const [teams, setTeams] = useState([]);
-            const [shiftTypes, setShiftTypes] = useState({});
-            const [verlofItems, setVerlofItems] = useState([]);
-            const [feestdagen, setFeestdagen] = useState({});
-            const [loading, setLoading] = useState(false); // Start with false, let data loading set this to true
-            const [error, setError] = useState(null);
-            const [huidigWeek, setHuidigWeek] = useState(getWeekNummer(new Date()));
-            const [zoekTerm, setZoekTerm] = useState('');
-            const [geselecteerdTeam, setGeselecteerdTeam] = useState('');
-            const [sortDirection, setSortDirection] = useState('asc'); // 'asc' for A-Z, 'desc' for Z-A
-            const [zittingsvrijItems, setZittingsvrijItems] = useState([]);
-            const [compensatieUrenItems, setCompensatieUrenItems] = useState([]);
-            const [urenPerWeekItems, setUrenPerWeekItems] = useState([]);
-            const [dagenIndicators, setDagenIndicators] = useState({});
-            const [contextMenu, setContextMenu] = useState(null);
-            const [currentUser, setCurrentUser] = useState(null);
-            const [isVerlofModalOpen, setIsVerlofModalOpen] = useState(false);
-            const [isCompensatieModalOpen, setIsCompensatieModalOpen] = useState(false);
-            const [isZiekModalOpen, setIsZiekModalOpen] = useState(false);
-            const [isZittingsvrijModalOpen, setIsZittingsvrijModalOpen] = useState(false);
-
-            // Debug modal state changes
-            useEffect(() => {
-                console.log('🏠 Modal state changed:', {
-                    compensatie: isCompensatieModalOpen,
-                    zittingsvrij: isZittingsvrijModalOpen,
-                    verlof: isVerlofModalOpen,
-                    ziek: isZiekModalOpen
-                });
-            }, [isCompensatieModalOpen, isZittingsvrijModalOpen, isVerlofModalOpen, isZiekModalOpen]);
-            const [selection, setSelection] = useState(null);
-            const [showTooltip, setShowTooltip] = useState(false);
-            const [tooltipTimeout, setTooltipTimeout] = useState(null);
-            const [firstClickData, setFirstClickData] = useState(null);
-           
-            // Initialize the tooltip manager when the component mounts
-            useEffect(() => {
-                // Make sure TooltipManager is initialized
-                console.log('🔍 Initializing TooltipManager from RoosterApp');
-                TooltipManager.init();
-            }, []);
-           
-            // Initialize profile cards after data is loaded
-            useEffect(() => {
-                if (!loading && medewerkers.length > 0) {
-                    setTimeout(() => {
-                        if (typeof ProfielKaarten !== 'undefined' && ProfielKaarten.init) {
-                            ProfielKaarten.init();
-                        }
-                    }, 500);
-                }
-            }, [loading, medewerkers]);
-
-            // Trigger tooltip re-attachment after data loads and DOM updates
-            useEffect(() => {
-                if (!loading && medewerkers.length > 0) {
-                    // Allow React to finish rendering before attaching tooltips
-                    setTimeout(() => {
-                        console.log('🔄 Triggering tooltip re-attachment after data load');
+            const root = ReactDOM.createRoot(document.getElementById('root'));
+            root.render(h(ErrorBoundary, null, h(RoosterApp)));
                         TooltipManager.autoAttachTooltips();
                         
                         // Dispatch custom event for any components listening
