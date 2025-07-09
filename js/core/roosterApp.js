@@ -1653,34 +1653,29 @@ const RoosterApp = () => {
                                             medewerker.Functie && h('span', { className: 'functie' }, medewerker.Functie)
                                         )
                                     ),
-                                    // Calendar cells for each day
-                                    ...periodeData.map((dag, dagIndex) => 
-                                        h('td', {
-                                            key: `${medewerker.id}-${dagIndex}`,
-                                            className: (() => {
-                                                const urenVoorDag = getUrenPerWeekForDate(medewerker.Username, dag);
-                                                const verlofItem = getVerlofVoorDag(medewerker.Username, dag);
-                                                const zittingsvrijItem = getZittingsvrijVoorDag(medewerker.Username, dag);
-                                                const compensatieItems = getCompensatieUrenVoorDag(medewerker.Username, dag);
-                                                const inSelection = isDateInSelection(dag, medewerker.Username);
-                                                const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-                                                const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
+                                    // Calendar cells for each day using DagCell component
+                                    ...periodeData.map((dag, dagIndex) => {
+                                        // Add holiday information to the day object for DagCell
+                                        const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
+                                        const dagMitFeestdag = {
+                                            ...dag,
+                                            isFeestdag: !!feestdagNaam,
+                                            feestdagNaam: feestdagNaam,
+                                            isWeekend: dag.getDay() === 0 || dag.getDay() === 6
+                                        };
 
-                                                let classes = `cal-cell ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${inSelection ? 'geselecteerd' : ''}`;
-                                                if (verlofItem) classes += ` verlof verlof-${verlofItem.Status?.toLowerCase()}`;
-                                                if (zittingsvrijItem) classes += ' zittingsvrij';
-                                                if (compensatieItems.length > 0) classes += ' heeft-compensatie';
-                                                return classes;
-                                            })(),
-                                            onClick: () => handleCellClick(medewerker, dag),
-                                            onContextMenu: (e) => {
-                                                e.preventDefault();
-                                                showContextMenu(e, medewerker, dag);
-                                            }
-                                        },
-                                            createCellContent(medewerker, dag)
-                                        )
-                                    )
+                                        return h(DagCell, {
+                                            key: `${medewerker.id}-${dagIndex}`,
+                                            dag: dagMitFeestdag,
+                                            medewerker: medewerker,
+                                            onContextMenu: showContextMenu,
+                                            getVerlofVoorDag: getVerlofVoorDag,
+                                            getZittingsvrijVoorDag: getZittingsvrijVoorDag,
+                                            getCompensatieUrenVoorDag: getCompensatieUrenVoorDag,
+                                            shiftTypes: shiftTypes,
+                                            onCellClick: handleCellClick
+                                        });
+                                    })
                                 )
                             )
                         ]).flat()
