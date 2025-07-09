@@ -10,6 +10,7 @@
 // Cache buster: 2025-01-12-v16-urenperweek-blocks-fix
 // Cache buster: 2025-01-12-v17-filter-special-day-types-only
 // Cache buster: 2025-01-12-v20-verlof-redenen-lookup-fix
+// Cache buster: 2025-01-12-v21-verlof-start-end-blocks-and-css-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -1746,12 +1747,13 @@ const RoosterApp = () => {
                                                 },
                                                     // Only render UrenPerWeek blocks for VVO, VVD, VVM
                                                     hasSpecialDay && h('div', {
-                                                        className: 'dag-indicator-blok',
+                                                        className: 'dag-indicator-blok urenperweek-blok',
                                                         style: { 
                                                             backgroundColor: dagenIndicators[urenPerWeekData[`${dayName}Soort`]]?.kleur || '#cccccc'
                                                         },
                                                         'data-afkorting': urenPerWeekData[`${dayName}Soort`],
-                                                        'data-medewerker': medewerker.Title || medewerker.naam
+                                                        'data-medewerker': medewerker.Title || medewerker.naam,
+                                                        'data-type': 'urenperweek'
                                                     }, urenPerWeekData[`${dayName}Soort`])
                                                 );
                                             }
