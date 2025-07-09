@@ -103,7 +103,7 @@ verlofRoosterN.aspx:494 âœ… User validated, app ready to use
 verlofRoosterN.aspx:442 ðŸ User registration check complete
 verlofRoosterN.aspx:346 ðŸš€ UserRegistrationCheck component initialized
 roosterApp.js:117 🏠 RoosterApp component initialized
-react.development.js:199  Warning: Each child in a list should have a unique "key" prop.
+Y: react.development.js:199  Warning: Each child in a list should have a unique "key" prop.
 
 Check the render method of `RoosterApp`. See https://reactjs.org/link/warning-keys for more information.
     at th

@@ -1,5 +1,6 @@
 // Import React and necessary hooks and utilities
 // Cache buster: 2025-07-09-v3-uservalidation-fix
+// Cache buster: 2025-01-12-v4-react-key-props-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -38,7 +39,7 @@ const RoosterApp = () => {
     // Helper function to create header cells
     const createHeaderCells = () => {
         const cells = [
-            h('th', { className: 'medewerker-kolom', id: 'medewerker-kolom' }, 
+            h('th', { key: 'medewerker-kolom', className: 'medewerker-kolom', id: 'medewerker-kolom' }, 
                 h('div', { 
                     className: 'medewerker-header-container',
                     style: {
@@ -1629,7 +1630,7 @@ const RoosterApp = () => {
             h('div', { className: 'rooster-table-container' },
                 h('table', { className: 'rooster-table' },
                     h('thead', null,
-                        h('tr', null, createHeaderCells())
+                        h('tr', { key: 'header-row' }, createHeaderCells())
                     ),
                     h('tbody', null,
                         Object.entries(gegroepeerdeData).map(([teamId, teamMedewerkers]) => [
