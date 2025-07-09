@@ -1535,13 +1535,6 @@ const RoosterApp = () => {
             };
         }
 
-        // User validation check
-        if (!isUserValidated) {
-            return h(UserValidation, {
-                onValidationSuccess: () => setIsUserValidated(true)
-            });
-        }
-
         // Show loading state while refreshing data or if data is not ready
         if (loading || !periodeData || periodeData.length === 0) {
             return h('div', {
