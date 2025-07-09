@@ -2509,6 +2509,10 @@
         }; // Close the RoosterApp function
 
             const root = ReactDOM.createRoot(document.getElementById('root'));
+            console.log('🎯 About to render React app');
+            console.log('Root element exists:', !!document.getElementById('root'));
+            console.log('React available:', typeof React !== 'undefined');
+            console.log('ReactDOM available:', typeof ReactDOM !== 'undefined');
             root.render(h(ErrorBoundary, null, h(RoosterApp)));
 
             // Make functions globally available for use in other components
