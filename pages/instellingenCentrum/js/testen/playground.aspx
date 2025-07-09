@@ -478,39 +478,49 @@
         </div>
     </div>
 
-    <script>
-        // Nederlandse maanden en dagen
-        const dutchMonths = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 
-                           'juli', 'augustus', 'september', 'oktober', 'november', 'december'];
+    <script type="module">
+        // Import our modularized utilities
+        import { 
+            maandNamenVolledig as dutchMonths, 
+            getDagenInWeek,
+            isVandaag,
+            formatteerDatum 
+        } from '../../../../js/utils/dateTimeUtils.js';
+        
+        import { getInitialen } from '../../../../js/utils/userUtils.js';
+
+        // Nederlandse dagen (keeping local as it's different format than dateTimeUtils)
         const dutchDays = ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'];
 
-        // Verbeterde week berekening functie
+        // Use the modularized calculateWeekType function (similar to what's in verlofRooster.aspx)
         function calculateWeekType(targetDate, cycleStartDate) {
             if (!cycleStartDate || !(cycleStartDate instanceof Date)) {
                 return { weekType: 'A', error: 'Geen geldige startdatum cyclus' };
             }
            
-            // Bereken welke kalenderweek elke datum valt
+            // Calculate which calendar week each date falls into
+            // We use Monday as the start of the week (getDay(): Sun=0, Mon=1, ..., Sat=6)
             const getWeekStartDate = (date) => {
                 const d = new Date(date);
-                const day = d.getDay(); // 0 = zondag, 1 = maandag, etc.
-                const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Pas aan naar maandag
+                const day = d.getDay(); // 0 = Sunday, 1 = Monday, etc.
+                const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Adjust to Monday
                 d.setDate(diff);
                 d.setHours(0, 0, 0, 0);
                 return d;
             };
            
-            // Krijg de maandag van de week die de cyclus startdatum bevat
+            // Get the Monday of the week containing the cycle start date
             const cycleWeekStart = getWeekStartDate(cycleStartDate);
             
-            // Krijg de maandag van de week die de doeldatum bevat
+            // Get the Monday of the week containing the target date
             const targetWeekStart = getWeekStartDate(targetDate);
            
-            // Bereken het aantal weken tussen deze maandagen
+            // Calculate the number of weeks between these Mondays
             const timeDiff = targetWeekStart.getTime() - cycleWeekStart.getTime();
             const weeksSinceCycleStart = Math.floor(timeDiff / (7 * 24 * 60 * 60 * 1000));
            
-            // Even weken = A, Oneven weken = B
+            // Handle negative weeks (dates before cycle start) properly
+            // Even weeks = A, Odd weeks = B (using mathematical modulo to handle negatives)
             const weekType = ((weeksSinceCycleStart % 2) + 2) % 2 === 0 ? 'A' : 'B';
             
             return {
@@ -521,7 +531,7 @@
 
         function formatDutchDate(date) {
             const day = date.getDate();
-            const month = dutchMonths[date.getMonth()];
+            const month = dutchMonths[date.getMonth()].toLowerCase(); // Convert to lowercase to match original
             const weekday = dutchDays[date.getDay()];
             return `${weekday} ${day} ${month}`;
         }
