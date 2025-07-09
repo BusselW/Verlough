@@ -1,3 +1,38 @@
+// Import React and necessary hooks and utilities
+import { 
+    maandNamenVolledig, 
+    getPasen, 
+    getFeestdagen, 
+    getWeekNummer, 
+    getWekenInJaar, 
+    getDagenInMaand, 
+    formatteerDatum, 
+    getDagenInWeek, 
+    isVandaag 
+} from '../utils/dateTimeUtils.js';
+import { getInitialen, getProfilePhotoUrl } from '../utils/userUtils.js';
+import { calculateWeekType } from '../services/scheduleLogic.js';
+import { fetchSharePointList, getUserInfo, getCurrentUser, createSharePointListItem, updateSharePointListItem, deleteSharePointListItem, trimLoginNaamPrefix } from '../services/sharepointService.js';
+import { getCurrentUserGroups, isUserInAnyGroup } from '../services/permissionService.js';
+import * as linkInfo from '../services/linkInfo.js';
+import LoadingLogic, { loadFilteredData, shouldReloadData, updateCacheKey, clearAllCache, logLoadingStatus } from '../services/loadingLogic.js';
+import ContextMenu, { canManageOthersEvents, canUserModifyItem } from '../ui/ContextMenu.js';
+import FAB from '../ui/FloatingActionButton.js';
+import Modal from '../ui/Modal.js';
+import DagCell, { renderCompensatieMomenten } from '../ui/dagCell.js';
+import VerlofAanvraagForm from '../ui/forms/VerlofAanvraagForm.js';
+import CompensatieUrenForm from '../ui/forms/CompensatieUrenForm.js';
+import ZiekteMeldingForm from '../ui/forms/ZiekteMeldingForm.js';
+import ZittingsvrijForm from '../ui/forms/ZittingsvrijForm.js';
+import { roosterTutorial } from '../tutorial/roosterTutorial.js';
+import { roosterHandleiding, openHandleiding } from '../tutorial/roosterHandleiding.js';
+import { renderHorenStatus, getHorenStatus, filterMedewerkersByHorenStatus } from '../ui/horen.js';
+import TooltipManager from '../ui/tooltipbar.js';
+import ProfielKaarten from '../ui/profielkaarten.js';
+
+// Get React hooks from global React object
+const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
+
 const RoosterApp = () => {
     // Helper function to create header cells
     const createHeaderCells = () => {

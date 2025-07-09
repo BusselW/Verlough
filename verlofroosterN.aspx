@@ -494,7 +494,12 @@
                         console.log('✅ User validated, app ready to use');
                     }
                 }
-            }, h(RoosterApp))
+            }, 
+                h('div', { className: 'app-container' },
+                    h(NavigationButtons),
+                    h(RoosterApp)
+                )
+            )
         ));
 
         // Make functions globally available for use in other components

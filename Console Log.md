@@ -8,7 +8,7 @@ That means you do not have to read whatever comes after or on the next line of t
 This means we have an unresolved console log error. You must first handle the error before handling the request. When the error is resolved, you can proceed by handling the request.
 
 ------------------------------------------------
-X: roosterApp.js:82  Uncaught ReferenceError: useState is not defined
+Y:
     at RoosterApp (roosterApp.js:82:51)
     at renderWithHooks (react-dom.development.js:15496:20)
     at mountIndeterminateComponent (react-dom.development.js:20113:15)
