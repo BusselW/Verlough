@@ -1,14 +1,4 @@
-# This file
-Under the dashed line, a 'Y:' or 'X:' will be written. Here's how to deal with that parameter:
-
-1. If there's an Y:
-That means you do not have to read whatever comes after or on the next line of the 'Y:'. It implies there was a console log error before which you handled and can therefore disregard as it's already handled.
-
-2. If there's an X:
-This means we have an unresolved console log error. You must first handle the error before handling the request. When the error is resolved, you can proceed by handling the request.
-
-------------------------------------------------
-Y:
+roosterApp.js:82  Uncaught ReferenceError: useState is not defined
     at RoosterApp (roosterApp.js:82:51)
     at renderWithHooks (react-dom.development.js:15496:20)
     at mountIndeterminateComponent (react-dom.development.js:20113:15)
@@ -64,6 +54,7 @@ performWorkUntilDeadline @ react.development.js:2920
 react-dom.development.js:18714  The above error occurred in the <RoosterApp> component:
 
     at RoosterApp (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/CPW/Rooster/js/core/roosterApp.js:82:51)
+    at div
     at UserRegistrationCheck (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/CPW/Rooster/verlofRoosterN.aspx:345:42)
     at ErrorBoundary (https://som.org.om.local/sites/MulderT/CustomPW/Verlof/CPW/Rooster/verlofRoosterN.aspx:315:17)
 
@@ -109,4 +100,3 @@ performConcurrentWorkOnRoot @ react-dom.development.js:25858
 workLoop @ react.development.js:2653
 flushWork @ react.development.js:2626
 performWorkUntilDeadline @ react.development.js:2920
-
