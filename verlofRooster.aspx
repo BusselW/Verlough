@@ -704,6 +704,85 @@
         // Hoofd RoosterApp Component
         // =====================
         const RoosterApp = () => {
+            // Helper function to create header cells
+            const createHeaderCells = () => {
+                const cells = [
+                    h('th', { className: 'medewerker-kolom', id: 'medewerker-kolom' }, 
+                        h('div', { 
+                            className: 'medewerker-header-container',
+                            style: {
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                gap: '8px'
+                            }
+                        },
+                            h('span', null, 'Medewerker'),
+                            h('button', {
+                                className: 'sort-button',
+                                onClick: toggleSortDirection,
+                                title: `Huidige sortering: ${sortDirection === 'asc' ? 'A-Z' : 'Z-A'} (klik om te wisselen)`,
+                                style: {
+                                    background: 'none',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    padding: '4px 6px',
+                                    borderRadius: '4px',
+                                    color: '#6b7280',
+                                    fontSize: '12px',
+                                    fontWeight: '600',
+                                    transition: 'all 0.2s ease',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    lineHeight: 1
+                                },
+                                onMouseOver: (e) => {
+                                    e.target.style.backgroundColor = '#f3f4f6';
+                                    e.target.style.color = '#374151';
+                                },
+                                onMouseOut: (e) => {
+                                    e.target.style.backgroundColor = 'transparent';
+                                    e.target.style.color = '#6b7280';
+                                }
+                            }, 
+                            h('i', { 
+                                className: `fas ${sortDirection === 'asc' ? 'fa-sort-down' : 'fa-sort-up'}`,
+                                style: { fontSize: '10px' }
+                            })
+                        )
+                    )
+                ];
+                
+                (periodeData || []).forEach((dag, index) => {
+                    const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
+                    const feestdagNaam = checkIsFeestdag(dag);
+                    const isToday = isVandaag(dag);
+                    const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''}`;
+                   
+                    // Create a ref callback to add tooltip for holiday
+                    const headerRef = (element) => {
+                        if (element && feestdagNaam && !element.dataset.tooltipAttached) {
+                            TooltipManager.attach(element, () => {
+                                return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
+                            });
+                        }
+                    };
+                   
+                    cells.push(h('th', {
+                        key: `dag-${index}-${dag.toISOString()}`,
+                        className: classes,
+                        ref: headerRef
+                    },
+                        h('div', { className: 'dag-header' },
+                            h('span', { className: 'dag-naam' }, formatteerDatum(dag).dagNaam),
+                            h('span', { className: 'dag-nummer' }, formatteerDatum(dag).dagNummer),
+                            isToday && h('div', { className: 'vandaag-indicator' })
+                        )
+                    ));
+                });
+                
+                return cells;
+            };
             console.log('🏠 RoosterApp component initialized');
             const [isUserValidated, setIsUserValidated] = useState(false);
             const [weergaveType, setWeergaveType] = useState('maand');
@@ -2170,79 +2249,7 @@
                                 style: { '--day-count': periodeData.length }
                             },
                                 h('thead', { className: 'rooster-thead' },
-                                    h('tr', null,
-                                        h('th', { className: 'medewerker-kolom', id: 'medewerker-kolom' }, 
-                                            h('div', { 
-                                                className: 'medewerker-header-container',
-                                                style: {
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'space-between',
-                                                    gap: '8px'
-                                                }
-                                            },
-                                                h('span', null, 'Medewerker'),
-                                                h('button', {
-                                                    className: 'sort-button',
-                                                    onClick: toggleSortDirection,
-                                                    title: `Huidige sortering: ${sortDirection === 'asc' ? 'A-Z' : 'Z-A'} (klik om te wisselen)`,
-                                                    style: {
-                                                        background: 'none',
-                                                        border: 'none',
-                                                        cursor: 'pointer',
-                                                        padding: '4px 6px',
-                                                        borderRadius: '4px',
-                                                        color: '#6b7280',
-                                                        fontSize: '12px',
-                                                        fontWeight: '600',
-                                                        transition: 'all 0.2s ease',
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        lineHeight: 1
-                                                    },
-                                                    onMouseOver: (e) => {
-                                                        e.target.style.backgroundColor = '#f3f4f6';
-                                                        e.target.style.color = '#374151';
-                                                    },
-                                                    onMouseOut: (e) => {
-                                                        e.target.style.backgroundColor = 'transparent';
-                                                        e.target.style.color = '#6b7280';
-                                                    }
-                                                }, 
-                                                h('i', { 
-                                                    className: `fas ${sortDirection === 'asc' ? 'fa-sort-down' : 'fa-sort-up'}`,
-                                                    style: { fontSize: '10px' }
-                                                })
-                                            )
-                                        ),
-                                        ...(periodeData || []).map(dag => {
-                                            const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-                                            const feestdagNaam = checkIsFeestdag(dag);
-                                            const isToday = isVandaag(dag);
-                                            const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''}`;
-                                           
-                                            // Create a ref callback to add tooltip for holiday
-                                            const headerRef = (element) => {
-                                                if (element && feestdagNaam && !element.dataset.tooltipAttached) {
-                                                    TooltipManager.attach(element, () => {
-                                                        return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
-                                                    });
-                                                }
-                                            };
-                                           
-                                            return h('th', {
-                                                key: dag.toISOString(),
-                                                className: classes,
-                                                ref: headerRef
-                                            },
-                                                h('div', { className: 'dag-header' },
-                                                    h('span', { className: 'dag-naam' }, formatteerDatum(dag).dagNaam),
-                                                    h('span', { className: 'dag-nummer' }, formatteerDatum(dag).dagNummer),
-                                                    isToday && h('div', { className: 'vandaag-indicator' })
-                                                )
-                                            );
-                                        })
-                                    )
+                                    h.apply(h, ['tr', null].concat(createHeaderCells()))
                                 ), // Close thead
                                 h('tbody', null,
                                     (gegroepeerdeData ? Object.keys(gegroepeerdeData) : []).map(teamId => {
@@ -2499,7 +2506,8 @@
                             medewerkers: medewerkers,
                             selection: selection,
                             initialData: selection && selection.itemData ? selection.itemData : {}
-                        }))                ) // Close Fragment with all app content (table + contextMenu + FAB + 4 modals)
+                        }))
+                    ) // Close Fragment with all app content (table + contextMenu + FAB + 4 modals)
                 );
 
                 // Wrap the entire app content with UserRegistrationCheck

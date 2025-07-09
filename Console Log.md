@@ -8,7 +8,7 @@ That means you do not have to read whatever comes after or on the next line of t
 This means we have an unresolved console log error. You must first handle the error before handling the request. When the error is resolved, you can proceed by handling the request.
 
 ------------------------------------------------
-X: react-dom.development.js:73  Warning: validateDOMNesting(...): <th> cannot appear as a child of <th>.
+Y: react-dom.development.js:73  Warning: validateDOMNesting(...): <th> cannot appear as a child of <th>.
     at th
     at th
     at tr
@@ -33,7 +33,7 @@ performConcurrentWorkOnRoot @ react-dom.development.js:25787
 workLoop @ react.development.js:2653
 flushWork @ react.development.js:2626
 performWorkUntilDeadline @ react.development.js:2920
-react-dom.development.js:73  Warning: validateDOMNesting(...): <tbody> cannot appear as a child of <thead>.
+Y: react-dom.development.js:73  Warning: validateDOMNesting(...): <tbody> cannot appear as a child of <thead>.
     at tbody
     at thead
     at table
