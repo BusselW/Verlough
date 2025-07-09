@@ -1230,11 +1230,14 @@ td.medewerker-kolom {
 }
 
 .team-header {
-    background-color: var(--team-kleur, #e0e0e0);
+    /* Don't set background-color in CSS - let JavaScript handle it via inline styles */
     color: white;
     padding: 0.6rem 1rem;
     font-weight: 600;
     font-size: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     position: sticky;
     left: 0;
     z-index: 6;

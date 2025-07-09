@@ -4,6 +4,7 @@
 // Cache buster: 2025-01-12-v5-user-validation-startup-fix
 // Cache buster: 2025-01-12-v6-complete-ui-structure-fix
 // Cache buster: 2025-01-12-v7-urenperweek-color-debug-fix
+// Cache buster: 2025-01-12-v8-team-header-color-fix
 // Cache buster: 2025-01-12-v9-profile-cards-avatars-fix
 // Cache buster: 2025-01-12-v10-missing-css-classes-fix
 // Cache buster: 2025-01-12-v13-zittingsvrij-class-fix
@@ -1644,7 +1645,25 @@ const RoosterApp = () => {
                                     h('td', { 
                                         colSpan: periodeData.length + 1,
                                         className: 'team-header',
-                                        style: { backgroundColor: teamId === 'geen_team' ? '#f3f4f6' : teams.find(t => t.id === teamId)?.kleur }
+                                        style: { 
+                                            backgroundColor: (() => {
+                                                const teamColor = teamId === 'geen_team' ? '#f3f4f6' : teams.find(t => t.id === teamId)?.kleur;
+                                                const fallbackColor = '#6c757d'; // Gray fallback
+                                                const finalColor = teamColor || fallbackColor;
+                                                
+                                                // Debug logging
+                                                if (Math.random() < 0.3) { // Log 30% of the time
+                                                    console.log(`🎨 Team header color for ${teamId}:`, {
+                                                        teamId,
+                                                        teamColor,
+                                                        finalColor,
+                                                        allTeams: teams.map(t => ({ id: t.id, naam: t.naam, kleur: t.kleur }))
+                                                    });
+                                                }
+                                                
+                                                return finalColor;
+                                            })()
+                                        }
                                     },
                                         teamId === 'geen_team' ? 'Zonder team' : teams.find(t => t.id === teamId)?.naam
                                     )
