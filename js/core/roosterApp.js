@@ -6,7 +6,7 @@
 // Cache buster: 2025-01-12-v9-profile-cards-avatars-fix
 // Cache buster: 2025-01-12-v10-missing-css-classes-fix
 // Cache buster: 2025-01-12-v13-zittingsvrij-class-fix
-// Cache buster: 2025-01-12-v14-zv-debug-logging
+// Cache buster: 2025-01-12-v15-zv-fixes-clean
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -912,15 +912,7 @@ const RoosterApp = () => {
                     .map(item => ({ ...item, id: item.ID, naam: item.Naam, team: teamNameToIdMap[item.Team] || '', Username: item.Username || null }));
                 setMedewerkers(medewerkersProcessed);
                 setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: new Date(v.StartDatum), EindDatum: new Date(v.EindDatum) })));
-                const zittingsvrijProcessed = (zittingsvrijData || []).map(z => ({ ...z, StartDatum: new Date(z.ZittingsVrijeDagTijd), EindDatum: new Date(z.ZittingsVrijeDagTijdEind) }));
-                setZittingsvrijItems(zittingsvrijProcessed);
-                
-                // Debug ZV data loading
-                console.log('🔍 ZV Data loaded:', zittingsvrijProcessed.length, 'items');
-                if (zittingsvrijProcessed.length > 0) {
-                    console.log('Sample ZV item:', zittingsvrijProcessed[0]);
-                    console.log('ZV usernames:', zittingsvrijProcessed.map(z => z.Gebruikersnaam));
-                }
+                setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: new Date(z.ZittingsVrijeDagTijd), EindDatum: new Date(z.ZittingsVrijeDagTijdEind) })));
                 setCompensatieUrenItems((compensatieUrenData || []).map(c => ({
                     ...c,
                     StartCompensatieUren: new Date(c.StartCompensatieUren),
@@ -1411,17 +1403,7 @@ const RoosterApp = () => {
         const getZittingsvrijVoorDag = useCallback((medewerkerUsername, datum) => {
             if (!medewerkerUsername) return null;
             const datumCheck = new Date(datum).setHours(12, 0, 0, 0);
-            const result = zittingsvrijItems.find(z => z.Gebruikersnaam === medewerkerUsername && datumCheck >= new Date(z.StartDatum).setHours(12, 0, 0, 0) && datumCheck <= new Date(z.EindDatum).setHours(12, 0, 0, 0));
-            
-            // Debug logging for ZV issues
-            if (zittingsvrijItems.length > 0 && medewerkerUsername === 'org\\busselw') {
-                console.log('🔍 ZV Debug for', medewerkerUsername, 'on', datum.toISOString().split('T')[0]);
-                console.log('Total ZV items:', zittingsvrijItems.length);
-                console.log('Sample ZV item:', zittingsvrijItems[0]);
-                console.log('Found ZV for this date:', result);
-            }
-            
-            return result;
+            return zittingsvrijItems.find(z => z.Gebruikersnaam === medewerkerUsername && datumCheck >= new Date(z.StartDatum).setHours(12, 0, 0, 0) && datumCheck <= new Date(z.EindDatum).setHours(12, 0, 0, 0));
         }, [zittingsvrijItems]);
 
         const getCompensatieUrenVoorDag = useCallback((medewerkerUsername, dag) => {
@@ -1674,14 +1656,6 @@ const RoosterApp = () => {
                                             const isFirstClick = firstClickData && 
                                                 firstClickData.medewerker.Username === medewerker.Username &&
                                                 firstClickData.dag.getTime() === dateObj.getTime();
-
-                                            // Check for zittingsvrij data
-                                            const zittingsvrijItem = getZittingsvrijVoorDag(medewerker.Username, dateObj);
-                                            
-                                            // Debug for ZV rendering
-                                            if (medewerker.Username === 'org\\busselw' && zittingsvrijItem) {
-                                                console.log('🎯 Passing ZV item to DagCell:', zittingsvrijItem);
-                                            }
 
                                             return h(DagCell, {
                                                 key: `${medewerker.id}-${dagIndex}`,
