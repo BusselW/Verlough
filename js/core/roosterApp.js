@@ -1608,7 +1608,7 @@ const RoosterApp = () => {
                                 ...teamMedewerkers.map(medewerker => 
                                     h('tr', { 
                                         key: `medewerker-${medewerker.id}`,
-                                        className: 'medewerker-row'
+                                        className: 'medewerker-rij'
                                     },
                                         // Employee name cell
                                         h('td', { className: 'medewerker-naam' },
