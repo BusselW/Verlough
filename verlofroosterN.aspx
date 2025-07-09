@@ -486,11 +486,28 @@
         console.log('Root element exists:', !!document.getElementById('root'));
         console.log('React available:', typeof React !== 'undefined');
         console.log('ReactDOM available:', typeof ReactDOM !== 'undefined');
-        root.render(h(ErrorBoundary, null, 
-            h('div', { className: 'app-container' },
-                h(NavigationButtons),
-                h(RoosterApp)
-            )
+        root.render(h(ErrorBoundary, null,
+            h('div', { className: 'sticky-header-container' },
+                h('header', { id: 'header', className: 'header' },
+                    h('div', { className: 'header-content' },
+                        // Left side - Melding button and title
+                        h('div', { className: 'header-left' },
+                            h('button', {
+                                className: 'btn btn-melding',
+                                onClick: () => window.location.href = 'pages/meldingMaken.aspx',
+                                title: 'Melding Maken'
+                            },
+                                h('i', { className: 'fas fa-exclamation-triangle' }),
+                                'Melding'
+                            ),
+                            h('h1', null, 'Verlofrooster')
+                        ),
+                        // Right side - Permission-based navigation
+                        h(NavigationButtons)
+                    )
+                )
+            ),
+            h(RoosterApp)
         ));
 
         // Make functions globally available for use in other components
