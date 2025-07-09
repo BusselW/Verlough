@@ -24,6 +24,7 @@
 
     <!-- Hoofd script van de applicatie, nu als module om 'import' te gebruiken -->
     <script type="module">
+        console.log('🚀 Main script starting execution...');
         // Importeer de benodigde componenten en functies
         import MedewerkerRow from './js/ui/userinfo.js';
         import { fetchSharePointList, getUserInfo, getCurrentUser, createSharePointListItem, updateSharePointListItem, deleteSharePointListItem, trimLoginNaamPrefix } from './js/services/sharepointService.js';
@@ -713,7 +714,7 @@
             const [shiftTypes, setShiftTypes] = useState({});
             const [verlofItems, setVerlofItems] = useState([]);
             const [feestdagen, setFeestdagen] = useState({});
-            const [loading, setLoading] = useState(true);
+            const [loading, setLoading] = useState(false); // Start with false, let data loading set this to true
             const [error, setError] = useState(null);
             const [huidigWeek, setHuidigWeek] = useState(getWeekNummer(new Date()));
             const [zoekTerm, setZoekTerm] = useState('');
