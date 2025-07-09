@@ -44,6 +44,7 @@
         import { renderHorenStatus, getHorenStatus, filterMedewerkersByHorenStatus } from './js/ui/horen.js';
         import TooltipManager from './js/ui/tooltipbar.js';
         import ProfielKaarten from './js/ui/profielkaarten.js';
+        import RoosterApp from './js/core/roosterApp.js';
         import { 
             maandNamenVolledig, 
             getPasen, 
@@ -685,139 +686,7 @@
             return children;
         };
 
-        // =====================
-        // Hoofd RoosterApp Component
-        // =====================
-        const RoosterApp = () => {
-            // Helper function to create header cells
-            const createHeaderCells = () => {
-                const cells = [
-                    h('th', { className: 'medewerker-kolom', id: 'medewerker-kolom' }, 
-                        h('div', { 
-                            className: 'medewerker-header-container',
-                            style: {
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                gap: '8px'
-                            }
-                        },
-                            h('span', null, 'Medewerker'),
-                            h('button', {
-                                className: 'sort-button',
-                                onClick: toggleSortDirection,
-                                title: `Huidige sortering: ${sortDirection === 'asc' ? 'A-Z' : 'Z-A'} (klik om te wisselen)`,
-                                style: {
-                                    background: 'none',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    padding: '4px 6px',
-                                    borderRadius: '4px',
-                                    color: '#6b7280',
-                                    fontSize: '12px',
-                                    fontWeight: '600',
-                                    transition: 'all 0.2s ease',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    lineHeight: 1
-                                },
-                                onMouseOver: (e) => {
-                                    e.target.style.backgroundColor = '#f3f4f6';
-                                    e.target.style.color = '#374151';
-                                },
-                                onMouseOut: (e) => {
-                                    e.target.style.backgroundColor = 'transparent';
-                                    e.target.style.color = '#6b7280';
-                                }
-                            }, 
-                            h('i', { 
-                                className: `fas ${sortDirection === 'asc' ? 'fa-sort-down' : 'fa-sort-up'}`,
-                                style: { fontSize: '10px' }
-                            })
-                        )
-                    ))
-                ];
-                
-                (periodeData || []).forEach((dag, index) => {
-                    const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-                    const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
-                    const isToday = isVandaag(dag);
-                    const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''}`;
-                   
-                    // Create a ref callback to add tooltip for holiday
-                    const headerRef = (element) => {
-                        if (element && feestdagNaam && !element.dataset.tooltipAttached) {
-                            TooltipManager.attach(element, () => {
-                                return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
-                            });
-                        }
-                    };
-                   
-                    cells.push(h('th', {
-                        key: `dag-${index}-${dag.toISOString()}`,
-                        className: classes,
-                        ref: headerRef
-                    },
-                        h('div', { className: 'dag-header' },
-                            h('span', { className: 'dag-naam' }, formatteerDatum(dag).dagNaam),
-                            h('span', { className: 'dag-nummer' }, formatteerDatum(dag).dagNummer),
-                            isToday && h('div', { className: 'vandaag-indicator' })
-                        )
-                    ));
-                });
-                
-                return cells;
-            };
-            console.log('🏠 RoosterApp component initialized');
-            const [isUserValidated, setIsUserValidated] = useState(false);
-            const [weergaveType, setWeergaveType] = useState('maand');
-            const [huidigJaar, setHuidigJaar] = useState(new Date().getFullYear());
-            const [huidigMaand, setHuidigMaand] = useState(new Date().getMonth());
-            const [medewerkers, setMedewerkers] = useState([]);
-            const [teams, setTeams] = useState([]);
-            const [shiftTypes, setShiftTypes] = useState({});
-            const [verlofItems, setVerlofItems] = useState([]);
-            const [feestdagen, setFeestdagen] = useState({});
-            const [loading, setLoading] = useState(false); // Start with false, let data loading set this to true
-            const [error, setError] = useState(null);
-            const [huidigWeek, setHuidigWeek] = useState(getWeekNummer(new Date()));
-            const [zoekTerm, setZoekTerm] = useState('');
-            const [geselecteerdTeam, setGeselecteerdTeam] = useState('');
-            const [sortDirection, setSortDirection] = useState('asc'); // 'asc' for A-Z, 'desc' for Z-A
-            const [zittingsvrijItems, setZittingsvrijItems] = useState([]);
-            const [compensatieUrenItems, setCompensatieUrenItems] = useState([]);
-            const [urenPerWeekItems, setUrenPerWeekItems] = useState([]);
-            const [dagenIndicators, setDagenIndicators] = useState({});
-            const [contextMenu, setContextMenu] = useState(null);
-            const [currentUser, setCurrentUser] = useState(null);
-            const [isVerlofModalOpen, setIsVerlofModalOpen] = useState(false);
-            const [isCompensatieModalOpen, setIsCompensatieModalOpen] = useState(false);
-            const [isZiekModalOpen, setIsZiekModalOpen] = useState(false);
-            const [isZittingsvrijModalOpen, setIsZittingsvrijModalOpen] = useState(false);
-
-            // Debug modal state changes
-            useEffect(() => {
-                console.log('🏠 Modal state changed:', {
-                    compensatie: isCompensatieModalOpen,
-                    zittingsvrij: isZittingsvrijModalOpen,
-                    verlof: isVerlofModalOpen,
-                    ziek: isZiekModalOpen
-                });
-            }, [isCompensatieModalOpen, isZittingsvrijModalOpen, isVerlofModalOpen, isZiekModalOpen]);
-            const [selection, setSelection] = useState(null);
-            const [showTooltip, setShowTooltip] = useState(false);
-            const [tooltipTimeout, setTooltipTimeout] = useState(null);
-            const [firstClickData, setFirstClickData] = useState(null);
-           
-            // Initialize the tooltip manager when the component mounts
-            useEffect(() => {
-                // Make sure TooltipManager is initialized
-                console.log('🔍 Initializing TooltipManager from RoosterApp');
-                TooltipManager.init();
-            }, []);
-           
-            // Initialize profile cards after data is loaded
-            useEffect(() => {
+        // RoosterApp component is now imported as a module from ./js/core/roosterApp.js
                 if (!loading && medewerkers.length > 0) {
                     setTimeout(() => {
                         if (typeof ProfielKaarten !== 'undefined' && ProfielKaarten.init) {
