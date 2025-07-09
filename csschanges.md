@@ -1,5 +1,15 @@
 # CSS Classes Comparison: RoosterApp Symbol vs Actual Implementation
 
+## Summary of Fixed Dutch/English Class Name Mismatches:
+1. **`team-header-row` → `team-rij`** - Fixed to match CSS
+2. **`medewerker-row` → `medewerker-rij`** - Fixed to match CSS  
+3. **`medewerker-naam` TD** → **`medewerker-kolom` TD** - Fixed table structure
+4. **Removed non-existent CSS classes**: `medewerker-avatar-container`, `medewerker-details`
+5. **Fixed structure**: Avatar and text now direct children of `medewerker-info` for proper alignment
+6. **`'functie'` → `'medewerker-functie'`** - Fixed to match CSS
+
+**Alignment Issue Fixed**: Content was right-aligned due to using non-existent container classes. Now uses proper CSS structure with left-aligned content.
+
 | CSS Class/ID from Documentation | CSS Class/ID in roosterApp.js | Exists? |
 |----------------------------------|--------------------------------|---------|
 | **IDs** |
@@ -35,12 +45,10 @@
 | `.team-rij` | `className: 'team-rij'` | ✅ **FIXED: was team-header-row** |
 | `.team-header` | `className: 'team-header'` | ✅ |
 | `.medewerker-rij` | `className: 'medewerker-rij'` | ✅ **FIXED: was medewerker-row** |
-| `.medewerker-naam` | `className: 'medewerker-naam'` | ✅ |
+| `.medewerker-kolom` | `className: 'medewerker-kolom'` | ✅ **FIXED: TD class was medewerker-naam** |
 | `.medewerker-info` | `className: 'medewerker-info'` | ✅ |
-| `.medewerker-avatar-container` | `className: 'medewerker-avatar-container'` | ✅ |
-| `.medewerker-avatar` | `className: 'medewerker-avatar'` | ✅ |
-| `.medewerker-details` | `className: 'medewerker-details'` | ✅ |
-| `.medewerker-naam` | `className: 'medewerker-naam'` | ✅ **FIXED: removed redundant 'naam'** |
+| `.medewerker-avatar` | `className: 'medewerker-avatar'` | ✅ **FIXED: removed non-existent container** |
+| `.medewerker-naam` | `className: 'medewerker-naam'` | ✅ **FIXED: now direct child of text div** |
 | `.medewerker-functie` | `className: 'medewerker-functie'` | ✅ **FIXED: was 'functie'** |
 | **Header Classes** |
 | `.medewerker-kolom` | `className: 'medewerker-kolom'` | ✅ |

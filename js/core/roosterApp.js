@@ -5,7 +5,8 @@
 // Cache buster: 2025-01-12-v6-complete-ui-structure-fix
 // Cache buster: 2025-01-12-v9-profile-cards-avatars-fix
 // Cache buster: 2025-01-12-v10-missing-css-classes-fix
-// Cache buster: 2025-01-12-v11-dutch-class-names-fix
+// Cache buster: 2025-01-12-v13-zittingsvrij-class-fix
+// Cache buster: 2025-01-12-v14-zv-debug-logging
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -911,7 +912,15 @@ const RoosterApp = () => {
                     .map(item => ({ ...item, id: item.ID, naam: item.Naam, team: teamNameToIdMap[item.Team] || '', Username: item.Username || null }));
                 setMedewerkers(medewerkersProcessed);
                 setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: new Date(v.StartDatum), EindDatum: new Date(v.EindDatum) })));
-                setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: new Date(z.ZittingsVrijeDagTijd), EindDatum: new Date(z.ZittingsVrijeDagTijdEind) })));
+                const zittingsvrijProcessed = (zittingsvrijData || []).map(z => ({ ...z, StartDatum: new Date(z.ZittingsVrijeDagTijd), EindDatum: new Date(z.ZittingsVrijeDagTijdEind) }));
+                setZittingsvrijItems(zittingsvrijProcessed);
+                
+                // Debug ZV data loading
+                console.log('🔍 ZV Data loaded:', zittingsvrijProcessed.length, 'items');
+                if (zittingsvrijProcessed.length > 0) {
+                    console.log('Sample ZV item:', zittingsvrijProcessed[0]);
+                    console.log('ZV usernames:', zittingsvrijProcessed.map(z => z.Gebruikersnaam));
+                }
                 setCompensatieUrenItems((compensatieUrenData || []).map(c => ({
                     ...c,
                     StartCompensatieUren: new Date(c.StartCompensatieUren),
@@ -1402,7 +1411,17 @@ const RoosterApp = () => {
         const getZittingsvrijVoorDag = useCallback((medewerkerUsername, datum) => {
             if (!medewerkerUsername) return null;
             const datumCheck = new Date(datum).setHours(12, 0, 0, 0);
-            return zittingsvrijItems.find(z => z.Gebruikersnaam === medewerkerUsername && datumCheck >= new Date(z.StartDatum).setHours(12, 0, 0, 0) && datumCheck <= new Date(z.EindDatum).setHours(12, 0, 0, 0));
+            const result = zittingsvrijItems.find(z => z.Gebruikersnaam === medewerkerUsername && datumCheck >= new Date(z.StartDatum).setHours(12, 0, 0, 0) && datumCheck <= new Date(z.EindDatum).setHours(12, 0, 0, 0));
+            
+            // Debug logging for ZV issues
+            if (zittingsvrijItems.length > 0 && medewerkerUsername === 'org\\busselw') {
+                console.log('🔍 ZV Debug for', medewerkerUsername, 'on', datum.toISOString().split('T')[0]);
+                console.log('Total ZV items:', zittingsvrijItems.length);
+                console.log('Sample ZV item:', zittingsvrijItems[0]);
+                console.log('Found ZV for this date:', result);
+            }
+            
+            return result;
         }, [zittingsvrijItems]);
 
         const getCompensatieUrenVoorDag = useCallback((medewerkerUsername, dag) => {
@@ -1612,27 +1631,25 @@ const RoosterApp = () => {
                                         className: 'medewerker-rij'
                                     },
                                         // Employee name cell
-                                        h('td', { className: 'medewerker-naam' },
+                                        h('td', { className: 'medewerker-kolom' },
                                             h('div', { className: 'medewerker-info' },
-                                                h('div', { className: 'medewerker-avatar-container' },
-                                                    h('img', {
-                                                        className: 'medewerker-avatar',
-                                                        src: getProfilePhotoUrl(medewerker.Username) || `https://placehold.co/40x40/4a90e2/ffffff?text=${getInitialen(medewerker.Title || medewerker.naam)}`,
-                                                        alt: medewerker.Title || medewerker.naam,
-                                                        onError: (e) => {
-                                                            e.target.src = `https://placehold.co/40x40/4a90e2/ffffff?text=${getInitialen(medewerker.Title || medewerker.naam)}`;
-                                                        }
-                                                    })
-                                                ),
-                                                h('div', { className: 'medewerker-details' },
+                                                h('img', {
+                                                    className: 'medewerker-avatar',
+                                                    src: getProfilePhotoUrl(medewerker.Username) || `https://placehold.co/40x40/4a90e2/ffffff?text=${getInitialen(medewerker.Title || medewerker.naam)}`,
+                                                    alt: medewerker.Title || medewerker.naam,
+                                                    onError: (e) => {
+                                                        e.target.src = `https://placehold.co/40x40/4a90e2/ffffff?text=${getInitialen(medewerker.Title || medewerker.naam)}`;
+                                                    }
+                                                }),
+                                                h('div', null,
                                                     h('span', { 
                                                         className: 'medewerker-naam',
                                                         'data-username': medewerker.Username,
                                                         'data-medewerker': medewerker.Title || medewerker.naam
                                                     }, medewerker.Title || medewerker.naam),
-                                                    medewerker.Functie && h('span', { className: 'medewerker-functie' }, medewerker.Functie),
-                                                    renderHorenStatus && renderHorenStatus(medewerker)
-                                                )
+                                                    medewerker.Functie && h('span', { className: 'medewerker-functie' }, medewerker.Functie)
+                                                ),
+                                                renderHorenStatus && renderHorenStatus(medewerker)
                                             )
                                         ),
                                         // Calendar cells for each day using DagCell component
@@ -1657,6 +1674,14 @@ const RoosterApp = () => {
                                             const isFirstClick = firstClickData && 
                                                 firstClickData.medewerker.Username === medewerker.Username &&
                                                 firstClickData.dag.getTime() === dateObj.getTime();
+
+                                            // Check for zittingsvrij data
+                                            const zittingsvrijItem = getZittingsvrijVoorDag(medewerker.Username, dateObj);
+                                            
+                                            // Debug for ZV rendering
+                                            if (medewerker.Username === 'org\\busselw' && zittingsvrijItem) {
+                                                console.log('🎯 Passing ZV item to DagCell:', zittingsvrijItem);
+                                            }
 
                                             return h(DagCell, {
                                                 key: `${medewerker.id}-${dagIndex}`,
