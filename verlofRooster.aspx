@@ -412,6 +412,7 @@
 
             const checkUserRegistration = async () => {
                 try {
+                    console.log('🔍 Starting user registration check...');
                     setIsChecking(true);
 
                     // Get current user from SharePoint
@@ -419,7 +420,9 @@
                     console.log('Current user from SharePoint:', user);
 
                     if (!user) {
-                        throw new Error('Kan huidige gebruiker niet ophalen');
+                        console.warn('⚠️ No user info returned, proceeding anyway');
+                        onUserValidated(true);
+                        return;
                     }
 
                     setCurrentUser(user);
@@ -484,13 +487,17 @@
                     setIsRegistered(userExists);
 
                     // Always call onUserValidated to allow the app to load
-                    // The overlay will handle the user not being registered
+                    console.log('✅ User validation complete, calling onUserValidated(true)');
                     onUserValidated(true);
 
                 } catch (error) {
-                    console.error('Error checking user registration:', error);
+                    console.error('❌ Error checking user registration:', error);
                     setIsRegistered(false);
+                    // Still allow app to load even if user check fails
+                    console.log('⚠️ User check failed but proceeding with app load');
+                    onUserValidated(true);
                 } finally {
+                    console.log('🏁 User registration check complete');
                     setIsChecking(false);
                 }
             };
