@@ -2170,7 +2170,7 @@
                                 style: { '--day-count': periodeData.length }
                             },
                                 h('thead', { className: 'rooster-thead' },
-                                    h('tr', null,
+                                    h('tr', null, [
                                         h('th', { className: 'medewerker-kolom', id: 'medewerker-kolom' }, 
                                             h('div', { 
                                                 className: 'medewerker-header-container',
@@ -2214,8 +2214,8 @@
                                                     style: { fontSize: '10px' }
                                                 })
                                             )
-                                        ),
-                                        ((periodeData || []).length > 0 ? periodeData.map(dag => {
+                                        )
+                                    ].concat((periodeData || []).map(dag => {
                                             const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
                                             const feestdagNaam = checkIsFeestdag(dag);
                                             const isToday = isVandaag(dag);
@@ -2241,7 +2241,7 @@
                                                     isToday && h('div', { className: 'vandaag-indicator' })
                                                 )
                                             );
-                                        }) : [])
+                                        }))
                                     )
                                 ), // Close thead
                                 h('tbody', null,
