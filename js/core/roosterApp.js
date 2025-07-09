@@ -9,6 +9,7 @@
 // Cache buster: 2025-01-12-v15-zv-fixes-clean
 // Cache buster: 2025-01-12-v16-urenperweek-blocks-fix
 // Cache buster: 2025-01-12-v17-filter-special-day-types-only
+// Cache buster: 2025-01-12-v19-fix-block-display-only-required-types
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -1657,32 +1658,72 @@ const RoosterApp = () => {
                                                 firstClickData.medewerker.Username === medewerker.Username &&
                                                 firstClickData.dag.getTime() === dateObj.getTime();
 
-                                            // Add UrenPerWeek data to dateObj if we have it
-                                            if (urenPerWeekData && urenPerWeekData[`${dayName}Soort`] && 
-                                                ['VVO', 'VVD', 'VVM'].includes(urenPerWeekData[`${dayName}Soort`])) {
-                                                dateObj.urenPerWeekType = urenPerWeekData[`${dayName}Soort`];
-                                                dateObj.urenPerWeekColor = dagenIndicators[urenPerWeekData[`${dayName}Soort`]]?.kleur || '#cccccc';
-                                            }
+                                            // Get all data for this cell
+                                            const verlofItem = getVerlofVoorDag(medewerker.Username, dateObj);
+                                            const zittingsvrijItem = getZittingsvrijVoorDag(medewerker.Username, dateObj);
+                                            const compensatieUrenVoorDag = getCompensatieUrenVoorDag(medewerker.Username, dateObj);
                                             
-                                            // Use DagCell component with proper styling
-                                            return h(DagCell, {
-                                                key: `${medewerker.id}-${dagIndex}`,
-                                                dag: dateObj,
-                                                medewerker: {
-                                                    ...medewerker,
-                                                    Naam: medewerker.Title || medewerker.naam,
-                                                    Username: medewerker.Username
+                                            // Check if UrenPerWeek type should be shown (only VVO, VVD, VVM)
+                                            const shouldShowUrenPerWeek = urenPerWeekData && 
+                                                urenPerWeekData[`${dayName}Soort`] && 
+                                                ['VVO', 'VVD', 'VVM'].includes(urenPerWeekData[`${dayName}Soort`]);
+                                            
+                                            // Only show blocks for: Verlof, Ziekte, Compensatieuren, Zittingsvrij, VVO/VVD/VVM
+                                            // Normal working days (like "Normaal") should NOT show a tag/block
+                                            const hasVerlofOrZiekte = verlofItem;
+                                            const hasZittingsvrij = zittingsvrijItem;
+                                            const hasCompensatie = compensatieUrenVoorDag && compensatieUrenVoorDag.length > 0;
+                                            const hasSpecialDay = shouldShowUrenPerWeek;
+                                            
+                                            // Use DagCell for verlof/ziekte/zittingsvrij/compensatie, custom rendering for UrenPerWeek
+                                            if (hasVerlofOrZiekte || hasZittingsvrij || hasCompensatie) {
+                                                // Use DagCell for standard blocks
+                                                return h(DagCell, {
+                                                    key: `${medewerker.id}-${dagIndex}`,
+                                                    dag: dateObj,
+                                                    medewerker: {
+                                                        ...medewerker,
+                                                        Naam: medewerker.Title || medewerker.naam,
+                                                        Username: medewerker.Username
+                                                    },
+                                                    getVerlofVoorDag,
+                                                    getZittingsvrijVoorDag,
+                                                    getCompensatieUrenVoorDag,
+                                                    shiftTypes,
+                                                    onContextMenu: showContextMenu,
+                                                    onCellClick: handleCellClick,
+                                                    isSelected: isInSelection,
+                                                    isFirstClick,
+                                                    feestdagNaam
+                                                });
+                                            } else {
+                                                // Custom cell for UrenPerWeek or empty cells
+                                                return h('td', {
+                                                    key: `${medewerker.id}-${dagIndex}`,
+                                                    className: `dag-cel ${dateObj.getDay() === 0 || dateObj.getDay() === 6 ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isInSelection ? 'selected' : ''} ${isFirstClick ? 'first-click' : ''}`.trim(),
+                                                    'data-feestdag': feestdagNaam || undefined,
+                                                    'data-datum': dateObj.toISOString().split('T')[0],
+                                                    'data-medewerker': medewerker.Title || medewerker.naam,
+                                                    onContextMenu: (e) => showContextMenu(e, {
+                                                        medewerker,
+                                                        dag: dateObj,
+                                                        verlofItem: null,
+                                                        zittingsvrijItem: null,
+                                                        compensatieUren: []
+                                                    }),
+                                                    onClick: () => handleCellClick(medewerker, dateObj, null)
                                                 },
-                                                getVerlofVoorDag,
-                                                getZittingsvrijVoorDag,
-                                                getCompensatieUrenVoorDag,
-                                                shiftTypes,
-                                                onContextMenu: showContextMenu,
-                                                onCellClick: handleCellClick,
-                                                isSelected: isInSelection,
-                                                isFirstClick,
-                                                feestdagNaam
-                                            });
+                                                    // Only render UrenPerWeek blocks for VVO, VVD, VVM
+                                                    hasSpecialDay && h('div', {
+                                                        className: 'dag-indicator-blok',
+                                                        style: { 
+                                                            backgroundColor: dagenIndicators[urenPerWeekData[`${dayName}Soort`]]?.kleur || '#cccccc'
+                                                        },
+                                                        'data-afkorting': urenPerWeekData[`${dayName}Soort`],
+                                                        'data-medewerker': medewerker.Title || medewerker.naam
+                                                    }, urenPerWeekData[`${dayName}Soort`])
+                                                );
+                                            }
                                         })
                                     )
                                 )
