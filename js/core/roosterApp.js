@@ -5,6 +5,7 @@
 // Cache buster: 2025-01-12-v6-complete-ui-structure-fix
 // Cache buster: 2025-01-12-v9-profile-cards-avatars-fix
 // Cache buster: 2025-01-12-v10-missing-css-classes-fix
+// Cache buster: 2025-01-12-v11-dutch-class-names-fix
 import { 
     maandNamenVolledig, 
     getPasen, 
@@ -1594,7 +1595,7 @@ const RoosterApp = () => {
                                 // Team header row
                                 h('tr', { 
                                     key: `team-${teamId}`,
-                                    className: 'team-header-row'
+                                    className: 'team-rij'
                                 },
                                     h('td', { 
                                         colSpan: periodeData.length + 1,
@@ -1625,11 +1626,11 @@ const RoosterApp = () => {
                                                 ),
                                                 h('div', { className: 'medewerker-details' },
                                                     h('span', { 
-                                                        className: 'naam medewerker-naam',
+                                                        className: 'medewerker-naam',
                                                         'data-username': medewerker.Username,
                                                         'data-medewerker': medewerker.Title || medewerker.naam
                                                     }, medewerker.Title || medewerker.naam),
-                                                    medewerker.Functie && h('span', { className: 'functie' }, medewerker.Functie),
+                                                    medewerker.Functie && h('span', { className: 'medewerker-functie' }, medewerker.Functie),
                                                     renderHorenStatus && renderHorenStatus(medewerker)
                                                 )
                                             )

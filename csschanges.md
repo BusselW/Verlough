@@ -32,16 +32,16 @@
 | `.week-view` | `className: '${weergaveType}-view'` (dynamic: week-view) | ✅ |
 | `.maand-view` | `className: '${weergaveType}-view'` (dynamic: maand-view) | ✅ |
 | `.rooster-thead` | `className: 'rooster-thead'` | ✅ |
-| `.team-header-row` | `className: 'team-header-row'` | ✅ |
+| `.team-rij` | `className: 'team-rij'` | ✅ **FIXED: was team-header-row** |
 | `.team-header` | `className: 'team-header'` | ✅ |
-| `.medewerker-row` | `className: 'medewerker-row'` | ✅ |
+| `.medewerker-rij` | `className: 'medewerker-rij'` | ✅ **FIXED: was medewerker-row** |
 | `.medewerker-naam` | `className: 'medewerker-naam'` | ✅ |
 | `.medewerker-info` | `className: 'medewerker-info'` | ✅ |
 | `.medewerker-avatar-container` | `className: 'medewerker-avatar-container'` | ✅ |
 | `.medewerker-avatar` | `className: 'medewerker-avatar'` | ✅ |
 | `.medewerker-details` | `className: 'medewerker-details'` | ✅ |
-| `.naam` | `className: 'naam medewerker-naam'` | ✅ |
-| `.functie` | `className: 'functie'` | ✅ |
+| `.medewerker-naam` | `className: 'medewerker-naam'` | ✅ **FIXED: removed redundant 'naam'** |
+| `.medewerker-functie` | `className: 'medewerker-functie'` | ✅ **FIXED: was 'functie'** |
 | **Header Classes** |
 | `.medewerker-kolom` | `className: 'medewerker-kolom'` | ✅ |
 | `.medewerker-header-container` | `className: 'medewerker-header-container'` | ✅ |
