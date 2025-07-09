@@ -211,6 +211,32 @@ const DagCell = ({ dag, medewerker, onContextMenu, getVerlofVoorDag, getZittings
         }, 'ZV');
     };
 
+    const renderUrenPerWeekBlok = (dag) => {
+        // Check if this day has a special UrenPerWeek type (VVO, VVD, VVM)
+        if (!dag.urenPerWeekType || !['VVO', 'VVD', 'VVM'].includes(dag.urenPerWeekType)) {
+            return null;
+        }
+        
+        return h('div', {
+            className: 'dag-indicator-blok urenperweek-blok',
+            style: { backgroundColor: dag.urenPerWeekColor || '#cccccc' },
+            'data-afkorting': dag.urenPerWeekType,
+            'data-medewerker': medewerker.Naam,
+            'data-type': 'urenperweek',
+            ref: (element) => {
+                if (element && !element.dataset.tooltipAttached) {
+                    TooltipManager.attach(element, () => {
+                        return TooltipManager.createUrenPerWeekTooltip({
+                            type: dag.urenPerWeekType,
+                            MedewerkerNaam: medewerker.Naam,
+                            Datum: dag
+                        });
+                    });
+                }
+            }
+        }, dag.urenPerWeekType);
+    };
+
     return h('td', {
         className: `dag-cel ${isWeekend ? 'weekend' : ''} ${isFeestdag ? 'feestdag' : ''} ${isSelected ? 'selected' : ''} ${isFirstClick ? 'first-click' : ''}`.trim(),
         'data-feestdag': isFeestdag ? feestdagNaam : undefined,
@@ -226,6 +252,8 @@ const DagCell = ({ dag, medewerker, onContextMenu, getVerlofVoorDag, getZittings
     },
         verlofItem && renderVerlofBlok(verlofItem),
         zittingsvrijItem && renderZittingsvrijBlok(zittingsvrijItem),
+        // Render UrenPerWeek blocks for special day types (VVO, VVD, VVM)
+        renderUrenPerWeekBlok(dag),
         // Convert compensatieUrenVoorDag to the format expected by renderCompensatieMomenten
         compensatieUrenVoorDag.length > 0 && (() => {
             const compensatieMomenten = compensatieUrenVoorDag.map(comp => {
