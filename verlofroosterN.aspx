@@ -58,11 +58,28 @@
             });
 
             useEffect(() => {
-                if (currentUser) {
+                if (currentUser && currentUser.Email) {
                     setUserInfo(prev => ({ ...prev, naam: currentUser.Title, loading: false }));
-                    getProfilePhotoUrl(currentUser.Email).then(url => {
-                        setUserInfo(prev => ({ ...prev, pictureUrl: url }));
-                    });
+                    
+                    // Get profile photo URL - getProfilePhotoUrl returns a string, not a promise
+                    try {
+                        const photoUrl = getProfilePhotoUrl(currentUser);
+                        if (photoUrl) {
+                            setUserInfo(prev => ({ ...prev, pictureUrl: photoUrl }));
+                        } else {
+                            // Fallback if no photo URL returned
+                            setUserInfo(prev => ({ 
+                                ...prev, 
+                                pictureUrl: '_layouts/15/userphoto.aspx?size=S'
+                            }));
+                        }
+                    } catch (error) {
+                        console.warn('Error calling getProfilePhotoUrl:', error);
+                        setUserInfo(prev => ({ 
+                            ...prev, 
+                            pictureUrl: '_layouts/15/userphoto.aspx?size=S'
+                        }));
+                    }
                 }
             }, [currentUser]);
 

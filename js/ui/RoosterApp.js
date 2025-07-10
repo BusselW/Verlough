@@ -33,7 +33,7 @@ import { calculateWeekType } from '../services/scheduleLogic.js';
 
 const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
-const RoosterApp = () => {
+const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) => {
     // Helper function to create header cells
     const createHeaderCells = () => {
         const cells = [
@@ -115,7 +115,6 @@ const RoosterApp = () => {
     };
     
     console.log('🏠 RoosterApp component initialized');
-    const [isUserValidated, setIsUserValidated] = useState(false);
     const [weergaveType, setWeergaveType] = useState('maand');
     const [huidigJaar, setHuidigJaar] = useState(new Date().getFullYear());
     const [huidigMaand, setHuidigMaand] = useState(new Date().getMonth());
@@ -135,7 +134,6 @@ const RoosterApp = () => {
     const [urenPerWeekItems, setUrenPerWeekItems] = useState([]);
     const [dagenIndicators, setDagenIndicators] = useState({});
     const [contextMenu, setContextMenu] = useState(null);
-    const [currentUser, setCurrentUser] = useState(null);
     const [isVerlofModalOpen, setIsVerlofModalOpen] = useState(false);
     const [isCompensatieModalOpen, setIsCompensatieModalOpen] = useState(false);
     const [isZiekModalOpen, setIsZiekModalOpen] = useState(false);
