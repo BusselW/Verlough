@@ -566,4 +566,37 @@
             };
 
             // If still loading, render UserRegistrationCheck without children
+            if (isLoading) {
+                return h(UserRegistrationCheck, { onUserValidated: handleUserValidated });
+            }
+
+            // Once loaded, render the app with the UserRegistrationCheck wrapper
+            return h(UserRegistrationCheck, { onUserValidated: handleUserValidated },
+                h(App, { 
+                    currentUser: appData.currentUser, 
+                    userPermissions: appData.userPermissions 
+                })
+            );
+        };
+            
+                    // =====================
+                    // Render Application
+                    // =====================
+                    const container = document.getElementById('root');
+                    const root = ReactDOM.createRoot(container);
+                    
+                    root.render(
+                        h(ErrorBoundary, null,
+                            h(MainAppWrapper)
+                        )
+                    );
+            
+                    // Make tutorial functions globally available
+                    window.startTutorial = roosterTutorial;
+                    window.openHandleiding = handleidingOpenen;
+            
+                    console.log('🎉 Application initialized successfully');
+                </script>
+            </body>
+            </html>
    
