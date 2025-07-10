@@ -472,7 +472,7 @@
             }
 
             // User is registered, show normal app
-            return null; // This component only handles validation, not rendering
+            return children;
         };
 
         // =====================
@@ -506,13 +506,13 @@
                 setIsLoading(false);
             };
 
-            if (isLoading) {
-                return h(UserRegistrationCheck, { 
-                    onUserValidated: handleUserValidated 
-                });
-            }
-
-            return appData ? h(App, appData) : null;
+            // Always render the UserRegistrationCheck with app content as children
+            return h(UserRegistrationCheck, { 
+                onUserValidated: handleUserValidated 
+            },
+                // Pass the app content as children
+                !isLoading && appData ? h(App, appData) : h('div', null, 'Loading app...')
+            );
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
