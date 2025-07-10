@@ -787,6 +787,13 @@ const RoosterApp = ({ isUserValidated = true }) => {
         }
     }, [refreshData]);
 
+    // Computed values
+    const ziekteRedenId = useMemo(() => {
+        if (!shiftTypes || Object.keys(shiftTypes).length === 0) return null;
+        const ziekteType = Object.values(shiftTypes).find(st => st.label && st.label.toLowerCase() === 'ziekte');
+        return ziekteType ? ziekteType.id : null;
+    }, [shiftTypes]);
+
     // Helper functions and computed values
     const urenPerWeekByMedewerker = useMemo(() => {
         const map = {};
@@ -1564,7 +1571,7 @@ const RoosterApp = ({ isUserValidated = true }) => {
             medewerkers: medewerkers,
             selection: selection,
             initialData: selection && selection.itemData ? selection.itemData : {},
-            ziekteRedenId: 1
+            ziekteRedenId: ziekteRedenId
         })),
         h(Modal, {
             isOpen: isZittingsvrijModalOpen,
