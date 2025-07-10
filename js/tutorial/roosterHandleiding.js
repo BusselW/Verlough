@@ -722,3 +722,9 @@ export const roosterHandleiding = new RoosterHandleiding();
 export const openHandleiding = (section = 'algemeen') => {
     roosterHandleiding.open(section);
 };
+
+// Alias for backward compatibility
+export const roosterTutorial = {
+    start: () => roosterHandleiding.open('algemeen'),
+    openSection: (section) => roosterHandleiding.open(section)
+};
