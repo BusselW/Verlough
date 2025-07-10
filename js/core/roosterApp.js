@@ -449,7 +449,6 @@ const RoosterApp = ({ isUserValidated = true }) => {
     const [dagenIndicators, setDagenIndicators] = useState({});
     const [contextMenu, setContextMenu] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
-    const [currentUser, setCurrentUser] = useState(null);
     const [isVerlofModalOpen, setIsVerlofModalOpen] = useState(false);
     const [isCompensatieModalOpen, setIsCompensatieModalOpen] = useState(false);
     const [isZiekModalOpen, setIsZiekModalOpen] = useState(false);
@@ -787,6 +786,99 @@ const RoosterApp = ({ isUserValidated = true }) => {
         }
     }, [refreshData]);
 
+    // Context menu handler
+    const showContextMenu = useCallback(async (e, medewerker, dag, item) => {
+        console.log('showContextMenu called:', {
+            medewerker: medewerker?.Username,
+            dag: dag.toDateString(),
+            item: item?.ID,
+            hasItem: !!item,
+            itemType: item ? Object.keys(item).filter(key => ['RedenId', 'StartCompensatieUren', 'ZittingsVrijeDagTijd'].includes(key)) : 'none'
+        });
+
+        const menuItems = [
+            {
+                label: 'Nieuw',
+                icon: 'fa-plus',
+                subItems: [
+                    {
+                        label: 'Verlof aanvragen',
+                        icon: 'fa-calendar-plus',
+                        onClick: () => {
+                            setSelection({
+                                start: dag,
+                                end: dag,
+                                medewerkerId: medewerker.Username,
+                                medewerkerData: medewerker
+                            });
+                            setIsVerlofModalOpen(true);
+                            setContextMenu(null);
+                        }
+                    },
+                    {
+                        label: 'Ziek melden',
+                        icon: 'fa-notes-medical',
+                        onClick: () => {
+                            setSelection({
+                                start: dag,
+                                end: dag,
+                                medewerkerId: medewerker.Username,
+                                medewerkerData: medewerker
+                            });
+                            setIsZiekModalOpen(true);
+                            setContextMenu(null);
+                        }
+                    },
+                    {
+                        label: 'Compensatieuren doorgeven',
+                        icon: './icons/compensatieuren/neutraleuren.svg',
+                        iconType: 'svg',
+                        onClick: () => {
+                            setSelection({
+                                start: dag,
+                                end: dag,
+                                medewerkerId: medewerker.Username,
+                                medewerkerData: medewerker
+                            });
+                            setIsCompensatieModalOpen(true);
+                            setContextMenu(null);
+                        }
+                    },
+                    {
+                        label: 'Zittingsvrij maken',
+                        icon: 'fa-gavel',
+                        onClick: () => {
+                            setSelection({
+                                start: dag,
+                                end: dag,
+                                medewerkerId: medewerker.Username,
+                                medewerkerData: medewerker
+                            });
+                            setIsZittingsvrijModalOpen(true);
+                            setContextMenu(null);
+                        }
+                    }
+                ]
+            },
+            {
+                label: 'Annuleren',
+                icon: 'fa-times',
+                onClick: () => {
+                    console.log('Annuleren clicked');
+                    setContextMenu(null);
+                }
+            }
+        ];
+
+        console.log('Final context menu items:', menuItems);
+        setContextMenu({
+            x: e.clientX,
+            y: e.clientY,
+            items: menuItems,
+            onClose: () => setContextMenu(null)
+        });
+    }, [medewerkers, currentUser]);
+
     // Computed values
     const ziekteRedenId = useMemo(() => {
         if (!shiftTypes || Object.keys(shiftTypes).length === 0) return null;
@@ -1057,28 +1149,6 @@ const RoosterApp = ({ isUserValidated = true }) => {
         setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
     };
 
-    const gegroepeerdeData = useMemo(() => {
-        const gefilterdeMedewerkers = medewerkers.filter(m => (!zoekTerm || m.naam.toLowerCase().includes(zoekTerm.toLowerCase())) && (!geselecteerdTeam || m.team === geselecteerdTeam));
-        
-        // Sort medewerkers by Title column from Medewerkers SharePoint list based on sortDirection
-        const gesorteerdeFilters = gefilterdeMedewerkers.sort((a, b) => {
-            // Use the Title field from the SharePoint Medewerkers list specifically
-            const titleA = (a.Title || a.Naam || a.naam || 'Onbekend').toLowerCase().trim();
-            const titleB = (b.Title || b.Naam || b.naam || 'Onbekend').toLowerCase().trim();
-            
-            if (sortDirection === 'asc') {
-                return titleA.localeCompare(titleB, 'nl', { numeric: true, sensitivity: 'base' });
-            } else {
-                return titleB.localeCompare(titleA, 'nl', { numeric: true, sensitivity: 'base' });
-            }
-        });
-        
-        const data = teams.reduce((acc, team) => { if (team && team.id) { acc[team.id] = gesorteerdeFilters.filter(m => m.team === team.id); } return acc; }, {});
-        const medewerkersZonderTeam = gesorteerdeFilters.filter(m => !m.team);
-        if (medewerkersZonderTeam.length > 0) { data['geen_team'] = medewerkersZonderTeam; }
-        return data;
-    }, [medewerkers, teams, zoekTerm, geselecteerdTeam, sortDirection]);
-
     // =====================
     // Helper: Check if a date is in the current selection for a medewerker
     // =====================
@@ -1345,18 +1415,6 @@ const RoosterApp = ({ isUserValidated = true }) => {
         return data;
     }, [medewerkers, teams, zoekTerm, geselecteerdTeam, sortDirection]);
 
-    // Toggle sort direction for medewerkers
-    const toggleSortDirection = () => {
-        setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
-    };
-
-    const volgende = () => { if (weergaveType === 'week') { const maxWeken = getWekenInJaar(huidigJaar); if (huidigWeek >= maxWeken) { setHuidigWeek(1); setHuidigJaar(huidigJaar + 1); } else { setHuidigWeek(huidigWeek + 1); } } else { if (huidigMaand === 11) { setHuidigMaand(0); setHuidigJaar(huidigJaar + 1); } else { setHuidigMaand(huidigMaand + 1); } } };
-    const vorige = () => { if (weergaveType === 'week') { if (huidigWeek === 1) { const vorigJaar = huidigJaar - 1; setHuidigWeek(getWekenInJaar(vorigJaar)); setHuidigJaar(vorigJaar); } else { setHuidigWeek(huidigWeek - 1); } } else { if (huidigMaand === 0) { setHuidigMaand(11); setHuidigJaar(huidigJaar - 1); } else { setHuidigMaand(huidigMaand - 1); } } };
-
-    const periodeData = useMemo(() => {
-        return weergaveType === 'week' ? getDagenInWeek(huidigWeek, huidigJaar) : getDagenInMaand(huidigMaand, huidigJaar);
-    }, [weergaveType, huidigWeek, huidigMaand, huidigJaar]);
-
     // Show loading state while refreshing data or if data is not ready
     if (loading || !periodeData || periodeData.length === 0) {
         return h('div', {
@@ -1470,30 +1528,146 @@ const RoosterApp = ({ isUserValidated = true }) => {
                                 (teamMedewerkers || []).map(medewerker =>
                                     h('tr', { key: medewerker.id, className: 'medewerker-rij' },
                                         h('td', { className: 'medewerker-kolom' }, h(MedewerkerRow, { medewerker: medewerker || {} })),
-                                        // Render calendar cells for each day
-                                        ...periodeData.map((dag, index) => {
-                                            const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-                                            const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
-                                            const isSelected = isDateInSelection(dag, medewerker.Username);
-                                            const isToday = isVandaag(dag);
-                                            const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''} ${isSelected ? 'selected' : ''}`;
+                                        // Render calendar cells for each day with proper data blocks
+                                        ...(() => {
+                                            const dagenMetBlokInfo = periodeData.map((dag) => {
+                                                const verlofItem = getVerlofVoorDag(medewerker.Username, dag);
+                                                const zittingsvrijItem = getZittingsvrijVoorDag(medewerker.Username, dag);
+                                                const compensatieItems = getCompensatieUrenVoorDag(medewerker.Username, dag);
 
-                                            return h('td', {
-                                                key: dag.toISOString(),
-                                                className: classes,
-                                                id: medewerker.id === 1 && dag.getDate() === 1 ? 'dag-cel' : undefined,
-                                                onClick: () => handleCellClick(medewerker, dag),
-                                                style: firstClickData && firstClickData.medewerker.Username === medewerker.Username && firstClickData.dag.toDateString() === dag.toDateString() ? { position: 'relative' } : {}
-                                            },
-                                                // Basic cell content - would be expanded with actual verlof/compensatie rendering
-                                                h('div', { className: 'dag-content' },
-                                                    isToday && h('div', { className: 'vandaag-indicator' }),
-                                                    // Tooltip for first click
-                                                    firstClickData && firstClickData.medewerker.Username === medewerker.Username && firstClickData.dag.toDateString() === dag.toDateString() && showTooltip &&
-                                                    h('div', { className: 'selection-tooltip visible' }, 'Selecteer nu een andere dag en klik rechts')
-                                                )
-                                            );
-                                        })
+                                                // Debug logging for compensatie uren detection
+                                                if (compensatieItems.length > 0) {
+                                                    console.log(`Found ${compensatieItems.length} compensatie items for ${medewerker.Username} on ${dag.toDateString()}:`, compensatieItems);
+                                                }
+
+                                                // Priority: verlof > zittingsvrij (compensatie uren have their own rendering)
+                                                let item = verlofItem || zittingsvrijItem;
+                                                // Compensatie uren are excluded from primary item selection because they
+                                                // have their own visual representation via renderCompensatieMomenten
+
+                                                return {
+                                                    dag,
+                                                    item: item,
+                                                    compensatieMomenten: getCompensatieMomentenVoorDag(dag).filter(m => m.item.MedewerkerID === medewerker.Username)
+                                                };
+                                            });
+
+                                            for (let i = 0; i < dagenMetBlokInfo.length; i++) {
+                                                if (dagenMetBlokInfo[i].item) {
+                                                    const isStart = i === 0 || dagenMetBlokInfo[i].item !== dagenMetBlokInfo[i - 1].item;
+                                                    if (isStart) {
+                                                        let length = 1;
+                                                        while (i + length < dagenMetBlokInfo.length && dagenMetBlokInfo[i + length].item === dagenMetBlokInfo[i].item) { length++; }
+                                                        const middleIndex = i + Math.floor((length - 1) / 2);
+                                                        for (let k = 0; k < length; k++) {
+                                                            dagenMetBlokInfo[i + k].isMiddle = (i + k === middleIndex);
+                                                            dagenMetBlokInfo[i + k].isStart = (k === 0);
+                                                            dagenMetBlokInfo[i + k].isEnd = (k === length - 1);
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            return dagenMetBlokInfo.map(({ dag, item, isStart, isEnd, isMiddle, compensatieMomenten }) => {
+                                                const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
+                                                const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
+                                                const isSelected = isDateInSelection(dag, medewerker.Username);
+                                                const isToday = isVandaag(dag);
+                                                const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''} ${isSelected ? 'selected' : ''}`;
+
+                                                // Check if this is the first-clicked cell
+                                                const isFirstClick = firstClickData &&
+                                                    firstClickData.medewerker.Username === medewerker.Username &&
+                                                    firstClickData.dag.toDateString() === dag.toDateString();
+                                                
+                                                // Create tooltip component for the first clicked cell
+                                                const tooltipElement = (isFirstClick && showTooltip) ?
+                                                    h('div', {
+                                                        className: 'selection-tooltip visible'
+                                                    }, 'Selecteer nu een andere dag en klik rechts') : null;
+
+                                                let teRenderenBlok = null;
+
+                                                // Logica voor UrenPerWeek                                                        
+                                                const urenSchema = getUrenPerWeekForDate(medewerker.Username, dag);
+                                                if (urenSchema) {
+                                                    const dagNamen = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
+                                                    const dagNaam = dagNamen[dag.getDay()];
+                                                    const soortVeld = `${dagNaam}Soort`;
+                                                    const dagSoort = urenSchema[soortVeld];
+
+                                                    if (dagSoort && dagenIndicators[dagSoort]) {
+                                                        const indicator = dagenIndicators[dagSoort];
+                                                        teRenderenBlok = h('div', {
+                                                            className: 'verlof-blok',
+                                                            style: { backgroundColor: indicator.kleur, borderRadius: '6px' },
+                                                            title: `${indicator.Beschrijving || indicator.Title} (vanaf ${urenSchema.Ingangsdatum.toLocaleDateString()})`
+                                                        }, indicator.Title);
+                                                       
+                                                        console.log(`🔍 Rendered UrenPerWeek block for ${medewerker.Username} on ${dag.toDateString()}: ${dagSoort} (record from ${urenSchema.Ingangsdatum.toLocaleDateString()})`);
+                                                    }
+                                                }
+
+                                                if (item && !teRenderenBlok) { // Alleen tonen als er geen UrenPerWeek blok is
+                                                    console.log(`🎯 Rendering primary item block for ${medewerker.Username} on ${dag.toDateString()}:`, item);
+                                                    const blokClasses = ['verlof-blok'];
+                                                    if (isStart) blokClasses.push('start-blok');
+                                                    if (isEnd) blokClasses.push('eind-blok');
+
+                                                    const isVerlof = 'RedenId' in item;
+                                                    const isZittingsvrij = 'ZittingsVrijeDagTijd' in item;
+                                                    const isCompensatie = 'StartCompensatieUren' in item;
+
+                                                    if (isCompensatie) {
+                                                        console.warn(`⚠️ Compensatie item unexpectedly selected as primary item:`, item);
+                                                    }
+
+                                                    const shiftType = isVerlof ? shiftTypes[item.RedenId] : null;
+                                                    const afkorting = isVerlof && shiftType ? shiftType.afkorting : (item.Afkorting || 'ZV');
+                                                    const kleur = isVerlof && shiftType ? shiftType.kleur : (item.Kleur || '#8e44ad');
+                                                    const titel = isVerlof && shiftType ? (item.Omschrijving || shiftType.label) : (item.Opmerking || item.Title);
+                                                    const status = isVerlof ? (item.Status || 'Goedgekeurd').toLowerCase() : 'goedgekeurd';
+
+                                                    if (afkorting === 'VER') {
+                                                        blokClasses.push('ver-item');
+                                                    }
+
+                                                    teRenderenBlok = h('div', {
+                                                        className: `${blokClasses.join(' ')} status-${status}`,
+                                                        'data-afkorting': afkorting,
+                                                        style: { backgroundColor: kleur },
+                                                        title: titel
+                                                    }, isMiddle ? afkorting : '');
+                                                }
+
+                                                const compensatieMomentenBlokken = renderCompensatieMomenten(compensatieMomenten, {
+                                                    onContextMenu: (e, compensatieItem) => {
+                                                        console.log('Compensatie item right-clicked, showing context menu:', compensatieItem);
+                                                        showContextMenu(e, medewerker, dag, compensatieItem);
+                                                    },
+                                                    onClick: (e, compensatieItem) => {
+                                                        console.log('Compensatie item clicked, opening edit modal:', compensatieItem);
+                                                        handleCellClick(medewerker, dag, compensatieItem);
+                                                    }
+                                                });
+
+                                                return h('td', {
+                                                    key: dag.toISOString(),
+                                                    className: classes,
+                                                    id: medewerker.id === 1 && dag.getDate() === 1 ? 'dag-cel' : undefined,
+                                                    onClick: () => handleCellClick(medewerker, dag),
+                                                    onContextMenu: (e) => {
+                                                        e.preventDefault();
+                                                        showContextMenu(e, medewerker, dag, item);
+                                                    },
+                                                    style: isFirstClick ? { position: 'relative' } : {}
+                                                },
+                                                    teRenderenBlok,
+                                                    compensatieMomentenBlokken,
+                                                    tooltipElement
+                                                );
+                                            });
+                                        })()
                                     )
                                 )
                             );
