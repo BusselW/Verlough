@@ -347,7 +347,7 @@ const NavigationButtons = () => {
 // =====================
 // Hoofd RoosterApp Component
 // =====================
-const RoosterApp = () => {
+const RoosterApp = ({ isUserValidated = true }) => {
     // Helper function to create header cells
     const createHeaderCells = () => {
         const cells = [
@@ -446,7 +446,7 @@ const RoosterApp = () => {
     const [zittingsvrijItems, setZittingsvrijItems] = useState([]);
     const [compensatieUrenItems, setCompensatieUrenItems] = useState([]);
     const [urenPerWeekItems, setUrenPerWeekItems] = useState([]);
-    const [dagenIndicators, setDagenIndicators] = useState([]);
+    const [dagenIndicators, setDagenIndicators] = useState({});
     const [contextMenu, setContextMenu] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
     const [isVerlofModalOpen, setIsVerlofModalOpen] = useState(false);
@@ -457,12 +457,93 @@ const RoosterApp = () => {
     const [showTooltip, setShowTooltip] = useState(false);
     const [tooltipTimeout, setTooltipTimeout] = useState(null);
     const [firstClickData, setFirstClickData] = useState(null);
+
+    // Debug modal state changes
+    useEffect(() => {
+        console.log('🏠 Modal state changed:', {
+            compensatie: isCompensatieModalOpen,
+            zittingsvrij: isZittingsvrijModalOpen,
+            verlof: isVerlofModalOpen,
+            ziek: isZiekModalOpen
+        });
+    }, [isCompensatieModalOpen, isZittingsvrijModalOpen, isVerlofModalOpen, isZiekModalOpen]);
+
+    useEffect(() => {
+        const jaren = [huidigJaar - 1, huidigJaar, huidigJaar + 1];
+        const alleFeestdagen = jaren.reduce((acc, jaar) => ({ ...acc, ...getFeestdagen(jaar) }), {});
+        setFeestdagen(alleFeestdagen);
+    }, [huidigJaar]);
+
+    // Mock data loading for now - this would be replaced with actual SharePoint data loading
+    useEffect(() => {
+        if (isUserValidated) {
+            console.log('🔄 Loading mock data for RoosterApp...');
+            setLoading(true);
+            
+            // Simulate loading delay
+            setTimeout(() => {
+                // Set some basic mock data
+                setMedewerkers([
+                    { id: 1, Username: 'user1', Naam: 'Test Gebruiker 1', team: 'team1' },
+                    { id: 2, Username: 'user2', Naam: 'Test Gebruiker 2', team: 'team1' }
+                ]);
+                setTeams([
+                    { id: 'team1', naam: 'Test Team', kleur: '#4a90e2' }
+                ]);
+                setShiftTypes({
+                    1: { id: 1, label: 'Verlof', kleur: '#4a90e2', afkorting: 'V' }
+                });
+                setLoading(false);
+                console.log('✅ Mock data loaded successfully');
+            }, 1000);
+        }
+    }, [isUserValidated]);
     
     // Initialize the tooltip manager when the component mounts
     useEffect(() => {
         // Make sure TooltipManager is initialized
         console.log('🔍 Initializing TooltipManager from RoosterApp');
         TooltipManager.init();
+    }, []);
+   
+    // Initialize profile cards after data is loaded
+    useEffect(() => {
+        if (!loading && medewerkers.length > 0) {
+            setTimeout(() => {
+                if (typeof ProfielKaarten !== 'undefined' && ProfielKaarten.init) {
+                    ProfielKaarten.init();
+                }
+            }, 500);
+        }
+    }, [loading, medewerkers]);
+
+    // Trigger tooltip re-attachment after data loads and DOM updates
+    useEffect(() => {
+        if (!loading && medewerkers.length > 0) {
+            // Allow React to finish rendering before attaching tooltips
+            setTimeout(() => {
+                console.log('🔄 Triggering tooltip re-attachment after data load');
+                TooltipManager.autoAttachTooltips();
+                
+                // Dispatch custom event for any components listening
+                const event = new CustomEvent('react-update', {
+                    detail: { 
+                        verlofItems: verlofItems.length, 
+                        compensatieItems: compensatieUrenItems.length,
+                        zittingsvrijItems: zittingsvrijItems.length 
+                    }
+                });
+                window.dispatchEvent(event);
+            }, 200);
+        }
+    }, [loading, verlofItems, compensatieUrenItems, zittingsvrijItems, medewerkers, huidigMaand, huidigJaar, weergaveType]);
+
+    // Check if required services are available
+    useEffect(() => {
+        if (typeof fetchSharePointList !== 'function' || typeof getCurrentUser !== 'function') {
+            setError('Required services not available. Please refresh the page.');
+            setLoading(false);
+        }
     }, []);
 
     // Expose tutorial functions globally
@@ -488,6 +569,184 @@ const RoosterApp = () => {
             delete window.openHandleiding;
         };
     }, []);
+
+    // Functies voor het openen van de modals
+    const handleVrijvragen = useCallback((start, end, medewerkerId) => {
+        console.log('handleVrijvragen called:', { start, end, medewerkerId });
+        setSelection({ start, end, medewerkerId });
+        setIsVerlofModalOpen(true);
+    }, []);
+
+    const handleZiekMelden = useCallback((start, end, medewerkerId) => {
+        console.log('handleZiekMelden called:', { start, end, medewerkerId });
+        setSelection({ start, end, medewerkerId });
+        setIsZiekModalOpen(true);
+    }, []);
+
+    const handleCompensatie = useCallback((start, end, medewerkerId) => {
+        console.log('handleCompensatie called:', { start, end, medewerkerId });
+        setSelection({ start, end, medewerkerId });
+        setIsCompensatieModalOpen(true);
+    }, []);
+
+    const handleZittingsvrij = useCallback((start, end, medewerkerId) => {
+        console.log('handleZittingsvrij called:', { start, end, medewerkerId });
+        setSelection({ start, end, medewerkerId });
+        setIsZittingsvrijModalOpen(true);
+    }, []);
+
+    // Calendar cell click handler with two-click selection support
+    function handleCellClick(medewerker, dag, specificItem = null) {
+        // If a specific item is provided (e.g., compensatie item), open the appropriate modal directly
+        if (specificItem) {
+            console.log('Opening modal for specific item:', specificItem);
+            const { type } = (() => {
+                if ('RedenId' in specificItem) return { type: 'verlof' };
+                if ('ZittingsVrijeDagTijd' in specificItem) return { type: 'zittingsvrij' };
+                if ('StartCompensatieUren' in specificItem) return { type: 'compensatie' };
+                if ('Status' in specificItem && specificItem.Status === 'Ziek') return { type: 'ziekte' };
+                return { type: null };
+            })();
+
+            const targetMedewerker = medewerkers.find(m => m.Username === medewerker.Username);
+
+            if (type === 'compensatie') {
+                setSelection({
+                    start: new Date(specificItem.StartCompensatieUren),
+                    end: new Date(specificItem.EindeCompensatieUren),
+                    medewerkerId: specificItem.MedewerkerID,
+                    itemData: specificItem,
+                    medewerkerData: targetMedewerker
+                });
+                setIsCompensatieModalOpen(true);
+                return;
+            } else if (type === 'verlof') {
+                setSelection({
+                    start: new Date(specificItem.StartDatum),
+                    end: new Date(specificItem.EindDatum),
+                    medewerkerId: specificItem.MedewerkerID,
+                    itemData: specificItem,
+                    medewerkerData: targetMedewerker
+                });
+                setIsVerlofModalOpen(true);
+                return;
+            } else if (type === 'zittingsvrij') {
+                setSelection({
+                    start: new Date(specificItem.StartDatum),
+                    end: new Date(specificItem.EindDatum),
+                    medewerkerId: specificItem.Gebruikersnaam,
+                    itemData: specificItem,
+                    medewerkerData: targetMedewerker
+                });
+                setIsZittingsvrijModalOpen(true);
+                return;
+            } else if (type === 'ziekte') {
+                setSelection({
+                    start: new Date(specificItem.StartDatum),
+                    end: new Date(specificItem.EindDatum),
+                    medewerkerId: specificItem.MedewerkerID,
+                    itemData: specificItem,
+                    medewerkerData: targetMedewerker
+                });
+                setIsZiekModalOpen(true);
+                return;
+            }
+        }
+
+        // Regular cell click behavior (date range selection)
+        if (!firstClickData) {
+            // First click: Set start of selection
+            setFirstClickData({ medewerker, dag });
+            setSelection({ start: dag, end: dag, medewerkerId: medewerker.Username });
+
+            // Show tooltip after first click
+            setShowTooltip(true);
+
+            // Auto-hide tooltip after 5 seconds
+            if (tooltipTimeout) {
+                clearTimeout(tooltipTimeout);
+            }
+
+            const timeout = setTimeout(() => {
+                setShowTooltip(false);
+            }, 5000);
+            setTooltipTimeout(timeout);
+
+        } else if (firstClickData.medewerker.Username === medewerker.Username) {
+            // Second click on same employee: Set end of selection
+            const startDate = new Date(firstClickData.dag);
+            const endDate = new Date(dag);
+            const actualStart = startDate <= endDate ? startDate : endDate;
+            const actualEnd = startDate <= endDate ? endDate : startDate;
+
+            setSelection({
+                start: actualStart,
+                end: actualEnd,
+                medewerkerId: medewerker.Username
+            });
+            setFirstClickData(null); // Reset for next selection
+            setShowTooltip(false); // Hide tooltip after selection is complete
+
+            if (tooltipTimeout) {
+                clearTimeout(tooltipTimeout);
+                setTooltipTimeout(null);
+            }
+        } else {
+            // Click on different employee: Start new selection
+            setFirstClickData({ medewerker, dag });
+            setSelection({ start: dag, end: dag, medewerkerId: medewerker.Username });
+
+            // Show tooltip for this new selection too
+            setShowTooltip(true);
+
+            // Auto-hide tooltip after 5 seconds
+            if (tooltipTimeout) {
+                clearTimeout(tooltipTimeout);
+            }
+
+            const timeout = setTimeout(() => {
+                setShowTooltip(false);
+            }, 5000);
+            setTooltipTimeout(timeout);
+        }
+    }
+
+    // Helper: Check if a date is in the current selection for a medewerker
+    function isDateInSelection(dag, medewerkerUsername) {
+        if (!selection || !selection.start || !selection.end || !selection.medewerkerId) return false;
+        // Only highlight if the medewerker matches
+        if (medewerkerUsername !== selection.medewerkerId) return false;
+        // Compare only the date part (ignore time)
+        const d = new Date(dag);
+        d.setHours(0, 0, 0, 0);
+        const s = new Date(selection.start);
+        s.setHours(0, 0, 0, 0);
+        const e = new Date(selection.end);
+        e.setHours(0, 0, 0, 0);
+        return d >= s && d <= e;
+    }
+
+    const gegroepeerdeData = useMemo(() => {
+        const gefilterdeMedewerkers = medewerkers.filter(m => (!zoekTerm || m.naam.toLowerCase().includes(zoekTerm.toLowerCase())) && (!geselecteerdTeam || m.team === geselecteerdTeam));
+        
+        // Sort medewerkers by Title column from Medewerkers SharePoint list based on sortDirection
+        const gesorteerdeFilters = gefilterdeMedewerkers.sort((a, b) => {
+            // Use the Title field from the SharePoint Medewerkers list specifically
+            const titleA = (a.Title || a.Naam || a.naam || 'Onbekend').toLowerCase().trim();
+            const titleB = (b.Title || b.Naam || b.naam || 'Onbekend').toLowerCase().trim();
+            
+            if (sortDirection === 'asc') {
+                return titleA.localeCompare(titleB, 'nl', { numeric: true, sensitivity: 'base' });
+            } else {
+                return titleB.localeCompare(titleA, 'nl', { numeric: true, sensitivity: 'base' });
+            }
+        });
+        
+        const data = teams.reduce((acc, team) => { if (team && team.id) { acc[team.id] = gesorteerdeFilters.filter(m => m.team === team.id); } return acc; }, {});
+        const medewerkersZonderTeam = gesorteerdeFilters.filter(m => !m.team);
+        if (medewerkersZonderTeam.length > 0) { data['geen_team'] = medewerkersZonderTeam; }
+        return data;
+    }, [medewerkers, teams, zoekTerm, geselecteerdTeam, sortDirection]);
 
     // Toggle sort direction for medewerkers
     const toggleSortDirection = () => {
@@ -603,15 +862,143 @@ const RoosterApp = () => {
                         h.apply(h, ['tr', null].concat(createHeaderCells()))
                     ),
                     h('tbody', null,
-                        h('tr', null,
-                            h('td', { colSpan: periodeData.length + 1, style: { textAlign: 'center', padding: '20px' } },
-                                'Medewerker gegevens worden geladen...'
-                            )
-                        )
+                        // Render teams and medewerkers with actual data
+                        (gegroepeerdeData ? Object.keys(gegroepeerdeData) : []).map(teamId => {
+                            const team = (teams || []).find(t => t.id === teamId) || { id: 'geen_team', naam: 'Geen Team', kleur: '#ccc' };
+                            const teamMedewerkers = gegroepeerdeData[teamId];
+                            if (!teamMedewerkers || teamMedewerkers.length === 0) return null;
+
+                            return h(Fragment, { key: teamId },
+                                h('tr', { className: 'team-rij' }, h('td', { colSpan: periodeData.length + 1 }, h('div', { className: 'team-header', style: { '--team-kleur': team.kleur } }, team.naam))),
+                                (teamMedewerkers || []).map(medewerker =>
+                                    h('tr', { key: medewerker.id, className: 'medewerker-rij' },
+                                        h('td', { className: 'medewerker-kolom' }, h(MedewerkerRow, { medewerker: medewerker || {} })),
+                                        // Render calendar cells for each day
+                                        ...periodeData.map((dag, index) => {
+                                            const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
+                                            const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
+                                            const isSelected = isDateInSelection(dag, medewerker.Username);
+                                            const isToday = isVandaag(dag);
+                                            const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''} ${isSelected ? 'selected' : ''}`;
+
+                                            return h('td', {
+                                                key: dag.toISOString(),
+                                                className: classes,
+                                                id: medewerker.id === 1 && dag.getDate() === 1 ? 'dag-cel' : undefined,
+                                                onClick: () => handleCellClick(medewerker, dag),
+                                                style: firstClickData && firstClickData.medewerker.Username === medewerker.Username && firstClickData.dag.toDateString() === dag.toDateString() ? { position: 'relative' } : {}
+                                            },
+                                                // Basic cell content - would be expanded with actual verlof/compensatie rendering
+                                                h('div', { className: 'dag-content' },
+                                                    isToday && h('div', { className: 'vandaag-indicator' }),
+                                                    // Tooltip for first click
+                                                    firstClickData && firstClickData.medewerker.Username === medewerker.Username && firstClickData.dag.toDateString() === dag.toDateString() && showTooltip &&
+                                                    h('div', { className: 'selection-tooltip visible' }, 'Selecteer nu een andere dag en klik rechts')
+                                                )
+                                            );
+                                        })
+                                    )
+                                )
+                            );
+                        })
                     )
                 )
             )
-        )
+        ),
+        // Context menu
+        contextMenu && h(ContextMenu, {
+            x: contextMenu.x,
+            y: contextMenu.y,
+            items: contextMenu.items,
+            onClose: () => setContextMenu(null)
+        }),
+        // FAB
+        h(FAB, {
+            id: 'fab-container',
+            actions: [
+                {
+                    label: 'Verlof aanvragen',
+                    icon: 'fa-calendar-plus',
+                    onClick: () => setIsVerlofModalOpen(true)
+                },
+                {
+                    label: 'Ziek melden',
+                    icon: 'fa-notes-medical',
+                    onClick: () => setIsZiekModalOpen(true)
+                },
+                {
+                    label: 'Compensatieuren doorgeven',
+                    icon: 'fa-clock',
+                    onClick: () => setIsCompensatieModalOpen(true)
+                },
+                {
+                    label: 'Zittingsvrij maken',
+                    icon: 'fa-gavel',
+                    onClick: () => setIsZittingsvrijModalOpen(true)
+                }
+            ]
+        }),
+        // Modals
+        h(Modal, {
+            isOpen: isVerlofModalOpen,
+            onClose: () => setIsVerlofModalOpen(false),
+            title: selection && selection.itemData ? "Verlof Bewerken" : "Verlof Aanvragen"
+        }, h(VerlofAanvraagForm, {
+            onClose: () => setIsVerlofModalOpen(false),
+            medewerkers: medewerkers,
+            verlofItems: verlofItems,
+            shiftTypes: shiftTypes,
+            selection: selection,
+            initialData: selection && selection.itemData ? selection.itemData : {},
+            onSubmit: (formData) => {
+                console.log('Verlof form submitted:', formData);
+                setIsVerlofModalOpen(false);
+            }
+        })),
+        h(Modal, {
+            isOpen: isCompensatieModalOpen,
+            onClose: () => setIsCompensatieModalOpen(false),
+            title: selection && selection.itemData ? "Compensatie Uren Bewerken" : "Compensatie Uren Aanvragen"
+        }, h(CompensatieUrenForm, {
+            onClose: () => setIsCompensatieModalOpen(false),
+            medewerkers: medewerkers,
+            compensatieUrenItems: compensatieUrenItems,
+            selection: selection,
+            initialData: selection && selection.itemData ? selection.itemData : {},
+            onSubmit: (formData) => {
+                console.log('Compensatie form submitted:', formData);
+                setIsCompensatieModalOpen(false);
+            }
+        })),
+        h(Modal, {
+            isOpen: isZiekModalOpen,
+            onClose: () => setIsZiekModalOpen(false),
+            title: selection && selection.itemData ? "Ziekmelding Bewerken" : "Ziek Melden"
+        }, h(ZiekteMeldingForm, {
+            onClose: () => setIsZiekModalOpen(false),
+            onSubmit: (formData) => {
+                console.log('Ziekte form submitted:', formData);
+                setIsZiekModalOpen(false);
+            },
+            medewerkers: medewerkers,
+            selection: selection,
+            initialData: selection && selection.itemData ? selection.itemData : {},
+            ziekteRedenId: 1
+        })),
+        h(Modal, {
+            isOpen: isZittingsvrijModalOpen,
+            onClose: () => setIsZittingsvrijModalOpen(false),
+            title: selection && selection.itemData ? "Zittingsvrij Bewerken" : "Zittingsvrij Maken"
+        }, h(ZittingsvrijForm, {
+            onClose: () => setIsZittingsvrijModalOpen(false),
+            onSubmit: (formData) => {
+                console.log('Zittingsvrij form submitted:', formData);
+                setIsZittingsvrijModalOpen(false);
+            },
+            medewerkers: medewerkers,
+            selection: selection,
+            initialData: selection && selection.itemData ? selection.itemData : {}
+        }))
     );
 };
 
