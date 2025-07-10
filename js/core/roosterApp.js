@@ -1484,6 +1484,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             initialData: selection && selection.itemData ? selection.itemData : {},
             ziekteRedenId: ziekteRedenId
        
+
         })),
         h(Modal, {
             isOpen: isZittingsvrijModalOpen,
