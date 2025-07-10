@@ -786,7 +786,7 @@ const RoosterApp = ({ isUserValidated = true }) => {
         }
     }, [refreshData]);
 
-    // Context menu handler
+    // Context menu handlerx
     const showContextMenu = useCallback(async (e, medewerker, dag, item) => {
         console.log('showContextMenu called:', {
             medewerker: medewerker?.Username,
