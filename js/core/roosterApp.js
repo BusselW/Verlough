@@ -449,6 +449,7 @@ const RoosterApp = ({ isUserValidated = true }) => {
     const [dagenIndicators, setDagenIndicators] = useState({});
     const [contextMenu, setContextMenu] = useState(null);
     const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
     const [isVerlofModalOpen, setIsVerlofModalOpen] = useState(false);
     const [isCompensatieModalOpen, setIsCompensatieModalOpen] = useState(false);
     const [isZiekModalOpen, setIsZiekModalOpen] = useState(false);
@@ -474,30 +475,619 @@ const RoosterApp = ({ isUserValidated = true }) => {
         setFeestdagen(alleFeestdagen);
     }, [huidigJaar]);
 
-    // Mock data loading for now - this would be replaced with actual SharePoint data loading
+    // Real data loading function - copied from backup
+    const refreshData = useCallback(async (forceReload = false) => {
+        try {
+            console.log('🔄 Starting refreshData...');
+            setLoading(true);
+            setError(null);
+
+            // Wait for configuration to be available with timeout
+            let configWaitAttempts = 0;
+            const maxConfigWaitAttempts = 50; // 5 seconds max wait
+            while (!window.appConfiguratie && configWaitAttempts < maxConfigWaitAttempts) {
+                console.log(`⏳ Waiting for appConfiguratie... attempt ${configWaitAttempts + 1}/${maxConfigWaitAttempts}`);
+                await new Promise(r => setTimeout(r, 100));
+                configWaitAttempts++;
+            }
+
+            if (!window.appConfiguratie) {
+                throw new Error('Configuration not loaded after timeout');
+            }
+
+            // Check if fetchSharePointList is available
+            if (typeof fetchSharePointList !== 'function') {
+                throw new Error('SharePoint service not available');
+            }
+
+            // Fetch current user info
+            console.log('👤 Fetching current user...');
+            const userInfo = await getCurrentUser();
+            setCurrentUser(userInfo);
+
+            // Check if we need to reload data for the current period
+            const needsReload = forceReload || shouldReloadData(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+            
+            if (needsReload) {
+                console.log('� Loading data for new period...');
+                // Update cache key for current period
+                updateCacheKey(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+            } else {
+                console.log('✅ Using cached data for current period');
+            }
+
+            console.log('📊 Fetching SharePoint lists...');
+            
+            // Always load static data (these are small lists and don't change often)
+            const [medewerkersData, teamsData, verlofredenenData, urenPerWeekData, dagenIndicatorsData] = await Promise.all([
+                fetchSharePointList('Medewerkers'),
+                fetchSharePointList('Teams'),
+                fetchSharePointList('Verlofredenen'),
+                fetchSharePointList('UrenPerWeek'),
+                fetchSharePointList('DagenIndicators')
+            ]);
+
+            // Load period-specific data with smart filtering
+            let verlofData, zittingsvrijData, compensatieUrenData;
+            
+            if (needsReload) {
+                console.log('🔍 Loading period-specific data with filtering...');
+                [verlofData, zittingsvrijData, compensatieUrenData] = await Promise.all([
+                    loadFilteredData(fetchSharePointList, 'Verlof', 'verlof', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand),
+                    loadFilteredData(fetchSharePointList, 'IncidenteelZittingVrij', 'zittingsvrij', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand),
+                    loadFilteredData(fetchSharePointList, 'CompensatieUren', 'compensatie', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand)
+                ]);
+                
+                // Log loading statistics
+                logLoadingStatus();
+            } else {
+                // Use cached data
+                verlofData = LoadingLogic.getCachedData('verlof') || [];
+                zittingsvrijData = LoadingLogic.getCachedData('zittingsvrij') || [];
+                compensatieUrenData = LoadingLogic.getCachedData('compensatie') || [];
+                
+                console.log(`📁 Using cached data: ${verlofData.length} verlof, ${zittingsvrijData.length} zittingsvrij, ${compensatieUrenData.length} compensatie items`);
+            }
+
+            console.log('✅ Data fetched successfully, processing...');
+            const teamsMapped = (teamsData || []).map(item => ({ id: item.Title || item.ID?.toString(), naam: item.Naam || item.Title, kleur: item.Kleur || '#cccccc' }));
+            setTeams(teamsMapped);
+            const teamNameToIdMap = teamsMapped.reduce((acc, t) => { acc[t.naam] = t.id; return acc; }, {});
+            const transformedShiftTypes = (verlofredenenData || []).reduce((acc, item) => {
+                if (item.Title) { acc[item.ID] = { id: item.ID, label: item.Title, kleur: item.Kleur || '#999999', afkorting: item.Afkorting || '??' }; }
+                return acc;
+            }, {});
+            setShiftTypes(transformedShiftTypes);
+            const medewerkersProcessed = (medewerkersData || [])
+                .filter(item => item.Naam && item.Actief !== false)
+                .map(item => ({ ...item, id: item.ID, naam: item.Naam, team: teamNameToIdMap[item.Team] || '', Username: item.Username || null }));
+            setMedewerkers(medewerkersProcessed);
+            setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: new Date(v.StartDatum), EindDatum: new Date(v.EindDatum) })));
+            setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: new Date(z.ZittingsVrijeDagTijd), EindDatum: new Date(z.ZittingsVrijeDagTijdEind) })));
+            setCompensatieUrenItems((compensatieUrenData || []).map(c => ({
+                ...c,
+                StartCompensatieUren: new Date(c.StartCompensatieUren),
+                EindeCompensatieUren: new Date(c.EindeCompensatieUren),
+                ruildagStart: c.ruildagStart ? new Date(c.ruildagStart) : null
+            })));
+            setUrenPerWeekItems((urenPerWeekData || []).map(u => {
+                // Normalize Ingangsdatum by properly parsing and resetting time components
+                let ingangsDate;
+               
+                try {
+                    // Handle Dutch date format (DD-MM-YYYY)
+                    if (typeof u.Ingangsdatum === 'string' && u.Ingangsdatum.match(/^\d{1,2}-\d{1,2}-\d{4}/)) {
+                        const parts = u.Ingangsdatum.split(' ')[0].split('-');
+                        const day = parseInt(parts[0], 10);
+                        const month = parseInt(parts[1], 10) - 1; // Months are 0-based in JS
+                        const year = parseInt(parts[2], 10);
+                       
+                        ingangsDate = new Date(year, month, day);
+                    } else {
+                        ingangsDate = new Date(u.Ingangsdatum);
+                    }
+                   
+                    // Check if date is valid
+                    if (isNaN(ingangsDate.getTime())) {
+                        console.error('Invalid date after parsing:', u.Ingangsdatum);
+                        ingangsDate = null;
+                    } else {
+                        // Reset time components for consistent comparison
+                        ingangsDate.setHours(0, 0, 0, 0);
+                    }
+                } catch (error) {
+                    console.error('Error parsing date:', error, u.Ingangsdatum);
+                    ingangsDate = null;
+                }
+               
+                // Parse CycleStartDate if present (for 2-week rotations)
+                let cycleStartDate = null;
+                if (u.CycleStartDate) {
+                    try {
+                        cycleStartDate = new Date(u.CycleStartDate);
+                        if (isNaN(cycleStartDate.getTime())) {
+                            cycleStartDate = null;
+                        } else {
+                            cycleStartDate.setHours(0, 0, 0, 0);
+                        }
+                    } catch (error) {
+                        console.error('Error parsing CycleStartDate:', error, u.CycleStartDate);
+                        cycleStartDate = null;
+                    }
+                }
+               
+                // Handle WeekType field - preserve original value but normalize case
+                let weekType = null;
+                if (u.WeekType !== undefined && u.WeekType !== null && u.WeekType !== '') {
+                    weekType = String(u.WeekType).trim().toUpperCase();
+                    // Validate it's either A or B
+                    if (weekType !== 'A' && weekType !== 'B') {
+                        console.error(`Invalid WeekType '${u.WeekType}' for record ID ${u.Id}, expected 'A' or 'B'`);
+                        weekType = null;
+                    }
+                }
+               
+                // Handle IsRotatingSchedule field (defaults to false for backwards compatibility)  
+                const isRotatingSchedule = u.IsRotatingSchedule === true || u.IsRotatingSchedule === 'true';
+               
+                // DEBUG: Log WeekType processing for rotating schedules
+                if (isRotatingSchedule) {
+                    console.log(`🔍 DEBUG: Processing rotating record ID ${u.Id} - Raw WeekType: '${u.WeekType}' (type: ${typeof u.WeekType}), Processed: '${weekType}'`);
+                }
+               
+                return {
+                    ...u,
+                    Ingangsdatum: ingangsDate,
+                    CycleStartDate: cycleStartDate,
+                    WeekType: weekType,
+                    IsRotatingSchedule: isRotatingSchedule
+                };
+            }));
+           
+            // DEBUG: Log processed UrenPerWeek data to check for Week B records
+            console.log('🔍 DEBUG: Processed UrenPerWeek data:',
+                (urenPerWeekData || []).map(u => ({
+                    Id: u.Id,
+                    MedewerkerID: u.MedewerkerID,
+                    WeekType: u.WeekType,
+                    IsRotatingSchedule: u.IsRotatingSchedule,
+                    Ingangsdatum: u.Ingangsdatum,
+                    CycleStartDate: u.CycleStartDate
+                })).filter(u => u.IsRotatingSchedule) // Only show rotating schedules
+            );
+           
+            const indicatorsMapped = (dagenIndicatorsData || []).reduce((acc, item) => {
+                if (item.Title) {
+                    acc[item.Title] = { ...item, kleur: item.Kleur || '#cccccc', Beschrijving: item.Beschrijving || '' };
+                }
+                return acc;
+            }, {});
+            setDagenIndicators(indicatorsMapped);
+
+            console.log('✅ Data processing complete!');
+
+            // Debug: Log medewerkers data for troubleshooting
+            console.log('DEBUG - Loaded medewerkers:', medewerkersProcessed.slice(0, 5).map(m => ({
+                Id: m.Id,
+                Title: m.Title,
+                Username: m.Username,
+                Team: m.Team
+            })));
+
+        } catch (err) {
+            console.error('❌ Error in refreshData:', err);
+            setError(`Fout bij laden: ${err.message}`);
+        } finally {
+            console.log('🏁 refreshData complete, setting loading to false');
+            setLoading(false);
+        }
+    }, [weergaveType, huidigJaar, huidigMaand, huidigWeek]);
+
+    // Initial data load when user is validated
+    useEffect(() => {
+        // Only start loading data after user is validated
+        if (isUserValidated) {
+            refreshData();
+        }
+    }, [refreshData, isUserValidated]);
+
+    // Effect to reload data when period changes (maand/week navigation)
     useEffect(() => {
         if (isUserValidated) {
-            console.log('🔄 Loading mock data for RoosterApp...');
-            setLoading(true);
+            console.log(`📅 Period changed to ${weergaveType}: ${weergaveType === 'week' ? `week ${huidigWeek}` : maandNamenVolledig[huidigMaand]} ${huidigJaar}`);
             
-            // Simulate loading delay
-            setTimeout(() => {
-                // Set some basic mock data
-                setMedewerkers([
-                    { id: 1, Username: 'user1', Naam: 'Test Gebruiker 1', team: 'team1' },
-                    { id: 2, Username: 'user2', Naam: 'Test Gebruiker 2', team: 'team1' }
-                ]);
-                setTeams([
-                    { id: 'team1', naam: 'Test Team', kleur: '#4a90e2' }
-                ]);
-                setShiftTypes({
-                    1: { id: 1, label: 'Verlof', kleur: '#4a90e2', afkorting: 'V' }
-                });
-                setLoading(false);
-                console.log('✅ Mock data loaded successfully');
-            }, 1000);
+            // Check if we need to reload data for the new period
+            if (shouldReloadData(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand)) {
+                console.log('🔄 Triggering data reload for new period...');
+                refreshData(false); // Don't force reload, let loadingLogic decide
+            } else {
+                console.log('✅ Data already cached for this period');
+            }
         }
-    }, [isUserValidated]);
+    }, [weergaveType, huidigJaar, huidigMaand, huidigWeek, isUserValidated, refreshData]);
+
+    // Form submission handlers
+    const handleVerlofSubmit = useCallback(async (formData) => {
+        try {
+            console.log("Submitting verlof form data:", formData);
+            console.log("Detailed form data breakdown:", {
+                Title: formData.Title,
+                Medewerker: formData.Medewerker,
+                MedewerkerID: formData.MedewerkerID,
+                StartDatum: formData.StartDatum,
+                EindDatum: formData.EindDatum,
+                RedenId: formData.RedenId,
+                Omschrijving: formData.Omschrijving,
+                Status: formData.Status
+            });
+
+            // Validate required fields
+            if (!formData.MedewerkerID) {
+                throw new Error('MedewerkerID is required but missing');
+            }
+            if (!formData.StartDatum || !formData.EindDatum) {
+                throw new Error('Start and end dates are required');
+            }
+
+            const result = await createSharePointListItem('Verlof', formData);
+            console.log('Verlofaanvraag ingediend:', result);
+            setIsVerlofModalOpen(false);
+            refreshData();
+        } catch (error) {
+            console.error('Fout bij het indienen van verlofaanvraag:', error);
+            console.error('Error details:', {
+                message: error.message,
+                stack: error.stack,
+                formData: formData
+            });
+            alert('Fout bij het indienen van verlofaanvraag: ' + error.message);
+        }
+    }, [refreshData]);
+
+    const handleZiekteSubmit = useCallback(async (formData) => {
+        try {
+            console.log("Submitting ziekte form data:", formData);
+            const result = await createSharePointListItem('Verlof', formData);
+            console.log('Ziekmelding ingediend:', result);
+            setIsZiekModalOpen(false);
+            refreshData();
+        } catch (error) {
+            console.error('Fout bij het indienen van ziekmelding:', error);
+            alert('Fout bij het indienen van ziekmelding: ' + error.message);
+        }
+    }, [refreshData]);
+
+    const handleCompensatieSubmit = useCallback(async (formData) => {
+        try {
+            console.log("🟡 handleCompensatieSubmit called with data:", formData);
+            const result = await createSharePointListItem('CompensatieUren', formData);
+            console.log('✅ Compensatie-uren ingediend successfully:', result);
+            setIsCompensatieModalOpen(false);
+            refreshData();
+        } catch (error) {
+            console.error('❌ Fout bij het indienen van compensatie-uren:', error);
+            alert('Fout bij het indienen van compensatie-uren: ' + error.message);
+        }
+    }, [refreshData]);
+
+    const handleZittingsvrijSubmit = useCallback(async (formData) => {
+        try {
+            console.log("🔵 handleZittingsvrijSubmit called with data:", formData);
+            // Use the list name from formData if provided, otherwise default to 'IncidenteelZittingVrij'
+            const listName = formData._listName || 'IncidenteelZittingVrij';
+            delete formData._listName; // Remove this property before sending to SharePoint
+
+            const result = await createSharePointListItem(listName, formData);
+            console.log('✅ Zittingsvrij ingediend successfully:', result);
+            setIsZittingsvrijModalOpen(false);
+            refreshData();
+        } catch (error) {
+            console.error('❌ Fout bij het indienen van zittingsvrij:', error);
+            alert('Fout bij het indienen van zittingsvrij: ' + error.message);
+        }
+    }, [refreshData]);
+
+    // Helper functions and computed values
+    const urenPerWeekByMedewerker = useMemo(() => {
+        const map = {};
+       
+        // Filter out items with invalid dates first
+        const validItems = urenPerWeekItems.filter(item =>
+            item.Ingangsdatum instanceof Date && !isNaN(item.Ingangsdatum.getTime())
+        );
+       
+        // Group items by medewerker
+        for (const item of validItems) {
+            if (!map[item.MedewerkerID]) {
+                map[item.MedewerkerID] = [];
+            }
+            map[item.MedewerkerID].push(item);
+        }
+       
+        // Sort each employee's records by Ingangsdatum (newest first)
+        // This is just for organizing the initial data - the actual selection
+        // logic is in getUrenPerWeekForDate
+        for (const medewerkerId in map) {
+            map[medewerkerId].sort((a, b) => b.Ingangsdatum - a.Ingangsdatum);
+           
+            // DEBUG: Log grouped records for employees with rotating schedules
+            if (map[medewerkerId].some(record => record.IsRotatingSchedule)) {
+                console.log(`🔍 DEBUG: Grouped rotating schedule records for ${medewerkerId}:`,
+                    map[medewerkerId].map(r => ({
+                        Id: r.Id,
+                        WeekType: r.WeekType,
+                        IsRotatingSchedule: r.IsRotatingSchedule,
+                        Ingangsdatum: r.Ingangsdatum?.toLocaleDateString(),
+                        CycleStartDate: r.CycleStartDate?.toLocaleDateString()
+                    }))
+                );
+            }
+        }
+       
+        return map;
+    }, [urenPerWeekItems]);
+
+    const getUrenPerWeekForDate = useCallback((medewerkerId, date) => {
+        const schedules = urenPerWeekByMedewerker[medewerkerId];
+        if (!schedules) return null;
+       
+        // Normalize the input date for proper comparison
+        let normalizedDate;
+        try {
+            normalizedDate = new Date(date);
+            normalizedDate.setHours(0, 0, 0, 0);
+        } catch (error) {
+            console.error('Error normalizing date in getUrenPerWeekForDate:', error, date);
+            return null;
+        }
+       
+        // Sort the applicable records by Ingangsdatum (newest first)
+        // We need to find the most recent record where Ingangsdatum <= target date
+        const applicableRecords = schedules
+            .filter(s => {
+                // Ensure valid date object
+                if (!(s.Ingangsdatum instanceof Date) || isNaN(s.Ingangsdatum.getTime())) {
+                    console.warn(`Invalid Ingangsdatum for record ID ${s.Id} for medewerker ${medewerkerId}:`, s.Ingangsdatum);
+                    return false;
+                }
+                // Only include records where Ingangsdatum is on or before our target date
+                const isApplicable = s.Ingangsdatum <= normalizedDate;
+                if (medewerkerId.toLowerCase().includes('rauf') && Math.random() < 0.01) {  // Only log occasionally for Rauf
+                    console.log(`UrenPerWeek comparison for ${medewerkerId} on ${normalizedDate.toLocaleDateString()}:`,
+                        `Record ID ${s.Id} with date ${s.Ingangsdatum.toLocaleDateString()} is ${isApplicable ? 'applicable' : 'not applicable'}`);
+                }
+                return isApplicable;
+            })
+            .sort((a, b) => b.Ingangsdatum - a.Ingangsdatum);
+       
+        // If no applicable records found, return null
+        if (applicableRecords.length === 0) {
+            if (medewerkerId.toLowerCase().includes('rauf') && Math.random() < 0.01) {
+                console.log(`⚠️ No applicable UrenPerWeek record found for ${medewerkerId} on ${normalizedDate.toLocaleDateString()}`);
+            }
+            return null;
+        }
+       
+        // Check if this employee has rotating schedules
+        const hasRotatingSchedule = applicableRecords.some(record => record.IsRotatingSchedule === true);
+       
+        if (hasRotatingSchedule) {
+            // For rotating schedules, we need to find the correct schedule period and week type
+            // Group records by schedule period (same Ingangsdatum + IsRotatingSchedule)
+            const schedulePeriodsMap = new Map();
+           
+            for (const record of applicableRecords) {
+                const periodKey = `${record.Ingangsdatum.getTime()}_${record.IsRotatingSchedule}`;
+               
+                if (!schedulePeriodsMap.has(periodKey)) {
+                    schedulePeriodsMap.set(periodKey, {
+                        ingangsdatum: record.Ingangsdatum,
+                        isRotating: record.IsRotatingSchedule,
+                        cycleStartDate: record.CycleStartDate,
+                        records: []
+                    });
+                }
+               
+                schedulePeriodsMap.get(periodKey).records.push(record);
+            }
+           
+            // Convert to array and sort by date (newest first)
+            const schedulePeriods = Array.from(schedulePeriodsMap.values())
+                .sort((a, b) => b.ingangsdatum - a.ingangsdatum);
+           
+            // Find the most recent period that applies to our target date
+            let selectedPeriod = null;
+           
+            for (const period of schedulePeriods) {
+                if (period.ingangsdatum <= normalizedDate) {
+                    selectedPeriod = period;
+                    break;
+                }
+            }
+           
+            if (!selectedPeriod) {
+                console.warn(`⚠️ No applicable schedule period found for ${medewerkerId} on ${normalizedDate.toLocaleDateString()}`);
+                return null;
+            }
+           
+            // DEBUG: Enhanced logging for Week B lookup issues
+            if (medewerkerId.toLowerCase().includes('rauf') || Math.random() < 0.1) { // Log for Rauf or 10% of other calls
+                console.log(`🔍 DEBUG: Selected period for ${medewerkerId} on ${normalizedDate.toLocaleDateString()}:`);
+                console.log(`🔍 DEBUG: Period Ingangsdatum: ${selectedPeriod.ingangsdatum.toLocaleDateString()}`);
+                console.log(`🔍 DEBUG: Period is rotating: ${selectedPeriod.isRotating}`);
+                console.log(`🔍 DEBUG: Available records in period:`,
+                    selectedPeriod.records.map(r => ({
+                        Id: r.Id,
+                        WeekType: r.WeekType,
+                        IsRotatingSchedule: r.IsRotatingSchedule,
+                        CycleStartDate: r.CycleStartDate ? new Date(r.CycleStartDate).toLocaleDateString() : 'None'
+                    }))
+                );
+            }
+           
+            if (selectedPeriod.isRotating) {
+                // This is a rotating schedule period - find the correct week type
+                const cycleStartDate = selectedPeriod.cycleStartDate || selectedPeriod.ingangsdatum;
+                const requiredWeekType = calculateWeekType(normalizedDate, cycleStartDate);
+               
+                if (medewerkerId.toLowerCase().includes('rauf') || Math.random() < 0.1) {
+                    console.log(`🔍 DEBUG: Looking for Week ${requiredWeekType} in rotating period (calculated from cycle start: ${cycleStartDate.toLocaleDateString()})`);
+                }
+               
+                // Find the record for this week type in this period
+                const weekTypeRecord = selectedPeriod.records.find(record => {
+                    // Ensure case-insensitive comparison
+                    const recordWeekType = record.WeekType ? String(record.WeekType).trim().toUpperCase() : null;
+                    return recordWeekType === requiredWeekType.toUpperCase();
+                });
+               
+                if (weekTypeRecord) {
+                    if (medewerkerId.toLowerCase().includes('rauf') || Math.random() < 0.1) {
+                        console.log(`✅ Found Week ${requiredWeekType} record for ${medewerkerId}: ID ${weekTypeRecord.Id}`);
+                    }
+                    return weekTypeRecord;
+                } else {
+                    // Enhanced error logging
+                    console.error(`❌ Could not find Week ${requiredWeekType} record for ${medewerkerId} on ${normalizedDate.toLocaleDateString()}`);
+                    console.error(`❌ Available WeekTypes in period:`, selectedPeriod.records.map(r => r.WeekType));
+                    console.error(`❌ CycleStartDate used for calculation: ${cycleStartDate.toLocaleDateString()}`);
+                   
+                    // Fall back to any available record from this period
+                    console.warn(`⚠️ Could not find Week ${requiredWeekType} record for ${medewerkerId}, falling back to available record`);
+                    return selectedPeriod.records[0];
+                }
+            } else {
+                // This is a non-rotating schedule period that happens to be in a list with rotating schedules
+                console.log(`✅ Using non-rotating record from mixed schedule for ${medewerkerId}: ID ${selectedPeriod.records[0].Id}`);
+                return selectedPeriod.records[0];
+            }
+        } else {
+            // For non-rotating schedules, use the most recent applicable record
+            const selectedRecord = applicableRecords[0];
+           
+            console.log(`✅ Selected standard UrenPerWeek record for ${medewerkerId} on ${normalizedDate.toLocaleDateString()}: Record ID ${selectedRecord.Id} from ${selectedRecord.Ingangsdatum.toLocaleDateString()}`);
+            return selectedRecord;
+        }
+    }, [urenPerWeekByMedewerker]);
+
+    const compensatieMomentenByDate = useMemo(() => {
+        const moments = {};
+        const addMoment = (date, type, item) => {
+            if (!date || isNaN(date)) return; // Skip invalid dates
+            // Extract date part as UTC to avoid timezone conversion issues
+            const utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+            const key = utcDate.toISOString().split('T')[0];
+            if (!moments[key]) {
+                moments[key] = [];
+            }
+            moments[key].push({ type, item });
+        };
+
+        compensatieUrenItems.forEach(item => {
+            if (item.Ruildag === true) {
+                addMoment(item.StartCompensatieUren, 'ruildag-gewerkt', item);
+                if (item.ruildagStart) {
+                    addMoment(item.ruildagStart, 'ruildag-vrij', item);
+                }
+            } else {
+                addMoment(item.StartCompensatieUren, 'compensatie', item);
+            }
+        });
+        return moments;
+    }, [compensatieUrenItems]);
+
+    const getCompensatieMomentenVoorDag = useCallback((datum) => {
+        // Use the same UTC date key format as addMoment function to ensure consistency
+        const utcDate = new Date(Date.UTC(datum.getFullYear(), datum.getMonth(), datum.getDate()));
+        const key = utcDate.toISOString().split('T')[0];
+        return compensatieMomentenByDate[key] || [];
+    }, [compensatieMomentenByDate]);
+
+    const getVerlofVoorDag = useCallback((medewerkerUsername, datum) => {
+        if (!medewerkerUsername) return null;
+        const datumCheck = new Date(datum).setHours(12, 0, 0, 0);
+        return verlofItems.find(v => v.MedewerkerID === medewerkerUsername && v.Status !== 'Afgewezen' && datumCheck >= new Date(v.StartDatum).setHours(12, 0, 0, 0) && datumCheck <= new Date(v.EindDatum).setHours(12, 0, 0, 0));
+    }, [verlofItems]);
+
+    const getZittingsvrijVoorDag = useCallback((medewerkerUsername, datum) => {
+        if (!medewerkerUsername) return null;
+        const datumCheck = new Date(datum).setHours(12, 0, 0, 0);
+        return zittingsvrijItems.find(z => z.Gebruikersnaam === medewerkerUsername && datumCheck >= new Date(z.StartDatum).setHours(12, 0, 0, 0) && datumCheck <= new Date(z.EindDatum).setHours(12, 0, 0, 0));
+    }, [zittingsvrijItems]);
+
+    const getCompensatieUrenVoorDag = useCallback((medewerkerUsername, dag) => {
+        if (!medewerkerUsername || !compensatieUrenItems || compensatieUrenItems.length === 0) {
+            return [];
+        }
+
+        // Normalize the calendar day to a UTC start and end for accurate comparison
+        const dagStartUTC = new Date(Date.UTC(dag.getFullYear(), dag.getMonth(), dag.getDate(), 0, 0, 0));
+        const dagEindUTC = new Date(Date.UTC(dag.getFullYear(), dag.getMonth(), dag.getDate(), 23, 59, 59));
+
+        return compensatieUrenItems.filter(item => {
+            if (item.MedewerkerID !== medewerkerUsername) {
+                return false;
+            }
+
+            // Parse SharePoint dates directly as Date objects (they are already in UTC)
+            const startCompensatie = new Date(item.StartCompensatieUren);
+            const eindeCompensatie = new Date(item.EindeCompensatieUren);
+
+            // Check if the compensation period overlaps with the current day (in UTC)
+            return startCompensatie <= dagEindUTC && eindeCompensatie >= dagStartUTC;
+        });
+    }, [compensatieUrenItems]);
+
+    const periodeData = useMemo(() => {
+        return weergaveType === 'week' ? getDagenInWeek(huidigWeek, huidigJaar) : getDagenInMaand(huidigMaand, huidigJaar);
+    }, [weergaveType, huidigWeek, huidigMaand, huidigJaar]);
+
+    const volgende = () => { if (weergaveType === 'week') { const maxWeken = getWekenInJaar(huidigJaar); if (huidigWeek >= maxWeken) { setHuidigWeek(1); setHuidigJaar(huidigJaar + 1); } else { setHuidigWeek(huidigWeek + 1); } } else { if (huidigMaand === 11) { setHuidigMaand(0); setHuidigJaar(huidigJaar + 1); } else { setHuidigMaand(huidigMaand + 1); } } };
+    const vorige = () => { if (weergaveType === 'week') { if (huidigWeek === 1) { const vorigJaar = huidigJaar - 1; setHuidigWeek(getWekenInJaar(vorigJaar)); setHuidigJaar(vorigJaar); } else { setHuidigWeek(huidigWeek - 1); } } else { if (huidigMaand === 0) { setHuidigMaand(11); setHuidigJaar(huidigJaar - 1); } else { setHuidigMaand(huidigMaand - 1); } } };
+
+    // Toggle sort direction for medewerkers
+    const toggleSortDirection = () => {
+        setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    };
+
+    const gegroepeerdeData = useMemo(() => {
+        const gefilterdeMedewerkers = medewerkers.filter(m => (!zoekTerm || m.naam.toLowerCase().includes(zoekTerm.toLowerCase())) && (!geselecteerdTeam || m.team === geselecteerdTeam));
+        
+        // Sort medewerkers by Title column from Medewerkers SharePoint list based on sortDirection
+        const gesorteerdeFilters = gefilterdeMedewerkers.sort((a, b) => {
+            // Use the Title field from the SharePoint Medewerkers list specifically
+            const titleA = (a.Title || a.Naam || a.naam || 'Onbekend').toLowerCase().trim();
+            const titleB = (b.Title || b.Naam || b.naam || 'Onbekend').toLowerCase().trim();
+            
+            if (sortDirection === 'asc') {
+                return titleA.localeCompare(titleB, 'nl', { numeric: true, sensitivity: 'base' });
+            } else {
+                return titleB.localeCompare(titleA, 'nl', { numeric: true, sensitivity: 'base' });
+            }
+        });
+        
+        const data = teams.reduce((acc, team) => { if (team && team.id) { acc[team.id] = gesorteerdeFilters.filter(m => m.team === team.id); } return acc; }, {});
+        const medewerkersZonderTeam = gesorteerdeFilters.filter(m => !m.team);
+        if (medewerkersZonderTeam.length > 0) { data['geen_team'] = medewerkersZonderTeam; }
+        return data;
+    }, [medewerkers, teams, zoekTerm, geselecteerdTeam, sortDirection]);
+
+    // =====================
+    // Helper: Check if a date is in the current selection for a medewerker
+    // =====================
+    function isDateInSelection(dag, medewerkerUsername) {
+        if (!selection || !selection.start || !selection.end || !selection.medewerkerId) return false;
+        // Only highlight if the medewerker matches
+        if (medewerkerUsername !== selection.medewerkerId) return false;
+        // Compare only the date part (ignore time)
+        const d = new Date(dag);
+        d.setHours(0, 0, 0, 0);
+        const s = new Date(selection.start);
+        s.setHours(0, 0, 0, 0);
+        const e = new Date(selection.end);
+        e.setHours(0, 0, 0, 0);
+        return d >= s && d <= e;
+    }
     
     // Initialize the tooltip manager when the component mounts
     useEffect(() => {
@@ -950,10 +1540,7 @@ const RoosterApp = ({ isUserValidated = true }) => {
             shiftTypes: shiftTypes,
             selection: selection,
             initialData: selection && selection.itemData ? selection.itemData : {},
-            onSubmit: (formData) => {
-                console.log('Verlof form submitted:', formData);
-                setIsVerlofModalOpen(false);
-            }
+            onSubmit: handleVerlofSubmit
         })),
         h(Modal, {
             isOpen: isCompensatieModalOpen,
@@ -965,10 +1552,7 @@ const RoosterApp = ({ isUserValidated = true }) => {
             compensatieUrenItems: compensatieUrenItems,
             selection: selection,
             initialData: selection && selection.itemData ? selection.itemData : {},
-            onSubmit: (formData) => {
-                console.log('Compensatie form submitted:', formData);
-                setIsCompensatieModalOpen(false);
-            }
+            onSubmit: handleCompensatieSubmit
         })),
         h(Modal, {
             isOpen: isZiekModalOpen,
@@ -976,10 +1560,7 @@ const RoosterApp = ({ isUserValidated = true }) => {
             title: selection && selection.itemData ? "Ziekmelding Bewerken" : "Ziek Melden"
         }, h(ZiekteMeldingForm, {
             onClose: () => setIsZiekModalOpen(false),
-            onSubmit: (formData) => {
-                console.log('Ziekte form submitted:', formData);
-                setIsZiekModalOpen(false);
-            },
+            onSubmit: handleZiekteSubmit,
             medewerkers: medewerkers,
             selection: selection,
             initialData: selection && selection.itemData ? selection.itemData : {},
@@ -991,10 +1572,7 @@ const RoosterApp = ({ isUserValidated = true }) => {
             title: selection && selection.itemData ? "Zittingsvrij Bewerken" : "Zittingsvrij Maken"
         }, h(ZittingsvrijForm, {
             onClose: () => setIsZittingsvrijModalOpen(false),
-            onSubmit: (formData) => {
-                console.log('Zittingsvrij form submitted:', formData);
-                setIsZittingsvrijModalOpen(false);
-            },
+            onSubmit: handleZittingsvrijSubmit,
             medewerkers: medewerkers,
             selection: selection,
             initialData: selection && selection.itemData ? selection.itemData : {}
