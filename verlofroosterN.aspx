@@ -482,14 +482,73 @@
             console.log('🎯 App component rendering with permissions:', userPermissions);
             
             return h(Fragment, null,
-                h(RoosterApp, { 
-                    isUserValidated: true, 
-                    currentUser: currentUser, 
-                    userPermissions: { 
-                        ...userPermissions, 
-                        NavigationButtons: NavigationButtons // Pass the component as a prop
-                    } 
-                })
+                // Application Header
+                h('div', { id: 'header', className: 'header' },
+                    h('div', { className: 'header-content' },
+                        h('div', { className: 'header-left' },
+                            h('button', {
+                                id: 'btn-melding',
+                                className: 'btn btn-melding',
+                                onClick: () => {
+                                    // Open feedback/melding functionality
+                                    window.open('mailto:support@verlofrooster.nl?subject=Feedback Verlofrooster', '_blank');
+                                },
+                                title: 'Feedback of problemen melden'
+                            },
+                                h('i', { className: 'fas fa-bug' }),
+                                'Melding'
+                            ),
+                            h('div', { className: 'logo-container' },
+                                h('h1', { className: 'app-title' }, 'Verlofrooster')
+                            )
+                        ),
+                        h('div', { className: 'header-right' },
+                            h(NavigationButtons, { userPermissions, currentUser })
+                        )
+                    )
+                ),
+
+                // Main Application Content
+                h('div', { id: 'app-container', className: 'app-container' },
+                    h('div', { id: 'toolbar', className: 'toolbar' },
+                        h('div', { id: 'periode-navigatie', className: 'periode-navigatie' },
+                            // Period navigation will be handled by RoosterApp
+                        ),
+                        h('div', { id: 'filter-groep', className: 'filter-groep' },
+                            // Filters will be handled by RoosterApp
+                        ),
+                        h('div', { id: 'legenda-container', className: 'legenda-container' },
+                            h('div', { className: 'legenda' },
+                                h('span', { className: 'legenda-title' }, 'Legenda:'),
+                                h('div', { className: 'legenda-item' },
+                                    h('span', { className: 'legenda-kleur verlof-goedgekeurd' }),
+                                    h('span', null, 'VER - Verlof')
+                                ),
+                                h('div', { className: 'legenda-item' },
+                                    h('span', { className: 'legenda-kleur ziekte' }),
+                                    h('span', null, 'ZK - Ziekte')
+                                ),
+                                h('div', { className: 'legenda-item' },
+                                    h('span', { className: 'legenda-kleur compensatie-uren' }),
+                                    h('span', null, 'CU - Compensatie-uren')
+                                ),
+                                h('div', { className: 'legenda-item' },
+                                    h('span', { className: 'legenda-kleur zittingsvrij' }),
+                                    h('span', null, 'ZV - Zittingsvrij')
+                                )
+                            )
+                        )
+                    ),
+
+                    // Main Rooster Content
+                    h('div', { className: 'main-content' },
+                        h(RoosterApp, { 
+                            isUserValidated: true, 
+                            currentUser: currentUser, 
+                            userPermissions: userPermissions
+                        })
+                    )
+                )
             );
         };
 
@@ -506,62 +565,5 @@
                 setIsLoading(false);
             };
 
-            // Always render UserRegistrationCheck with the app as children
-            return h(UserRegistrationCheck, { 
-                onUserValidated: handleUserValidated 
-            },
-                // Always pass the app as children, but only render when data is ready
-                !isLoading && appData ? h(App, appData) : h('div', {
-                    style: {
-                        width: '100%',
-                        height: '100vh',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        background: '#f8fafc'
-                    }
-                }, 'Applicatie wordt geladen...')
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        console.log('🎯 About to render React app');
-        console.log('Root element exists:', !!document.getElementById('root'));
-        console.log('React available:', typeof React !== 'undefined');
-        console.log('ReactDOM available:', typeof ReactDOM !== 'undefined');
-        
-        root.render(h(ErrorBoundary, null,
-            h(MainAppWrapper, null)
-        ));
-
-        // Make functions globally available for use in other components
-        window.canManageOthersEvents = canManageOthersEvents;
-        window.getProfilePhotoUrl = getProfilePhotoUrl;
-        window.fetchSharePointList = fetchSharePointList;
-        window.TooltipManager = TooltipManager; // Expose TooltipManager for debugging
-        
-        // Expose loading logic functions for debugging and manual testing
-        window.logLoadingStatus = logLoadingStatus;
-        window.clearAllCache = clearAllCache;
-        window.updateCacheKey = updateCacheKey;
-        window.loadFilteredData = loadFilteredData;
-        window.shouldReloadData = shouldReloadData;
-
-        // Expose User and Permission functions
-        window.getCurrentUser = getCurrentUser;
-        window.getCurrentUserGroups = getCurrentUserGroups;
-        window.isUserInAnyGroup = isUserInAnyGroup;
-        window.createSharePointListItem = createSharePointListItem;
-        window.updateSharePointListItem = updateSharePointListItem;
-        window.deleteSharePointListItem = deleteSharePointListItem;
-        window.trimLoginNaamPrefix = trimLoginNaamPrefix;
-
-        // For debugging: log the initial user data
-        (async () => {
-            const user = await getCurrentUser();
-            console.log('👤 Current user data:', user);
-        })();
-    </script>
-</body>
-
-</html>
+            // If still loading, render UserRegistrationCheck without children
+   
