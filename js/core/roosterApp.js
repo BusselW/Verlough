@@ -10,7 +10,7 @@ import {
     getWeekNummer, 
     getWekenInJaar, 
     getDagenInMaand, 
-    formatteerDatum, 
+    formatteerDatum,
     getDagenInWeek, 
     isVandaag 
 } from '../utils/dateTimeUtils.js';
