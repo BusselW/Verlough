@@ -807,53 +807,87 @@ const RoosterApp = () => {
         );
     }
 
-    // Main render
-    return h(Fragment, null,
-        // Header with navigation and controls
-        h('div', { className: 'rooster-header' },
-            h('div', { className: 'rooster-controls' },
-                h('div', { className: 'periode-navigatie' },
-                    h('button', { onClick: vorigePeriode }, '‹'),
-                    h('span', { className: 'periode-titel' }, getPeriodeTitel()),
-                    h('button', { onClick: volgendePeriode }, '›'),
-                    h('button', { onClick: vandaag, className: 'vandaag-btn' }, 'Vandaag')
-                ),
+    // Initialize controls in toolbar areas
+    useEffect(() => {
+        // Render period navigation into designated area
+        const periodeContainer = document.getElementById('periode-navigatie');
+        if (periodeContainer) {
+            const periodeControls = h('div', { className: 'periode-controls' },
+                h('button', { 
+                    className: 'nav-btn prev-btn',
+                    onClick: vorigePeriode,
+                    title: 'Vorige periode' 
+                }, '‹'),
+                h('span', { className: 'periode-titel' }, getPeriodeTitel()),
+                h('button', { 
+                    className: 'nav-btn next-btn',
+                    onClick: volgendePeriode,
+                    title: 'Volgende periode' 
+                }, '›'),
+                h('button', { 
+                    className: 'vandaag-btn',
+                    onClick: vandaag,
+                    title: 'Ga naar vandaag' 
+                }, 'Vandaag'),
                 h('div', { className: 'weergave-toggle' },
                     h('button', {
-                        className: weergaveType === 'maand' ? 'active' : '',
+                        className: `toggle-btn ${weergaveType === 'maand' ? 'active' : ''}`,
                         onClick: () => setWeergaveType('maand')
                     }, 'Maand'),
                     h('button', {
-                        className: weergaveType === 'week' ? 'active' : '',
+                        className: `toggle-btn ${weergaveType === 'week' ? 'active' : ''}`,
                         onClick: () => setWeergaveType('week')
                     }, 'Week')
-                ),
-                h('div', { className: 'filters' },
+                )
+            );
+            ReactDOM.render(periodeControls, periodeContainer);
+        }
+
+        // Render filters into designated area
+        const filterContainer = document.getElementById('filter-groep');
+        if (filterContainer) {
+            const filterControls = h('div', { className: 'filter-controls' },
+                h('div', { className: 'search-container' },
                     h('input', {
                         type: 'text',
+                        className: 'search-input',
                         placeholder: 'Zoek medewerker...',
                         value: zoekTerm,
                         onChange: (e) => setZoekTerm(e.target.value)
                     }),
+                    h('i', { className: 'fas fa-search search-icon' })
+                ),
+                h('div', { className: 'team-filter' },
                     h('select', {
+                        className: 'team-select',
                         value: geselecteerdTeam,
                         onChange: (e) => setGeselecteerdTeam(e.target.value)
                     },
                         h('option', { value: '' }, 'Alle teams'),
                         teams.map(team => h('option', { key: team.ID, value: team.Title }, team.Title))
-                    ),
-                    h('select', { id: 'horen-filter' },
+                    )
+                ),
+                h('div', { className: 'horen-filter' },
+                    h('select', { 
+                        id: 'horen-filter',
+                        className: 'horen-select'
+                    },
                         h('option', { value: 'alle' }, 'Alle medewerkers'),
                         h('option', { value: 'ja' }, 'Horen: Ja'),
                         h('option', { value: 'nee' }, 'Horen: Nee')
                     )
                 )
-            )
-        ),
+            );
+            ReactDOM.render(filterControls, filterContainer);
+        }
+    }, [weergaveType, zoekTerm, geselecteerdTeam, teams, periodeData]);
+
+    // Main render
+    return h(Fragment, null,
 
         // Main table
-        h('div', { className: 'rooster-container' },
-            h('table', { className: 'rooster-table' },
+        h('div', { id: 'rooster-container', className: 'rooster-container' },
+            h('table', { id: 'rooster-table', className: 'rooster-table' },
                 h('thead', null,
                     h('tr', null, createHeaderCells())
                 ),
