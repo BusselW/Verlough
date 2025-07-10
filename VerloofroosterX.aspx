@@ -457,23 +457,18 @@
         // =====================
         // Main App Component - now uses imported RoosterApp
         // =====================
-        const App = () => {
-            const [isUserValidated, setIsUserValidated] = useState(false);
-            const [currentUser, setCurrentUser] = useState(null);
-            const [userPermissions, setUserPermissions] = useState({ loading: true });
-
-            const handleUserValidated = (isValidated, user, permissions) => {
-                setIsUserValidated(isValidated);
-                setCurrentUser(user);
-                setUserPermissions(permissions);
-            };
-
+        const App = ({ currentUser, userPermissions }) => {
+            console.log('🎯 App component rendering with permissions:', userPermissions);
+            
             return h(Fragment, null,
-                h(UserRegistrationCheck, {
-                    onUserValidated: handleUserValidated
-                },
-                    isUserValidated && h(RoosterApp, { currentUser, userPermissions })
-                )
+                h(RoosterApp, { 
+                    isUserValidated: true, 
+                    currentUser: currentUser, 
+                    userPermissions: { 
+                        ...userPermissions, 
+                        NavigationButtons: NavigationButtons // Pass the component as a prop
+                    } 
+                })
             );
         };
 

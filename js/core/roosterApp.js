@@ -36,6 +36,8 @@ const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } 
 // Hoofd RoosterApp Component
 // =====================
 const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) => {
+    const NavigationButtons = userPermissions.NavigationButtons || (() => null);
+
     // Helper function to create header cells
     const createHeaderCells = () => {
         const cells = [
@@ -93,7 +95,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
            
             // Create a ref callback to add tooltip for holiday
             const headerRef = (element) => {
-                if (element && feestdagNaam && !element.dataset.tooltipAttached) {
+                if (element && feestdagNaam && !element.dataset.tooltipAttached && typeof TooltipManager !== 'undefined') {
                     TooltipManager.attach(element, () => {
                         return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
                     });
@@ -858,7 +860,9 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     useEffect(() => {
         // Make sure TooltipManager is initialized
         console.log('🔍 Initializing TooltipManager from RoosterApp');
-        TooltipManager.init();
+        if (typeof TooltipManager !== 'undefined' && TooltipManager.init) {
+            TooltipManager.init();
+        }
     }, []);
    
     // Initialize profile cards after data is loaded
@@ -878,7 +882,9 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             // Allow React to finish rendering before attaching tooltips
             setTimeout(() => {
                 console.log('🔄 Triggering tooltip re-attachment after data load');
-                TooltipManager.autoAttachTooltips();
+                if (typeof TooltipManager !== 'undefined' && TooltipManager.autoAttachTooltips) {
+                    TooltipManager.autoAttachTooltips();
+                }
                 
                 // Dispatch custom event for any components listening
                 const event = new CustomEvent('react-update', {
@@ -904,11 +910,15 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     // Expose tutorial functions globally
     useEffect(() => {
         window.startTutorial = () => {
-            roosterTutorial.start();
+            if (typeof roosterTutorial !== 'undefined' && roosterTutorial.start) {
+                roosterTutorial.start();
+            }
         };
 
         window.openHandleiding = (section = 'algemeen') => {
-            openHandleiding(section);
+            if (typeof openHandleiding === 'function') {
+                openHandleiding(section);
+            }
         };
 
         document.addEventListener('tutorial-completed', () => {
@@ -1483,8 +1493,6 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             selection: selection,
             initialData: selection && selection.itemData ? selection.itemData : {},
             ziekteRedenId: ziekteRedenId
-       
-
         })),
         h(Modal, {
             isOpen: isZittingsvrijModalOpen,
