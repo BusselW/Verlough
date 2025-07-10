@@ -1457,7 +1457,7 @@ const RoosterApp = ({ isUserValidated = true }) => {
     }
 
     // Render de roosterkop en de medewerkerrijen
-    return h(Fragment, null,
+    return h('div', { className: 'app-container' },
         h('div', { className: 'sticky-header-container' },
             h('header', { id: 'header', className: 'header' },
                 h('div', { className: 'header-content' },
