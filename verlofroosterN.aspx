@@ -496,17 +496,42 @@
         // =====================
         // Application Bootstrap
         // =====================
+        const MainAppWrapper = () => {
+            const [appData, setAppData] = useState(null);
+            const [isLoading, setIsLoading] = useState(true);
+
+            const handleUserValidated = (isValid, currentUser, userPermissions) => {
+                console.log('✅ User validated, setting app data:', { isValid, currentUser, userPermissions });
+                setAppData({ currentUser, userPermissions });
+                setIsLoading(false);
+            };
+
+            if (isLoading) {
+                return h(UserRegistrationCheck, { 
+                    onUserValidated: handleUserValidated 
+                }, 
+                    h('div', { 
+                        style: { 
+                            display: 'flex', 
+                            justifyContent: 'center', 
+                            alignItems: 'center', 
+                            height: '100vh' 
+                        } 
+                    }, 'Loading...')
+                );
+            }
+
+            return appData ? h(App, appData) : h('div', null, 'Loading...');
+        };
+
         const root = ReactDOM.createRoot(document.getElementById('root'));
         console.log('🎯 About to render React app');
         console.log('Root element exists:', !!document.getElementById('root'));
         console.log('React available:', typeof React !== 'undefined');
         console.log('ReactDOM available:', typeof ReactDOM !== 'undefined');
+        
         root.render(h(ErrorBoundary, null,
-            h(UserRegistrationCheck, null,
-                (userData) => userData.currentUser ? 
-                    h(App, userData) : 
-                    h('div', null, 'Loading...')
-            )
+            h(MainAppWrapper, null)
         ));
 
         // Make functions globally available for use in other components
