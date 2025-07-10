@@ -1497,12 +1497,50 @@ const RoosterApp = ({ isUserValidated = true }) => {
                         )
                     )
                 ),
-                Object.keys(shiftTypes).length > 0 && h('div', { id: 'legenda-container', className: 'legenda-container' },
+                (Object.keys(shiftTypes).length > 0 || Object.keys(dagenIndicators).length > 0) && h('div', { id: 'legenda-container', className: 'legenda-container' },
                     h('span', { className: 'legenda-titel' }, 'Legenda:'),
-                    Object.values(shiftTypes || {}).map(type => h('div', { key: type.id, className: 'legenda-item' },
-                        h('div', { className: 'legenda-kleur', style: { backgroundColor: type.kleur } }),
-                        h('span', null, `${type.afkorting} - ${type.label}`)
-                    ))
+                    // Verlof/Ziekte types (VER, ZKT, etc.)
+                    Object.values(shiftTypes || {}).length > 0 && [
+                        h('div', { key: 'verlof-group', className: 'legenda-groep' },
+                            h('span', { className: 'legenda-groep-titel' }, 'Verlof & Ziekte:')
+                        ),
+                        ...Object.values(shiftTypes || {}).map(type => h('div', { key: type.id, className: 'legenda-item' },
+                            h('div', { className: 'legenda-kleur', style: { backgroundColor: type.kleur } }),
+                            h('span', null, `${type.afkorting} - ${type.label}`)
+                        ))
+                    ],
+                    // Rooster indicatoren (VVM, VVO, VVD, etc.)
+                    Object.values(dagenIndicators || {}).length > 0 && [
+                        h('div', { key: 'separator-1', className: 'legenda-separator' }),
+                        h('div', { key: 'rooster-group', className: 'legenda-groep' },
+                            h('span', { className: 'legenda-groep-titel' }, 'Rooster Types:')
+                        ),
+                        ...Object.values(dagenIndicators || {}).map(indicator => h('div', { key: indicator.Title, className: 'legenda-item' },
+                            h('div', { className: 'legenda-kleur', style: { backgroundColor: indicator.kleur } }),
+                            h('span', null, `${indicator.Title} - ${indicator.Beschrijving}`)
+                        ))
+                    ],
+                    // Compensatie & Zittingsvrij
+                    h('div', { key: 'separator-2', className: 'legenda-separator' }),
+                    h('div', { key: 'special-group', className: 'legenda-groep' },
+                        h('span', { className: 'legenda-groep-titel' }, 'Overige:')
+                    ),
+                    h('div', { key: 'compensatie', className: 'legenda-item' },
+                        h('div', { className: 'legenda-icon' },
+                            h('img', { src: './icons/compensatieuren/neutraleuren.svg', alt: 'Compensatie', style: { width: '16px', height: '16px' } })
+                        ),
+                        h('span', null, 'Compensatie Uren')
+                    ),
+                    h('div', { key: 'zittingsvrij', className: 'legenda-item' },
+                        h('div', { className: 'legenda-kleur', style: { backgroundColor: '#8e44ad' } }),
+                        h('span', null, 'ZV - Zittingsvrij')
+                    ),
+                    h('div', { key: 'horen', className: 'legenda-item' },
+                        h('div', { className: 'legenda-icon' },
+                            h('img', { src: './icons/horen-ja.svg', alt: 'Horen', style: { width: '16px', height: '16px' } })
+                        ),
+                        h('span', null, 'Horenplicht Indicator')
+                    )
                 )
             )
         ),
