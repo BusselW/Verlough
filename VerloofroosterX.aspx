@@ -33,6 +33,8 @@
         import { canManageOthersEvents, canUserModifyItem } from './js/ui/ContextMenu.js';
         import { roosterHandleiding, openHandleiding } from './js/tutorial/roosterHandleiding.js';
         import TooltipManager from './js/ui/tooltipbar.js';
+        import ProfielKaarten from './js/ui/profielkaarten.js';
+        import { roosterTutorial, openHandleiding as handleidingOpenen } from './js/tutorial/roosterHandleiding.js';
         import { getProfilePhotoUrl } from './js/utils/userUtils.js';
         import RoosterApp from './js/core/roosterApp.js';
 
@@ -194,13 +196,32 @@
         };
 
         // =====================
-        // Error Boundary (Ongewijzigd)
+        // Error Boundary (Bijgewerkt)
         // =====================
         class ErrorBoundary extends React.Component {
-            constructor(props) { super(props); this.state = { hasError: false, error: null }; }
-            static getDerivedStateFromError(error) { return { hasError: true, error }; }
-            componentDidCatch(error, errorInfo) { console.error('Error Boundary gevangen fout:', error, errorInfo); }
-            render() { if (this.state.hasError) { return h('div', { className: 'error-message' }, h('h2', null, 'Er is een onverwachte fout opgetreden'), h('p', null, 'Probeer de pagina te vernieuwen.'), h('details', null, h('summary', null, 'Technische details'), h('pre', null, this.state.error?.message || 'Onbekende fout'))); } return this.props.children; }
+            constructor(props) {
+                super(props);
+                this.state = { hasError: false, error: null };
+            }
+
+            static getDerivedStateFromError(error) {
+                return { hasError: true, error };
+            }
+
+            componentDidCatch(error, errorInfo) {
+                console.error('Error caught by boundary:', error, errorInfo);
+            }
+
+            render() {
+                if (this.state.hasError) {
+                    return h('div', { className: 'error-container' },
+                        h('h2', null, 'Er is een onverwachte fout opgetreden'),
+                        h('p', null, this.state.error?.message || 'Onbekende fout'),
+                        h('button', { onClick: () => window.location.reload() }, 'Vernieuw')
+                    );
+                }
+                return this.props.children;
+            }
         }
 
         // =====================
@@ -480,7 +501,13 @@
         console.log('Root element exists:', !!document.getElementById('root'));
         console.log('React available:', typeof React !== 'undefined');
         console.log('ReactDOM available:', typeof ReactDOM !== 'undefined');
-        root.render(h(ErrorBoundary, null, h(App)));
+        root.render(h(ErrorBoundary, null,
+            h(UserRegistrationCheck, null,
+                (userData) => userData.currentUser ? 
+                    h(App, userData) : 
+                    h('div', null, 'Loading...')
+            )
+        ));
 
         // Make functions globally available for use in other components
         window.canManageOthersEvents = canManageOthersEvents;
@@ -488,19 +515,28 @@
         window.fetchSharePointList = fetchSharePointList;
         window.TooltipManager = TooltipManager; // Expose TooltipManager for debugging
         
-        // Expose loading logic functions for debugging and manual control
-        window.LoadingLogic = LoadingLogic;
-        window.clearLoadingCache = clearAllCache;
-        window.getLoadingStats = LoadingLogic.getCacheStats;
+        // Expose loading logic functions for debugging and manual testing
         window.logLoadingStatus = logLoadingStatus;
-        
-        console.log('🔧 LoadingLogic utilities added to window:');
-        console.log('   - window.LoadingLogic - Full LoadingLogic object');
-        console.log('   - window.clearLoadingCache() - Clear all cached data');
-        console.log('   - window.getLoadingStats() - Get cache statistics');
-        console.log('   - window.logLoadingStatus() - Log current loading status');
-        
-        console.log('✅ Script execution completed successfully!');
+        window.clearAllCache = clearAllCache;
+        window.updateCacheKey = updateCacheKey;
+        window.loadFilteredData = loadFilteredData;
+        window.shouldReloadData = shouldReloadData;
+
+        // Expose User and Permission functions
+        window.getCurrentUser = getCurrentUser;
+        window.getCurrentUserGroups = getCurrentUserGroups;
+        window.isUserInAnyGroup = isUserInAnyGroup;
+        window.createSharePointListItem = createSharePointListItem;
+        window.updateSharePointListItem = updateSharePointListItem;
+        window.deleteSharePointListItem = deleteSharePointListItem;
+        window.trimLoginNaamPrefix = trimLoginNaamPrefix;
+
+        // For debugging: log the initial user data
+        (async () => {
+            const user = await getCurrentUser();
+            console.log('👤 Current user data:', user);
+        })();
     </script>
 </body>
+
 </html>
