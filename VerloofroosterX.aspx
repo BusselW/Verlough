@@ -41,7 +41,7 @@
         // Initialize tooltip manager as soon as the script runs
         TooltipManager.init();
 
-        // =====================
+        // =====================.
         // Interactive Tutorial is now handled by roosterTutorial.js
         // =====================
 
