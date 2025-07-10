@@ -506,12 +506,21 @@
                 setIsLoading(false);
             };
 
-            // Always render the UserRegistrationCheck with app content as children
+            // Always render UserRegistrationCheck with the app as children
             return h(UserRegistrationCheck, { 
                 onUserValidated: handleUserValidated 
             },
-                // Pass the app content as children
-                !isLoading && appData ? h(App, appData) : h('div', null, 'Loading app...')
+                // Always pass the app as children, but only render when data is ready
+                !isLoading && appData ? h(App, appData) : h('div', {
+                    style: {
+                        width: '100%',
+                        height: '100vh',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: '#f8fafc'
+                    }
+                }, 'Applicatie wordt geladen...')
             );
         };
 
