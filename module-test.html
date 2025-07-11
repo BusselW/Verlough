@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module Import Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="js/config/configLijst.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module">
+        console.log('🔍 Testing module imports...');
+        
+        // Make React available to ES6 modules
+        window.React = React;
+        
+        try {
+            // Test basic utility imports first
+            console.log('📚 Testing dateTimeUtils...');
+            const { maandNamenVolledig, formatteerDatum } = await import('./js/utils/dateTimeUtils.js');
+            console.log('✅ dateTimeUtils loaded:', maandNamenVolledig.slice(0, 3));
+        } catch (error) {
+            console.error('❌ dateTimeUtils failed:', error);
+        }
+        
+        try {
+            console.log('👤 Testing userUtils...');
+            const { getInitialen } = await import('./js/utils/userUtils.js');
+            console.log('✅ userUtils loaded, getInitialen:', getInitialen('John Doe'));
+        } catch (error) {
+            console.error('❌ userUtils failed:', error);
+        }
+        
+        try {
+            console.log('🔗 Testing sharepointService...');
+            const { fetchSharePointList } = await import('./js/services/sharepointService.js');
+            console.log('✅ sharepointService loaded');
+        } catch (error) {
+            console.error('❌ sharepointService failed:', error);
+        }
+        
+        try {
+            console.log('🏠 Testing RoosterApp...');
+            const RoosterApp = await import('./js/core/roosterApp.js?v=' + Date.now());
+            console.log('✅ RoosterApp loaded:', !!RoosterApp.default);
+        } catch (error) {
+            console.error('❌ RoosterApp failed:', error);
+        }
+        
+        console.log('🎯 Module import test complete');
+    </script>
+</body>
+</html>

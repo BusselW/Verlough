@@ -85,15 +85,15 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         
         (periodeData || []).forEach((dag, index) => {
             const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-            const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
+            const uiFeestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
             const isToday = isVandaag(dag);
-            const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''}`;
+            const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${uiFeestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''}`;
            
             // Create a ref callback to add tooltip for holiday
             const headerRef = (element) => {
-                if (element && feestdagNaam && !element.dataset.tooltipAttached) {
+                if (element && uiFeestdagNaam && !element.dataset.tooltipAttached) {
                     TooltipManager.attach(element, () => {
-                        return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
+                        return TooltipManager.createFeestdagTooltip(uiFeestdagNaam, dag);
                     });
                 }
             };

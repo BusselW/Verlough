@@ -25,6 +25,10 @@
     <!-- Hoofd script van de applicatie, nu als module om 'import' te gebruiken -->
     <script type="module">
         console.log('🚀 Main script starting execution...');
+        
+        // Make React available to imported ES6 modules that expect it globally
+        window.React = React;
+        
         // Importeer de benodigde componenten en functies
         import { fetchSharePointList, getUserInfo, getCurrentUser, createSharePointListItem, updateSharePointListItem, deleteSharePointListItem, trimLoginNaamPrefix } from './js/services/sharepointService.js';
         import { getCurrentUserGroups, isUserInAnyGroup } from './js/services/permissionService.js';
