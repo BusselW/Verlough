@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Import Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="js/config/configLijst.js"></script>
+</head>
+<body>
+    <div id="root">Testing imports...</div>
+    <script type="module">
+        console.log('Starting simple import test...');
+        window.React = React;
+        
+        try {
+            console.log('Testing dateTimeUtils...');
+            const dateUtils = await import('./js/utils/dateTimeUtils.js');
+            console.log('✅ dateTimeUtils OK');
+            
+            console.log('Testing userUtils...');
+            const userUtils = await import('./js/utils/userUtils.js');
+            console.log('✅ userUtils OK');
+            
+            console.log('Testing sharepointService...');
+            const spService = await import('./js/services/sharepointService.js');
+            console.log('✅ sharepointService OK');
+            
+            console.log('Testing scheduleLogic...');
+            const scheduleLogic = await import('./js/services/scheduleLogic.js');
+            console.log('✅ scheduleLogic OK');
+            
+            console.log('Testing ContextMenu...');
+            const contextMenu = await import('./js/ui/ContextMenu.js');
+            console.log('✅ ContextMenu OK');
+            
+            document.getElementById('root').innerHTML = 'All basic imports successful!';
+            
+        } catch (error) {
+            console.error('Import failed:', error);
+            document.getElementById('root').innerHTML = `Import failed: ${error.message}`;
+        }
+    </script>
+</body>
+</html>
