@@ -805,112 +805,132 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         );
     }
 
-    // Initialize controls in toolbar areas
-    useEffect(() => {
-        // Render period navigation into designated area
-        const periodeContainer = document.getElementById('periode-navigatie');
-        if (periodeContainer) {
-            const periodeControls = h('div', { className: 'periode-controls' },
-                h('button', { 
-                    className: 'nav-btn prev-btn',
-                    onClick: vorigePeriode,
-                    title: 'Vorige periode' 
-                }, '‹'),
-                h('span', { className: 'periode-titel' }, getPeriodeTitel()),
-                h('button', { 
-                    className: 'nav-btn next-btn',
-                    onClick: volgendePeriode,
-                    title: 'Volgende periode' 
-                }, '›'),
-                h('button', { 
-                    className: 'vandaag-btn',
-                    onClick: vandaag,
-                    title: 'Ga naar vandaag' 
-                }, 'Vandaag'),
-                h('div', { className: 'weergave-toggle' },
-                    h('button', {
-                        className: `toggle-btn ${weergaveType === 'maand' ? 'active' : ''}`,
-                        onClick: () => setWeergaveType('maand')
-                    }, 'Maand'),
-                    h('button', {
-                        className: `toggle-btn ${weergaveType === 'week' ? 'active' : ''}`,
-                        onClick: () => setWeergaveType('week')
-                    }, 'Week')
-                )
-            );
-            ReactDOM.render(periodeControls, periodeContainer);
-        }
-
-        // Render filters into designated area
-        const filterContainer = document.getElementById('filter-groep');
-        if (filterContainer) {
-            const filterControls = h('div', { className: 'filter-controls' },
-                h('div', { className: 'search-container' },
-                    h('input', {
-                        type: 'text',
-                        className: 'search-input',
-                        placeholder: 'Zoek medewerker...',
-                        value: zoekTerm,
-                        onChange: (e) => setZoekTerm(e.target.value)
-                    }),
-                    h('i', { className: 'fas fa-search search-icon' })
-                ),
-                h('div', { className: 'team-filter' },
-                    h('select', {
-                        className: 'team-select',
-                        value: geselecteerdTeam,
-                        onChange: (e) => setGeselecteerdTeam(e.target.value)
-                    },
-                        h('option', { value: '' }, 'Alle teams'),
-                        teams.map(team => h('option', { key: team.ID, value: team.Title }, team.Title))
-                    )
-                ),
-                h('div', { className: 'horen-filter' },
-                    h('select', { 
-                        id: 'horen-filter',
-                        className: 'horen-select'
-                    },
-                        h('option', { value: 'alle' }, 'Alle medewerkers'),
-                        h('option', { value: 'ja' }, 'Horen: Ja'),
-                        h('option', { value: 'nee' }, 'Horen: Nee')
-                    )
-                )
-            );
-            ReactDOM.render(filterControls, filterContainer);
-        }
-    }, [weergaveType, zoekTerm, geselecteerdTeam, teams, periodeData]);
-
     // Main render
     return h(Fragment, null,
+        // Toolbar
+        h('div', { id: 'toolbar', className: 'toolbar' },
+            // Period navigation controls
+            h('div', { id: 'periode-navigatie', className: 'periode-navigatie' },
+                h('div', { className: 'periode-controls' },
+                    h('button', { 
+                        className: 'nav-btn prev-btn',
+                        onClick: vorigePeriode,
+                        title: 'Vorige periode' 
+                    }, '‹'),
+                    h('span', { className: 'periode-titel' }, getPeriodeTitel()),
+                    h('button', { 
+                        className: 'nav-btn next-btn',
+                        onClick: volgendePeriode,
+                        title: 'Volgende periode' 
+                    }, '›'),
+                    h('button', { 
+                        className: 'vandaag-btn',
+                        onClick: vandaag,
+                        title: 'Ga naar vandaag' 
+                    }, 'Vandaag'),
+                    h('div', { className: 'weergave-toggle' },
+                        h('button', {
+                            className: `toggle-btn ${weergaveType === 'maand' ? 'active' : ''}`,
+                            onClick: () => setWeergaveType('maand')
+                        }, 'Maand'),
+                        h('button', {
+                            className: `toggle-btn ${weergaveType === 'week' ? 'active' : ''}`,
+                            onClick: () => setWeergaveType('week')
+                        }, 'Week')
+                    )
+                )
+            ),
 
-        // Main table
-        h('div', { id: 'rooster-container', className: 'rooster-container' },
-            h('table', { id: 'rooster-table', className: 'rooster-table' },
-                h('thead', null,
-                    h('tr', null, createHeaderCells())
-                ),
-                h('tbody', null,
-                    gefilterdeMedewerkers.map(medewerker => 
-                        h(MedewerkerRow, {
-                            key: medewerker.ID,
-                            medewerker,
-                            periodeData,
-                            verlofItems,
-                            zittingsvrijItems,
-                            compensatieUrenItems,
-                            urenPerWeekItems,
-                            shiftTypes,
-                            feestdagen,
-                            dagenIndicators,
-                            onCellClick: handleCellClick,
-                            onContextMenu: showContextMenu,
-                            getVerlofVoorDag,
-                            getZittingsvrijVoorDag,
-                            getCompensatieUrenVoorDag,
-                            getUrenPerWeekForDate,
-                            selection,
-                            firstClickData
-                        })
+            // Filter controls
+            h('div', { id: 'filter-groep', className: 'filter-groep' },
+                h('div', { className: 'filter-controls' },
+                    h('div', { className: 'search-container' },
+                        h('input', {
+                            type: 'text',
+                            className: 'search-input',
+                            placeholder: 'Zoek medewerker...',
+                            value: zoekTerm,
+                            onChange: (e) => setZoekTerm(e.target.value)
+                        }),
+                        h('i', { className: 'fas fa-search search-icon' })
+                    ),
+                    h('div', { className: 'team-filter' },
+                        h('select', {
+                            className: 'team-select',
+                            value: geselecteerdTeam,
+                            onChange: (e) => setGeselecteerdTeam(e.target.value)
+                        },
+                            h('option', { value: '' }, 'Alle teams'),
+                            teams.map(team => h('option', { key: team.ID, value: team.Title }, team.Title))
+                        )
+                    ),
+                    h('div', { className: 'horen-filter' },
+                        h('select', { 
+                            id: 'horen-filter',
+                            className: 'horen-select'
+                        },
+                            h('option', { value: 'alle' }, 'Alle medewerkers'),
+                            h('option', { value: 'ja' }, 'Horen: Ja'),
+                            h('option', { value: 'nee' }, 'Horen: Nee')
+                        )
+                    )
+                )
+            ),
+
+            // Legend
+            h('div', { id: 'legenda-container', className: 'legenda-container' },
+                h('div', { className: 'legenda' },
+                    h('span', { className: 'legenda-title' }, 'Legenda:'),
+                    h('div', { className: 'legenda-item' },
+                        h('span', { className: 'legenda-kleur verlof-goedgekeurd' }),
+                        h('span', null, 'VER - Verlof')
+                    ),
+                    h('div', { className: 'legenda-item' },
+                        h('span', { className: 'legenda-kleur ziekte' }),
+                        h('span', null, 'ZK - Ziekte')
+                    ),
+                    h('div', { className: 'legenda-item' },
+                        h('span', { className: 'legenda-kleur compensatie-uren' }),
+                        h('span', null, 'CU - Compensatie-uren')
+                    ),
+                    h('div', { className: 'legenda-item' },
+                        h('span', { className: 'legenda-kleur zittingsvrij' }),
+                        h('span', null, 'ZV - Zittingsvrij')
+                    )
+                )
+            )
+        ),
+
+        // Main table content
+        h('div', { className: 'main-content' },
+            h('div', { id: 'rooster-container', className: 'rooster-container' },
+                h('table', { id: 'rooster-table', className: 'rooster-table' },
+                    h('thead', null,
+                        h('tr', null, createHeaderCells())
+                    ),
+                    h('tbody', null,
+                        gefilterdeMedewerkers.map(medewerker => 
+                            h(MedewerkerRow, {
+                                key: medewerker.ID,
+                                medewerker,
+                                periodeData,
+                                verlofItems,
+                                zittingsvrijItems,
+                                compensatieUrenItems,
+                                urenPerWeekItems,
+                                shiftTypes,
+                                feestdagen,
+                                dagenIndicators,
+                                onCellClick: handleCellClick,
+                                onContextMenu: showContextMenu,
+                                getVerlofVoorDag,
+                                getZittingsvrijVoorDag,
+                                getCompensatieUrenVoorDag,
+                                getUrenPerWeekForDate,
+                                selection,
+                                firstClickData
+                            })
+                        )
                     )
                 )
             )

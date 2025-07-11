@@ -527,44 +527,11 @@
 
                 // Main Application Content
                 h('div', { id: 'app-container', className: 'app-container' },
-                    h('div', { id: 'toolbar', className: 'toolbar' },
-                        h('div', { id: 'periode-navigatie', className: 'periode-navigatie' },
-                            // Period navigation will be handled by RoosterApp
-                        ),
-                        h('div', { id: 'filter-groep', className: 'filter-groep' },
-                            // Filters will be handled by RoosterApp
-                        ),
-                        h('div', { id: 'legenda-container', className: 'legenda-container' },
-                            h('div', { className: 'legenda' },
-                                h('span', { className: 'legenda-title' }, 'Legenda:'),
-                                h('div', { className: 'legenda-item' },
-                                    h('span', { className: 'legenda-kleur verlof-goedgekeurd' }),
-                                    h('span', null, 'VER - Verlof')
-                                ),
-                                h('div', { className: 'legenda-item' },
-                                    h('span', { className: 'legenda-kleur ziekte' }),
-                                    h('span', null, 'ZK - Ziekte')
-                                ),
-                                h('div', { className: 'legenda-item' },
-                                    h('span', { className: 'legenda-kleur compensatie-uren' }),
-                                    h('span', null, 'CU - Compensatie-uren')
-                                ),
-                                h('div', { className: 'legenda-item' },
-                                    h('span', { className: 'legenda-kleur zittingsvrij' }),
-                                    h('span', null, 'ZV - Zittingsvrij')
-                                )
-                            )
-                        )
-                    ),
-
-                    // Main Rooster Content
-                    h('div', { className: 'main-content' },
-                        h(RoosterApp, { 
-                            isUserValidated: true, 
-                            currentUser: currentUser, 
-                            userPermissions: userPermissions
-                        })
-                    )
+                    h(RoosterApp, { 
+                        isUserValidated: true, 
+                        currentUser: currentUser, 
+                        userPermissions: userPermissions
+                    })
                 )
             );
         };
