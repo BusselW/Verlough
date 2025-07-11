@@ -17,7 +17,7 @@ const canManageOthersEvents = async () => {
 
     try {
         const result = await isUserInAnyGroup(privilegedGroups);
-        console.log('🔐 canManageOthersEvents check:', { groups: privilegedGroups, result });
+        // console.log('🔐 canManageOthersEvents check:', { groups: privilegedGroups, result });
         return result;
     } catch (error) {
         console.error('Error checking user permissions for managing others events:', error);
@@ -33,25 +33,25 @@ const canManageOthersEvents = async () => {
  */
 const canUserModifyItem = async (item, currentUsername) => {
     if (!item || !currentUsername) {
-        console.log('❌ canUserModifyItem: Missing item or currentUsername', { item: !!item, currentUsername });
+        // console.log('❌ canUserModifyItem: Missing item or currentUsername', { item: !!item, currentUsername });
         return false;
     }
     
-    console.log('🔍 canUserModifyItem: Checking permissions for item:', { 
-        itemOwner: item.MedewerkerID || item.Gebruikersnaam, 
-        currentUsername 
-    });
+    // console.log('🔍 canUserModifyItem: Checking permissions for item:', { 
+    //     itemOwner: item.MedewerkerID || item.Gebruikersnaam, 
+    //     currentUsername 
+    // });
     
     // Check if user has privileged access (can modify any item)
     const hasPrivilegedAccess = await canManageOthersEvents();
-    console.log('🔐 canUserModifyItem: Privileged access check result:', hasPrivilegedAccess);
+    // console.log('🔐 canUserModifyItem: Privileged access check result:', hasPrivilegedAccess);
     
     if (hasPrivilegedAccess) return true;
     
     // Check if it's the user's own item
     const itemOwner = item.MedewerkerID || item.Gebruikersnaam;
     const isOwnItem = itemOwner === currentUsername;
-    console.log('👤 canUserModifyItem: Own item check:', { itemOwner, currentUsername, isOwnItem });
+    // console.log('👤 canUserModifyItem: Own item check:', { itemOwner, currentUsername, isOwnItem });
     
     return isOwnItem;
 };
@@ -76,7 +76,7 @@ const ContextMenu = ({ x, y, onClose, items = [] }) => {
     // Filter items based on permissions
     useEffect(() => {
         const filterItems = async (itemsToFilter) => {
-            console.log('ContextMenu filtering items:', itemsToFilter);
+            // console.log('ContextMenu filtering items:', itemsToFilter);
             const filtered = [];
             
             for (const item of itemsToFilter) {
@@ -86,7 +86,7 @@ const ContextMenu = ({ x, y, onClose, items = [] }) => {
                 if (item.requiredGroups && item.requiredGroups.length > 0) {
                     try {
                         shouldInclude = await isUserInAnyGroup(item.requiredGroups);
-                        console.log(`Permission check for "${item.label}":`, shouldInclude, 'groups:', item.requiredGroups);
+                        // console.log(`Permission check for "${item.label}":`, shouldInclude, 'groups:', item.requiredGroups);
                     } catch (error) {
                         console.warn(`Could not check permissions for menu item ${item.label}:`, error);
                         // For now, show the item if permission check fails, except for sensitive operations
@@ -95,9 +95,9 @@ const ContextMenu = ({ x, y, onClose, items = [] }) => {
                 } else {
                     // Only log for items that might need permission checks but don't have requiredGroups set
                     if (['Bewerken', 'Verwijderen', 'Commentaar aanpassen'].includes(item.label)) {
-                        console.log(`"${item.label}" - permissions already checked in parent component`);
+                        // console.log(`"${item.label}" - permissions already checked in parent component`);
                     } else {
-                        console.log(`No permission check needed for "${item.label}"`);
+                        // console.log(`No permission check needed for "${item.label}"`);
                     }
                 }
                 
@@ -117,7 +117,7 @@ const ContextMenu = ({ x, y, onClose, items = [] }) => {
                 }
             }
             
-            console.log('ContextMenu filtered result:', filtered);
+            // console.log('ContextMenu filtered result:', filtered);
             return filtered;
         };
 
@@ -230,7 +230,7 @@ const ContextMenu = ({ x, y, onClose, items = [] }) => {
     
     const handleItemClick = (e, item) => {
         e.stopPropagation();
-        console.log('Context menu item clicked:', item.label, item);
+        // console.log('Context menu item clicked:', item.label, item);
         
         if (item.subItems && item.subItems.length > 0) {
             setActiveSubMenu(activeSubMenu === item.label ? null : item.label);
@@ -337,4 +337,4 @@ export default ContextMenu;
 // Export the permission utility functions for use in other components
 export { canManageOthersEvents, canUserModifyItem };
 
-console.log("ContextMenu component loaded successfully.");
+// console.log("ContextMenu component loaded successfully.");
