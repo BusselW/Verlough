@@ -29,6 +29,7 @@ import CompensatieUrenForm from '../ui/forms/CompensatieUrenForm.js';
 import ZiekteMeldingForm from '../ui/forms/ZiekteMeldingForm.js';
 import ZittingsvrijForm from '../ui/forms/ZittingsvrijForm.js';
 import MedewerkerRow from '../ui/userinfo.js';
+import Header from '../ui/header.js';
 
 const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
@@ -36,8 +37,6 @@ const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } 
 // Hoofd RoosterApp Component
 // =====================
 const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) => {
-    const NavigationButtons = userPermissions.NavigationButtons || (() => null);
-
     // Helper function to create header cells
     const createHeaderCells = () => {
         const cells = [
@@ -1169,7 +1168,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                         h('h1', null, 'Verlofrooster')
                     ),
                     // Right side - Permission-based navigation
-                    h(NavigationButtons, { userPermissions, currentUser })
+                    h(Header, { userPermissions, currentUser })
                 )
             ),
             h('div', { id: 'toolbar', className: 'toolbar' },

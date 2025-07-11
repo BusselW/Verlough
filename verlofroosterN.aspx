@@ -10,6 +10,7 @@
     <!-- CSS bestanden -->
     <link href="css/verlofrooster_stijl.css" rel="stylesheet">
     <link href="css/verlofrooster_styling.css" rel="stylesheet">
+    <link href="css/header.css" rel="stylesheet">
     <link rel="icon" href="data:," />
 
     <!-- React en configuratie bestanden -->
@@ -40,7 +41,7 @@
         import ProfielKaarten from './js/ui/profielkaarten.js';
         import { roosterTutorial, openHandleiding as handleidingOpenen } from './js/tutorial/roosterHandleiding.js';
         import { getProfilePhotoUrl } from './js/utils/userUtils.js';
-        import RoosterApp from './js/core/roosterAppN.js';
+        import RoosterApp from './js/core/roosterApp.js';
 
         const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
@@ -278,8 +279,41 @@
                     }
                     setCurrentUser(user);
 
-                    const permissions = await getCurrentUserGroups();
-                    setUserPermissions({ ...permissions, loading: false });
+                    const groupsArray = await getCurrentUserGroups();
+                    
+                    // Convert groups array to permission object
+                    const permissions = {
+                        isAdmin: groupsArray.some(group => 
+                            group.toLowerCase().includes('admin') || 
+                            group.toLowerCase().includes('beheerder') ||
+                            group.toLowerCase().includes('systeembeheer')
+                        ),
+                        isFunctional: groupsArray.some(group => 
+                            group.toLowerCase().includes('functioneel') || 
+                            group.toLowerCase().includes('functional') ||
+                            group.toLowerCase().includes('verlofbeheer')
+                        ),
+                        isTaakbeheer: groupsArray.some(group => 
+                            group.toLowerCase().includes('taakbeheer') || 
+                            group.toLowerCase().includes('behandel') ||
+                            group.toLowerCase().includes('verlofverwerking')
+                        ),
+                        loading: false
+                    };
+                    
+                    // TEMPORARY: For testing purposes, grant all permissions if no specific groups found
+                    // Remove this when you know the actual SharePoint group names
+                    if (!permissions.isAdmin && !permissions.isFunctional && !permissions.isTaakbeheer) {
+                        console.log('🧪 No specific groups found, enabling test permissions');
+                        permissions.isAdmin = true;
+                        permissions.isFunctional = true;
+                        permissions.isTaakbeheer = true;
+                    }
+                    
+                    console.log('👥 User groups:', groupsArray);
+                    console.log('🔑 Derived permissions:', permissions);
+
+                    setUserPermissions(permissions);
 
                     let userLoginName = user.LoginName.startsWith('i:0#.w|') ? user.LoginName.substring(7) : user.LoginName;
 
@@ -288,13 +322,19 @@
 
                     setIsRegistered(userExists);
                     console.log('✅ User validation complete, calling onUserValidated');
-                    onUserValidated(true, user, { ...permissions, loading: false });
+                    onUserValidated(true, user, permissions);
 
                 } catch (error) {
                     console.error('❌ Error checking user registration:', error);
                     setIsRegistered(false);
+                    const defaultPermissions = { 
+                        isAdmin: false, 
+                        isFunctional: false, 
+                        isTaakbeheer: false, 
+                        loading: false 
+                    };
                     console.log('⚠️ User check failed but proceeding with app load');
-                    onUserValidated(true, null, { loading: false });
+                    onUserValidated(true, null, defaultPermissions);
                 } finally {
                     console.log('🏁 User registration check complete');
                     setIsChecking(false);
