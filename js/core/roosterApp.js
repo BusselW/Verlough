@@ -739,6 +739,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                             medewerkerId: medewerker.Username,
                             medewerkerData: medewerker
                         };
+                        console.log('🏖️ Context menu Verlof clicked. Existing selection:', selection, 'Using selection:', currentSelection);
                         setSelection(currentSelection);
                         setIsVerlofModalOpen(true);
                         setContextMenu(null);
@@ -755,6 +756,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                             medewerkerId: medewerker.Username,
                             medewerkerData: medewerker
                         };
+                        console.log('🏥 Context menu Ziekte clicked. Existing selection:', selection, 'Using selection:', currentSelection);
                         setSelection(currentSelection);
                         setIsZiekModalOpen(true);
                         setContextMenu(null);
@@ -772,6 +774,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                             medewerkerId: medewerker.Username,
                             medewerkerData: medewerker
                         };
+                        console.log('⏰ Context menu Compensatie clicked. Existing selection:', selection, 'Using selection:', currentSelection);
                         setSelection(currentSelection);
                         setIsCompensatieModalOpen(true);
                         setContextMenu(null);
@@ -788,6 +791,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                             medewerkerId: medewerker.Username,
                             medewerkerData: medewerker
                         };
+                        console.log('⚖️ Context menu Zittingsvrij clicked. Existing selection:', selection, 'Using selection:', currentSelection);
                         setSelection(currentSelection);
                         setIsZittingsvrijModalOpen(true);
                         setContextMenu(null);
@@ -1268,6 +1272,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         // Regular cell click behavior (date range selection)
         if (!firstClickData) {
             // First click: Set start of selection
+            console.log(`📅 First click: Selected start date ${dag.toDateString()} for ${medewerker.Username}`);
             setFirstClickData({ medewerker, dag });
             setSelection({ start: dag, end: dag, medewerkerId: medewerker.Username });
 
@@ -1291,6 +1296,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             const actualStart = startDate <= endDate ? startDate : endDate;
             const actualEnd = startDate <= endDate ? endDate : startDate;
 
+            console.log(`📅 Second click: Date range selected from ${actualStart.toDateString()} to ${actualEnd.toDateString()} for ${medewerker.Username}`);
             setSelection({
                 start: actualStart,
                 end: actualEnd,
@@ -1323,20 +1329,16 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         }
     }
 
-    // Helper: Check if a date is in the current selection for a medewerker
-    function isDateInSelection(dag, medewerkerUsername) {
-        if (!selection || !selection.start || !selection.end || !selection.medewerkerId) return false;
-        // Only highlight if the medewerker matches
-        if (medewerkerUsername !== selection.medewerkerId) return false;
-        // Compare only the date part (ignore time)
-        const d = new Date(dag);
-        d.setHours(0, 0, 0, 0);
-        const s = new Date(selection.start);
-        s.setHours(0, 0, 0, 0);
-        const e = new Date(selection.end);
-        e.setHours(0, 0, 0, 0);
-        return d >= s && d <= e;
-    }
+    // Track selection changes for debugging
+    useEffect(() => {
+        console.log('🎯 Selection updated:', selection);
+        if (selection) {
+            console.log('📅 Start date:', selection.start?.toDateString());
+            console.log('📅 End date:', selection.end?.toDateString());
+            console.log('👤 Employee ID:', selection.medewerkerId);
+            console.log('📋 Item data:', selection.itemData ? 'Has item data' : 'No item data');
+        }
+    }, [selection]);
 
     const gegroepeerdeData = useMemo(() => {
         const gefilterdeMedewerkers = medewerkers.filter(m => (!zoekTerm || m.naam.toLowerCase().includes(zoekTerm.toLowerCase())) && (!geselecteerdTeam || m.team === geselecteerdTeam));
@@ -1803,10 +1805,8 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     label: 'Verlof aanvragen',
                     icon: 'fa-calendar-plus',
                     onClick: () => {
-                        // If no selection exists, clear it to let the form handle defaults
-                        if (!selection || !selection.start || !selection.end) {
-                            setSelection(null);
-                        }
+                        console.log('🏖️ FAB Verlof clicked with selection:', selection);
+                        // Keep existing selection if valid, otherwise it will be handled by the modal
                         setIsVerlofModalOpen(true);
                     }
                 },
@@ -1814,10 +1814,8 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     label: 'Ziek melden',
                     icon: 'fa-notes-medical',
                     onClick: () => {
-                        // If no selection exists, clear it to let the form handle defaults
-                        if (!selection || !selection.start || !selection.end) {
-                            setSelection(null);
-                        }
+                        console.log('🏥 FAB Ziekte clicked with selection:', selection);
+                        // Keep existing selection if valid, otherwise it will be handled by the modal
                         setIsZiekModalOpen(true);
                     }
                 },
@@ -1825,10 +1823,8 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     label: 'Compensatieuren doorgeven',
                     icon: 'fa-clock',
                     onClick: () => {
-                        // If no selection exists, clear it to let the form handle defaults
-                        if (!selection || !selection.start || !selection.end) {
-                            setSelection(null);
-                        }
+                        console.log('⏰ FAB Compensatie clicked with selection:', selection);
+                        // Keep existing selection if valid, otherwise it will be handled by the modal
                         setIsCompensatieModalOpen(true);
                     }
                 },
@@ -1836,10 +1832,8 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     label: 'Zittingsvrij maken',
                     icon: 'fa-gavel',
                     onClick: () => {
-                        // If no selection exists, clear it to let the form handle defaults
-                        if (!selection || !selection.start || !selection.end) {
-                            setSelection(null);
-                        }
+                        console.log('⚖️ FAB Zittingsvrij clicked with selection:', selection);
+                        // Keep existing selection if valid, otherwise it will be handled by the modal
                         setIsZittingsvrijModalOpen(true);
                     }
                 }
