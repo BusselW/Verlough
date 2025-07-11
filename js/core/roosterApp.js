@@ -1731,6 +1731,11 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                                         blokClasses.push('ver-item');
                                                     }
 
+                                                    // Log when rendering VER items with Nieuw status for debugging
+                                                    if (afkorting === 'VER' && status === 'nieuw') {
+                                                        console.log(`🔍 Rendering VER item with Nieuw status (will show at 40% opacity via CSS) for ${medewerker.Username} on ${dag.toDateString()}`);
+                                                    }
+
                                                     teRenderenBlok = h('div', {
                                                         className: `${blokClasses.join(' ')} status-${status}`,
                                                         'data-afkorting': afkorting,
