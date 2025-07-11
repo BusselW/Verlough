@@ -732,12 +732,14 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     label: 'Verlof aanvragen',
                     icon: 'fa-calendar-plus',
                     onClick: () => {
-                        setSelection({
+                        // Use existing selection if available, otherwise use current day
+                        const currentSelection = selection && selection.start && selection.end ? selection : {
                             start: dag,
                             end: dag,
                             medewerkerId: medewerker.Username,
                             medewerkerData: medewerker
-                        });
+                        };
+                        setSelection(currentSelection);
                         setIsVerlofModalOpen(true);
                         setContextMenu(null);
                     }
@@ -746,12 +748,14 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     label: 'Ziek melden',
                     icon: 'fa-notes-medical',
                     onClick: () => {
-                        setSelection({
+                        // Use existing selection if available, otherwise use current day
+                        const currentSelection = selection && selection.start && selection.end ? selection : {
                             start: dag,
                             end: dag,
                             medewerkerId: medewerker.Username,
                             medewerkerData: medewerker
-                        });
+                        };
+                        setSelection(currentSelection);
                         setIsZiekModalOpen(true);
                         setContextMenu(null);
                     }
@@ -761,12 +765,14 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     icon: './icons/compensatieuren/neutraleuren.svg',
                     iconType: 'svg',
                     onClick: () => {
-                        setSelection({
+                        // Use existing selection if available, otherwise use current day
+                        const currentSelection = selection && selection.start && selection.end ? selection : {
                             start: dag,
                             end: dag,
                             medewerkerId: medewerker.Username,
                             medewerkerData: medewerker
-                        });
+                        };
+                        setSelection(currentSelection);
                         setIsCompensatieModalOpen(true);
                         setContextMenu(null);
                     }
@@ -775,12 +781,14 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     label: 'Zittingsvrij maken',
                     icon: 'fa-gavel',
                     onClick: () => {
-                        setSelection({
+                        // Use existing selection if available, otherwise use current day
+                        const currentSelection = selection && selection.start && selection.end ? selection : {
                             start: dag,
                             end: dag,
                             medewerkerId: medewerker.Username,
                             medewerkerData: medewerker
-                        });
+                        };
+                        setSelection(currentSelection);
                         setIsZittingsvrijModalOpen(true);
                         setContextMenu(null);
                     }
@@ -1683,7 +1691,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                                 const tooltipElement = (isFirstClick && showTooltip) ?
                                                     h('div', {
                                                         className: 'selection-tooltip visible'
-                                                    }, 'Selecteer nu een andere dag en klik rechts') : null;
+                                                    }, 'Klik nu op een tweede dag en open het menu met je rechtermuisknop.') : null;
 
                                                 let teRenderenBlok = null;
 
@@ -1794,22 +1802,46 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 {
                     label: 'Verlof aanvragen',
                     icon: 'fa-calendar-plus',
-                    onClick: () => setIsVerlofModalOpen(true)
+                    onClick: () => {
+                        // If no selection exists, clear it to let the form handle defaults
+                        if (!selection || !selection.start || !selection.end) {
+                            setSelection(null);
+                        }
+                        setIsVerlofModalOpen(true);
+                    }
                 },
                 {
                     label: 'Ziek melden',
                     icon: 'fa-notes-medical',
-                    onClick: () => setIsZiekModalOpen(true)
+                    onClick: () => {
+                        // If no selection exists, clear it to let the form handle defaults
+                        if (!selection || !selection.start || !selection.end) {
+                            setSelection(null);
+                        }
+                        setIsZiekModalOpen(true);
+                    }
                 },
                 {
                     label: 'Compensatieuren doorgeven',
                     icon: 'fa-clock',
-                    onClick: () => setIsCompensatieModalOpen(true)
+                    onClick: () => {
+                        // If no selection exists, clear it to let the form handle defaults
+                        if (!selection || !selection.start || !selection.end) {
+                            setSelection(null);
+                        }
+                        setIsCompensatieModalOpen(true);
+                    }
                 },
                 {
                     label: 'Zittingsvrij maken',
                     icon: 'fa-gavel',
-                    onClick: () => setIsZittingsvrijModalOpen(true)
+                    onClick: () => {
+                        // If no selection exists, clear it to let the form handle defaults
+                        if (!selection || !selection.start || !selection.end) {
+                            setSelection(null);
+                        }
+                        setIsZittingsvrijModalOpen(true);
+                    }
                 }
             ]
         }),
