@@ -16,7 +16,7 @@ import {
 } from '../utils/dateTimeUtils.js';
 import { getInitialen, getProfilePhotoUrl } from '../utils/userUtils.js';
 import { calculateWeekType } from '../services/scheduleLogic.js';
-import { fetchSharePointList, getUserInfo, getCurrentUser, createSharePointListItem, updateSharePointListItem, deleteSharePointListItem, trimLoginNaamPrefix } from '../services/sharepointService.js';
+import { fetchSharePointList, getUserInfo, createSharePointListItem, updateSharePointListItem, deleteSharePointListItem, trimLoginNaamPrefix } from '../services/sharepointService.js';
 import { getCurrentUserGroups, isUserInAnyGroup } from '../services/permissionService.js';
 import * as linkInfo from '../services/linkInfo.js';
 import LoadingLogic, { loadFilteredData, shouldReloadData, updateCacheKey, clearAllCache, logLoadingStatus } from '../services/loadingLogic.js';
@@ -138,7 +138,6 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     const [urenPerWeekItems, setUrenPerWeekItems] = useState([]);
     const [dagenIndicators, setDagenIndicators] = useState({});
     const [contextMenu, setContextMenu] = useState(null);
-    const [currentUser, setCurrentUser] = useState(null);
     const [isVerlofModalOpen, setIsVerlofModalOpen] = useState(false);
     const [isCompensatieModalOpen, setIsCompensatieModalOpen] = useState(false);
     const [isZiekModalOpen, setIsZiekModalOpen] = useState(false);
@@ -190,9 +189,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             }
 
             // Fetch current user info
-            console.log('👤 Fetching current user...');
-            const userInfo = await getCurrentUser();
-            setCurrentUser(userInfo);
+            console.log('👤 Current user from props:', currentUser);
 
             // Check if we need to reload data for the current period
             const needsReload = forceReload || shouldReloadData(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
@@ -901,7 +898,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
 
     // Check if required services are available
     useEffect(() => {
-        if (typeof fetchSharePointList !== 'function' || typeof getCurrentUser !== 'function') {
+        if (typeof fetchSharePointList !== 'function') {
             setError('Required services not available. Please refresh the page.');
             setLoading(false);
         }
