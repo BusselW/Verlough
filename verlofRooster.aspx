@@ -16,9 +16,7 @@
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="js/config/configLijst.js"></script>
-
 </head>
-
 <body>
     <div id="root"></div>
 
@@ -35,10 +33,9 @@
         import * as linkInfo from './js/services/linkInfo.js';
         import LoadingLogic, { loadFilteredData, shouldReloadData, updateCacheKey, clearAllCache, logLoadingStatus } from './js/services/loadingLogic.js';
         import { canManageOthersEvents, canUserModifyItem } from './js/ui/contextmenuN.js';
-        import { roosterHandleiding, openHandleiding } from './js/tutorial/roosterHandleiding.js';
+        import { roosterHandleiding, openHandleiding, roosterTutorial } from './js/tutorial/roosterHandleiding.js';
         import TooltipManager from './js/ui/tooltipbar.js';
         import ProfielKaarten from './js/ui/profielkaarten.js';
-        import { roosterTutorial, openHandleiding as handleidingOpenen } from './js/tutorial/roosterHandleiding.js';
         import { getProfilePhotoUrl } from './js/utils/userUtils.js';
         import RoosterApp from './js/core/roosterApp.js';
 
@@ -87,19 +84,7 @@
                 }
             }, [currentUser]);
 
-            // Close dropdown when clicking outside
-            useEffect(() => {
-                const handleClickOutside = (event) => {
-                    if (settingsDropdownOpen && !event.target.closest('.user-dropdown')) {
-                        setSettingsDropdownOpen(false);
-                    }
-                    if (helpDropdownOpen && !event.target.closest('.help-dropdown')) {
-                        setHelpDropdownOpen(false);
-                    }
-                };
-                document.addEventListener('mousedown', handleClickOutside);
-                return () => document.removeEventListener('mousedown', handleClickOutside);
-            }, [settingsDropdownOpen, helpDropdownOpen]);
+
 
             const navigateTo = (page) => {
                 const baseUrl = "https://som.org.om.local/sites/verlofrooster";
@@ -300,14 +285,12 @@
                         loading: false
                     };
                     
-                    // TEMPORARY: For testing purposes, grant all permissions if no specific groups found
-                    // Remove this when you know the actual SharePoint group names
-                    if (!permissions.isAdmin && !permissions.isFunctional && !permissions.isTaakbeheer) {
-                        console.log('🧪 No specific groups found, enabling test permissions');
-                        permissions.isAdmin = true;
-                        permissions.isFunctional = true;
-                        permissions.isTaakbeheer = true;
-                    }
+                    // For production, remove this override:
+                    // if (!permissions.isAdmin && !permissions.isFunctional && !permissions.isTaakbeheer) {
+                    //     permissions.isAdmin = true;
+                    //     permissions.isFunctional = true;
+                    //     permissions.isTaakbeheer = true;
+                    // }
                     
                     console.log('👥 User groups:', groupsArray);
                     console.log('🔑 Derived permissions:', permissions);
@@ -553,25 +536,17 @@
         // =====================
         const MainAppWrapper = () => {
             const [appData, setAppData] = useState(null);
-            const [isLoading, setIsLoading] = useState(true);
 
             const handleUserValidated = (isValid, currentUser, userPermissions) => {
-                console.log('✅ User validated, setting app data:', { isValid, currentUser, userPermissions });
                 setAppData({ currentUser, userPermissions });
-                setIsLoading(false);
             };
 
-            // If still loading, render UserRegistrationCheck without children
-            if (isLoading) {
-                return h(UserRegistrationCheck, { onUserValidated: handleUserValidated });
-            }
-
-            // Once loaded, render the app with the UserRegistrationCheck wrapper
+            // Single UserRegistrationCheck wrapper
             return h(UserRegistrationCheck, { onUserValidated: handleUserValidated },
-                h(App, { 
+                appData ? h(App, { 
                     currentUser: appData.currentUser, 
                     userPermissions: appData.userPermissions 
-                })
+                }) : null
             );
         };
             
@@ -580,19 +555,19 @@
         // =====================
                     const container = document.getElementById('root');
                     const root = ReactDOM.createRoot(container);
-                    
+            
                     root.render(
                         h(ErrorBoundary, null,
                             h(MainAppWrapper)
                         )
                     );
-            
+
                     // Make tutorial functions globally available
                     window.startTutorial = roosterTutorial;
-                    window.openHandleiding = handleidingOpenen;
+                    window.openHandleiding = openHandleiding;  // Not the alias
             
-                    console.log('🎉 Application initialized successfully');
-                </script>
-            </body>
+                                console.log('🎉 Application initialized successfully');
+                            </script>
+                </body>
             </html>
-   
+
