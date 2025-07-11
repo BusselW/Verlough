@@ -105,7 +105,7 @@ const TooltipManager = {
                 } catch (error) {
                     console.error('Error generating tooltip content:', error);
                 }
-            }, 300); // 300ms delay for better UX
+            }, 500); // 500ms delay for better UX (less annoying)
         };
 
         const hideTooltip = () => {

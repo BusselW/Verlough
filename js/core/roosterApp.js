@@ -577,7 +577,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         }
     }, [refreshData]);
 
-    // Context menu handlerx
+    // Context menu handler
     const showContextMenu = useCallback(async (e, medewerker, dag, item) => {
         console.log('showContextMenu called:', {
             medewerker: medewerker?.Username,
@@ -587,88 +587,226 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             itemType: item ? Object.keys(item).filter(key => ['RedenId', 'StartCompensatieUren', 'ZittingsVrijeDagTijd'].includes(key)) : 'none'
         });
 
-        const menuItems = [
-            {
-                label: 'Nieuw',
-                icon: 'fa-plus',
-                subItems: [
-                    {
-                        label: 'Verlof aanvragen',
-                        icon: 'fa-calendar-plus',
+        const currentUsername = currentUser?.LoginName?.split('|')[1] || currentUser?.LoginName;
+        const menuItems = [];
+
+        // If there's an existing item, show edit/delete options
+        if (item) {
+            console.log('🔍 Existing item found, checking permissions for edit/delete');
+            
+            // Check if user can modify this item
+            const canModify = await canUserModifyItem(item, currentUsername);
+            console.log('🔐 User can modify item:', canModify);
+            
+            if (canModify) {
+                // Determine item type and add appropriate edit option
+                const isVerlof = 'RedenId' in item;
+                const isZittingsvrij = 'ZittingsVrijeDagTijd' in item;
+                const isCompensatie = 'StartCompensatieUren' in item;
+                
+                if (isVerlof) {
+                    menuItems.push({
+                        label: 'Verlof bewerken',
+                        icon: 'fa-edit',
                         onClick: () => {
                             setSelection({
-                                start: dag,
-                                end: dag,
-                                medewerkerId: medewerker.Username,
+                                start: new Date(item.StartDatum),
+                                end: new Date(item.EindDatum),
+                                medewerkerId: item.MedewerkerID,
+                                itemData: item,
                                 medewerkerData: medewerker
                             });
                             setIsVerlofModalOpen(true);
                             setContextMenu(null);
                         }
-                    },
-                    {
-                        label: 'Ziek melden',
-                        icon: 'fa-notes-medical',
+                    });
+                } else if (isZittingsvrij) {
+                    menuItems.push({
+                        label: 'Zittingsvrij bewerken',
+                        icon: 'fa-edit',
                         onClick: () => {
                             setSelection({
-                                start: dag,
-                                end: dag,
-                                medewerkerId: medewerker.Username,
-                                medewerkerData: medewerker
-                            });
-                            setIsZiekModalOpen(true);
-                            setContextMenu(null);
-                        }
-                    },
-                    {
-                        label: 'Compensatieuren doorgeven',
-                        icon: './icons/compensatieuren/neutraleuren.svg',
-                        iconType: 'svg',
-                        onClick: () => {
-                            setSelection({
-                                start: dag,
-                                end: dag,
-                                medewerkerId: medewerker.Username,
-                                medewerkerData: medewerker
-                            });
-                            setIsCompensatieModalOpen(true);
-                            setContextMenu(null);
-                        }
-                    },
-                    {
-                        label: 'Zittingsvrij maken',
-                        icon: 'fa-gavel',
-                        onClick: () => {
-                            setSelection({
-                                start: dag,
-                                end: dag,
-                                medewerkerId: medewerker.Username,
+                                start: new Date(item.StartDatum),
+                                end: new Date(item.EindDatum),
+                                medewerkerId: item.Gebruikersnaam,
+                                itemData: item,
                                 medewerkerData: medewerker
                             });
                             setIsZittingsvrijModalOpen(true);
                             setContextMenu(null);
                         }
-                    }
-                ]
-            },
-            {
-                label: 'Annuleren',
-                icon: 'fa-times',
-                onClick: () => {
-                    console.log('Annuleren clicked');
-                    setContextMenu(null);
+                    });
+                } else if (isCompensatie) {
+                    menuItems.push({
+                        label: 'Compensatie uren bewerken',
+                        icon: 'fa-edit',
+                        onClick: () => {
+                            setSelection({
+                                start: new Date(item.StartCompensatieUren),
+                                end: new Date(item.EindeCompensatieUren),
+                                medewerkerId: item.MedewerkerID,
+                                itemData: item,
+                                medewerkerData: medewerker
+                            });
+                            setIsCompensatieModalOpen(true);
+                            setContextMenu(null);
+                        }
+                    });
                 }
+
+                // Add comment edit option for items that have comments
+                if (item.Omschrijving || item.Opmerking || item.Comments) {
+                    menuItems.push({
+                        label: 'Commentaar bewerken',
+                        icon: 'fa-comment-edit',
+                        onClick: () => {
+                            // Open a simple comment edit modal
+                            const newComment = prompt('Bewerk commentaar:', item.Omschrijving || item.Opmerking || item.Comments || '');
+                            if (newComment !== null) {
+                                // Update the item with new comment
+                                const updateData = { 
+                                    ...item, 
+                                    [item.Omschrijving !== undefined ? 'Omschrijving' : (item.Opmerking !== undefined ? 'Opmerking' : 'Comments')]: newComment 
+                                };
+                                
+                                if (isVerlof) {
+                                    handleVerlofSubmit(updateData);
+                                } else if (isZittingsvrij) {
+                                    handleZittingsvrijSubmit(updateData);
+                                } else if (isCompensatie) {
+                                    handleCompensatieSubmit(updateData);
+                                }
+                            }
+                            setContextMenu(null);
+                        }
+                    });
+                }
+
+                // Add delete option
+                menuItems.push({
+                    label: 'Verwijderen',
+                    icon: 'fa-trash',
+                    onClick: async () => {
+                        const itemDescription = isVerlof ? 'verlof aanvraag' : 
+                                              isZittingsvrij ? 'zittingsvrij periode' : 
+                                              isCompensatie ? 'compensatie uren' : 'item';
+                        
+                        if (confirm(`Weet je zeker dat je deze ${itemDescription} wilt verwijderen?`)) {
+                            try {
+                                console.log('🗑️ Deleting item:', item);
+                                await deleteSharePointListItem(
+                                    isVerlof ? 'Verlof' : 
+                                    isZittingsvrij ? 'ZittingsVrij' : 
+                                    isCompensatie ? 'CompensatieUren' : 'Unknown',
+                                    item.ID || item.Id
+                                );
+                                
+                                // Refresh data after deletion
+                                await refreshData();
+                                console.log('✅ Item deleted successfully');
+                            } catch (error) {
+                                console.error('❌ Error deleting item:', error);
+                                alert('Fout bij verwijderen. Probeer het opnieuw.');
+                            }
+                        }
+                        setContextMenu(null);
+                    }
+                });
             }
-        ];
+
+            // Add separator if we have edit options
+            if (menuItems.length > 0) {
+                menuItems.push({ 
+                    label: '---', 
+                    disabled: true 
+                });
+            }
+        }
+
+        // Always show "Nieuw" options
+        menuItems.push({
+            label: 'Nieuw',
+            icon: 'fa-plus',
+            subItems: [
+                {
+                    label: 'Verlof aanvragen',
+                    icon: 'fa-calendar-plus',
+                    onClick: () => {
+                        setSelection({
+                            start: dag,
+                            end: dag,
+                            medewerkerId: medewerker.Username,
+                            medewerkerData: medewerker
+                        });
+                        setIsVerlofModalOpen(true);
+                        setContextMenu(null);
+                    }
+                },
+                {
+                    label: 'Ziek melden',
+                    icon: 'fa-notes-medical',
+                    onClick: () => {
+                        setSelection({
+                            start: dag,
+                            end: dag,
+                            medewerkerId: medewerker.Username,
+                            medewerkerData: medewerker
+                        });
+                        setIsZiekModalOpen(true);
+                        setContextMenu(null);
+                    }
+                },
+                {
+                    label: 'Compensatieuren doorgeven',
+                    icon: './icons/compensatieuren/neutraleuren.svg',
+                    iconType: 'svg',
+                    onClick: () => {
+                        setSelection({
+                            start: dag,
+                            end: dag,
+                            medewerkerId: medewerker.Username,
+                            medewerkerData: medewerker
+                        });
+                        setIsCompensatieModalOpen(true);
+                        setContextMenu(null);
+                    }
+                },
+                {
+                    label: 'Zittingsvrij maken',
+                    icon: 'fa-gavel',
+                    onClick: () => {
+                        setSelection({
+                            start: dag,
+                            end: dag,
+                            medewerkerId: medewerker.Username,
+                            medewerkerData: medewerker
+                        });
+                        setIsZittingsvrijModalOpen(true);
+                        setContextMenu(null);
+                    }
+                }
+            ]
+        });
+
+        // Add cancel option
+        menuItems.push({
+            label: 'Annuleren',
+            icon: 'fa-times',
+            onClick: () => {
+                console.log('Annuleren clicked');
+                setContextMenu(null);
+            }
+        });
 
         console.log('Final context menu items:', menuItems);
         setContextMenu({
             x: e.clientX,
             y: e.clientY,
             items: menuItems,
-            onClose: () => setContextMenu(null)
+            onClose: () => setContextMenu(null),
+            currentUsername: currentUsername
         });
-    }, [medewerkers, currentUser]);
+    }, [medewerkers, currentUser, canUserModifyItem, handleVerlofSubmit, handleZittingsvrijSubmit, handleCompensatieSubmit, refreshData]);
 
     // Computed values
     const ziekteRedenId = useMemo(() => {
