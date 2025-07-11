@@ -1760,16 +1760,16 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     h('span', { key: 'divider-horen', className: 'legenda-divider' }, '|'),
                     h('div', { key: 'horen-ja', className: 'legenda-item' },
                         h('div', { className: 'legenda-icon' },
-                            h('img', { src: './icons/profilecards/horen-ja.svg', alt: 'Horen Ja', style: { width: '16px', height: '16px' } })
+                            h('img', { src: './icons/profilecards/horen-ja.svg', alt: 'Beschikbaar om te horen', style: { width: '16px', height: '16px' } })
                         ),
-                        h('span', null, 'Horenplicht')
+                        h('span', null, 'Beschikbaar om te horen')
                     ),
                     h('span', { key: 'divider-horen-2', className: 'legenda-divider' }, '|'),
                     h('div', { key: 'horen-nee', className: 'legenda-item' },
                         h('div', { className: 'legenda-icon' },
-                            h('img', { src: './icons/profilecards/horen-nee.svg', alt: 'Horen Nee', style: { width: '16px', height: '16px' } })
+                            h('img', { src: './icons/profilecards/horen-nee.svg', alt: 'Niet beschikbaar om te horen', style: { width: '16px', height: '16px' } })
                         ),
-                        h('span', null, 'Geen Horenplicht')
+                        h('span', null, 'Niet beschikbaar om te horen')
                     )
                 )
             )
