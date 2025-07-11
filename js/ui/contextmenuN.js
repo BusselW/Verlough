@@ -287,9 +287,16 @@ const ContextMenuN = ({ x, y, onClose, items = [], currentUsername = null }) => 
         const hasSubItems = item.subItems && item.subItems.length > 0;
         const isActive = activeSubMenu === index;
 
+        if (item.label === '---') {
+            return h('div', {
+                key: index,
+                className: 'context-menu-separator'
+            });
+        }
+
         return h('div', {
             key: index,
-            className: `context-menu-item ${item.disabled ? 'disabled' : ''} ${hasSubItems ? 'has-submenu' : ''}`,
+            className: `context-menu-item ${item.disabled ? 'disabled' : ''} ${isActive && hasSubItems ? 'submenu-open' : ''}`,
             onClick: (e) => {
                 e.stopPropagation();
                 if (item.disabled) return;
@@ -310,19 +317,19 @@ const ContextMenuN = ({ x, y, onClose, items = [], currentUsername = null }) => 
                 position: 'relative'
             }
         },
-            // Main item content
-            h('div', { className: 'context-menu-item-content' },
-                item.icon && h('i', { className: `fas ${item.icon}` }),
-                h('span', null, item.label),
-                hasSubItems && h('i', { className: 'fas fa-chevron-right submenu-arrow' })
-            ),
+            // Icon
+            item.icon && h('i', { className: `fas ${item.icon}` }),
+            // Label text
+            h('span', { className: 'context-menu-item-text' }, item.label),
+            // Submenu arrow
+            hasSubItems && h('i', { className: 'fas fa-chevron-right submenu-arrow' }),
             // Submenu if active
             isActive && hasSubItems && h('div', { 
-                className: 'context-submenu',
+                className: 'submenu',
                 style: {
                     position: 'absolute',
                     left: '100%',
-                    top: 0,
+                    top: '-4px',
                     zIndex: 10000
                 }
             },
@@ -339,10 +346,8 @@ const ContextMenuN = ({ x, y, onClose, items = [], currentUsername = null }) => 
                             }
                         }
                     },
-                        h('div', { className: 'context-menu-item-content' },
-                            subItem.icon && h('i', { className: `fas ${subItem.icon}` }),
-                            h('span', null, subItem.label)
-                        )
+                        subItem.icon && h('i', { className: `fas ${subItem.icon}` }),
+                        h('span', { className: 'context-menu-item-text' }, subItem.label)
                     )
                 )
             )
@@ -351,7 +356,7 @@ const ContextMenuN = ({ x, y, onClose, items = [], currentUsername = null }) => 
 
     return h('div', {
         ref: menuRef,
-        className: 'context-menu',
+        className: 'context-menu-container',
         style: {
             position: 'fixed',
             left: adjustedPosition.x,
