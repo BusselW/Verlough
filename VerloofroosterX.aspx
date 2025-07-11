@@ -36,7 +36,7 @@
         import ProfielKaarten from './js/ui/profielkaarten.js';
         import { roosterTutorial, openHandleiding as handleidingOpenen } from './js/tutorial/roosterHandleiding.js';
         import { getProfilePhotoUrl } from './js/utils/userUtils.js';
-        import RoosterApp from './js/core/roosterApp.js';
+        import RoosterApp from './js/ui/RoosterApp.js';
 
         const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
@@ -58,11 +58,28 @@
             });
 
             useEffect(() => {
-                if (currentUser) {
+                if (currentUser && currentUser.Email) {
                     setUserInfo(prev => ({ ...prev, naam: currentUser.Title, loading: false }));
-                    getProfilePhotoUrl(currentUser.Email).then(url => {
-                        setUserInfo(prev => ({ ...prev, pictureUrl: url }));
-                    });
+                    
+                    // Get profile photo URL - getProfilePhotoUrl returns a string, not a promise
+                    try {
+                        const photoUrl = getProfilePhotoUrl(currentUser);
+                        if (photoUrl) {
+                            setUserInfo(prev => ({ ...prev, pictureUrl: photoUrl }));
+                        } else {
+                            // Fallback if no photo URL returned
+                            setUserInfo(prev => ({ 
+                                ...prev, 
+                                pictureUrl: '_layouts/15/userphoto.aspx?size=S'
+                            }));
+                        }
+                    } catch (error) {
+                        console.warn('Error calling getProfilePhotoUrl:', error);
+                        setUserInfo(prev => ({ 
+                            ...prev, 
+                            pictureUrl: '_layouts/15/userphoto.aspx?size=S'
+                        }));
+                    }
                 }
             }, [currentUser]);
 
@@ -482,61 +499,88 @@
             console.log('🎯 App component rendering with permissions:', userPermissions);
             
             return h(Fragment, null,
-                h(RoosterApp, { 
-                    isUserValidated: true, 
-                    currentUser: currentUser, 
-                    userPermissions: { 
-                        ...userPermissions, 
-                        NavigationButtons: NavigationButtons // Pass the component as a prop
-                    } 
-                })
+                // Application Header
+                h('div', { id: 'header', className: 'header' },
+                    h('div', { className: 'header-content' },
+                        h('div', { className: 'header-left' },
+                            h('button', {
+                                id: 'btn-melding',
+                                className: 'btn btn-melding',
+                                onClick: () => {
+                                    // Open feedback/melding functionality
+                                    window.open('mailto:support@verlofrooster.nl?subject=Feedback Verlofrooster', '_blank');
+                                },
+                                title: 'Feedback of problemen melden'
+                            },
+                                h('i', { className: 'fas fa-bug' }),
+                                'Melding'
+                            ),
+                            h('div', { className: 'logo-container' },
+                                h('h1', { className: 'app-title' }, 'Verlofrooster')
+                            )
+                        ),
+                        h('div', { className: 'header-right' },
+                            h(NavigationButtons, { userPermissions, currentUser })
+                        )
+                    )
+                ),
+
+                // Main Application Content
+                h('div', { id: 'app-container', className: 'app-container' },
+                    h(RoosterApp, { 
+                        isUserValidated: true, 
+                        currentUser: currentUser, 
+                        userPermissions: userPermissions
+                    })
+                )
             );
         };
 
         // =====================
         // Application Bootstrap
         // =====================
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        console.log('🎯 About to render React app');
-        console.log('Root element exists:', !!document.getElementById('root'));
-        console.log('React available:', typeof React !== 'undefined');
-        console.log('ReactDOM available:', typeof ReactDOM !== 'undefined');
-        root.render(h(ErrorBoundary, null,
-            h(UserRegistrationCheck, null,
-                (userData) => userData.currentUser ? 
-                    h(App, userData) : 
-                    h('div', null, 'Loading...')
-            )
-        ));
+        const MainAppWrapper = () => {
+            const [appData, setAppData] = useState(null);
+            const [isLoading, setIsLoading] = useState(true);
 
-        // Make functions globally available for use in other components
-        window.canManageOthersEvents = canManageOthersEvents;
-        window.getProfilePhotoUrl = getProfilePhotoUrl;
-        window.fetchSharePointList = fetchSharePointList;
-        window.TooltipManager = TooltipManager; // Expose TooltipManager for debugging
-        
-        // Expose loading logic functions for debugging and manual testing
-        window.logLoadingStatus = logLoadingStatus;
-        window.clearAllCache = clearAllCache;
-        window.updateCacheKey = updateCacheKey;
-        window.loadFilteredData = loadFilteredData;
-        window.shouldReloadData = shouldReloadData;
+            const handleUserValidated = (isValid, currentUser, userPermissions) => {
+                console.log('✅ User validated, setting app data:', { isValid, currentUser, userPermissions });
+                setAppData({ currentUser, userPermissions });
+                setIsLoading(false);
+            };
 
-        // Expose User and Permission functions
-        window.getCurrentUser = getCurrentUser;
-        window.getCurrentUserGroups = getCurrentUserGroups;
-        window.isUserInAnyGroup = isUserInAnyGroup;
-        window.createSharePointListItem = createSharePointListItem;
-        window.updateSharePointListItem = updateSharePointListItem;
-        window.deleteSharePointListItem = deleteSharePointListItem;
-        window.trimLoginNaamPrefix = trimLoginNaamPrefix;
+            // If still loading, render UserRegistrationCheck without children
+            if (isLoading) {
+                return h(UserRegistrationCheck, { onUserValidated: handleUserValidated });
+            }
 
-        // For debugging: log the initial user data
-        (async () => {
-            const user = await getCurrentUser();
-            console.log('👤 Current user data:', user);
-        })();
-    </script>
-</body>
-
-</html>
+            // Once loaded, render the app with the UserRegistrationCheck wrapper
+            return h(UserRegistrationCheck, { onUserValidated: handleUserValidated },
+                h(App, { 
+                    currentUser: appData.currentUser, 
+                    userPermissions: appData.userPermissions 
+                })
+            );
+        };
+            
+                    // =====================
+                    // Render Application
+                    // =====================
+                    const container = document.getElementById('root');
+                    const root = ReactDOM.createRoot(container);
+                    
+                    root.render(
+                        h(ErrorBoundary, null,
+                            h(MainAppWrapper)
+                        )
+                    );
+            
+                    // Make tutorial functions globally available
+                    window.startTutorial = roosterTutorial;
+                    window.openHandleiding = handleidingOpenen;
+            
+                    console.log('🎉 Application initialized successfully');
+                </script>
+            </body>
+            </html>
+   
