@@ -502,14 +502,11 @@
         const App = ({ currentUser, userPermissions }) => {
             console.log('🎯 App component rendering with permissions:', userPermissions);
             
-            return h('div', { className: 'app-container' },
-                // Main Application Content - RoosterApp handles its own header
-                h(RoosterApp, { 
-                    isUserValidated: true, 
-                    currentUser: currentUser, 
-                    userPermissions: userPermissions
-                })
-            );
+            return h(RoosterApp, { 
+                isUserValidated: true, 
+                currentUser: currentUser, 
+                userPermissions: userPermissions
+            });
         };
 
         // =====================
