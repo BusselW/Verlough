@@ -584,8 +584,14 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             dag: dag.toDateString(),
             item: item?.ID,
             hasItem: !!item,
-            itemType: item ? Object.keys(item).filter(key => ['RedenId', 'StartCompensatieUren', 'ZittingsVrijeDagTijd'].includes(key)) : 'none'
+            itemType: item ? Object.keys(item).filter(key => ['RedenId', 'StartCompensatieUren', 'ZittingsVrijeDagTijd'].includes(key)) : 'none',
+            currentSelection: selection
         });
+
+        // Check if we're right-clicking on a different employee than the current selection
+        if (selection && selection.medewerkerId && selection.medewerkerId !== medewerker.Username) {
+            console.log('⚠️ Context menu opened for different employee than selection. Selection employee:', selection.medewerkerId, 'Context menu employee:', medewerker.Username);
+        }
 
         const currentUsername = currentUser?.LoginName?.split('|')[1] || currentUser?.LoginName;
         const menuItems = [];
@@ -732,15 +738,23 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     label: 'Verlof aanvragen',
                     icon: 'fa-calendar-plus',
                     onClick: () => {
-                        // Use existing selection if available, otherwise use current day
-                        const currentSelection = selection && selection.start && selection.end ? selection : {
-                            start: dag,
-                            end: dag,
-                            medewerkerId: medewerker.Username,
-                            medewerkerData: medewerker
-                        };
-                        console.log('🏖️ Context menu Verlof clicked. Existing selection:', selection, 'Using selection:', currentSelection);
-                        setSelection(currentSelection);
+                        // Use existing selection if available, valid, and for the same employee
+                        if (selection && selection.start && selection.end && selection.medewerkerId && selection.medewerkerId === medewerker.Username) {
+                            console.log('🏖️ Context menu Verlof clicked. Using existing selection for same employee:', selection);
+                            // Keep existing selection as-is
+                        } else {
+                            const currentSelection = {
+                                start: dag,
+                                end: dag,
+                                medewerkerId: medewerker.Username,
+                                medewerkerData: medewerker
+                            };
+                            console.log('🏖️ Context menu Verlof clicked. Creating new selection:', currentSelection);
+                            if (selection && selection.medewerkerId !== medewerker.Username) {
+                                console.log('🔄 Switching from employee', selection.medewerkerId, 'to', medewerker.Username);
+                            }
+                            setSelection(currentSelection);
+                        }
                         setIsVerlofModalOpen(true);
                         setContextMenu(null);
                     }
@@ -749,15 +763,23 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     label: 'Ziek melden',
                     icon: 'fa-notes-medical',
                     onClick: () => {
-                        // Use existing selection if available, otherwise use current day
-                        const currentSelection = selection && selection.start && selection.end ? selection : {
-                            start: dag,
-                            end: dag,
-                            medewerkerId: medewerker.Username,
-                            medewerkerData: medewerker
-                        };
-                        console.log('🏥 Context menu Ziekte clicked. Existing selection:', selection, 'Using selection:', currentSelection);
-                        setSelection(currentSelection);
+                        // Use existing selection if available, valid, and for the same employee
+                        if (selection && selection.start && selection.end && selection.medewerkerId && selection.medewerkerId === medewerker.Username) {
+                            console.log('🏥 Context menu Ziekte clicked. Using existing selection for same employee:', selection);
+                            // Keep existing selection as-is
+                        } else {
+                            const currentSelection = {
+                                start: dag,
+                                end: dag,
+                                medewerkerId: medewerker.Username,
+                                medewerkerData: medewerker
+                            };
+                            console.log('🏥 Context menu Ziekte clicked. Creating new selection:', currentSelection);
+                            if (selection && selection.medewerkerId !== medewerker.Username) {
+                                console.log('🔄 Switching from employee', selection.medewerkerId, 'to', medewerker.Username);
+                            }
+                            setSelection(currentSelection);
+                        }
                         setIsZiekModalOpen(true);
                         setContextMenu(null);
                     }
@@ -767,15 +789,23 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     icon: './icons/compensatieuren/neutraleuren.svg',
                     iconType: 'svg',
                     onClick: () => {
-                        // Use existing selection if available, otherwise use current day
-                        const currentSelection = selection && selection.start && selection.end ? selection : {
-                            start: dag,
-                            end: dag,
-                            medewerkerId: medewerker.Username,
-                            medewerkerData: medewerker
-                        };
-                        console.log('⏰ Context menu Compensatie clicked. Existing selection:', selection, 'Using selection:', currentSelection);
-                        setSelection(currentSelection);
+                        // Use existing selection if available, valid, and for the same employee
+                        if (selection && selection.start && selection.end && selection.medewerkerId && selection.medewerkerId === medewerker.Username) {
+                            console.log('⏰ Context menu Compensatie clicked. Using existing selection for same employee:', selection);
+                            // Keep existing selection as-is
+                        } else {
+                            const currentSelection = {
+                                start: dag,
+                                end: dag,
+                                medewerkerId: medewerker.Username,
+                                medewerkerData: medewerker
+                            };
+                            console.log('⏰ Context menu Compensatie clicked. Creating new selection:', currentSelection);
+                            if (selection && selection.medewerkerId !== medewerker.Username) {
+                                console.log('🔄 Switching from employee', selection.medewerkerId, 'to', medewerker.Username);
+                            }
+                            setSelection(currentSelection);
+                        }
                         setIsCompensatieModalOpen(true);
                         setContextMenu(null);
                     }
@@ -784,15 +814,23 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                     label: 'Zittingsvrij maken',
                     icon: 'fa-gavel',
                     onClick: () => {
-                        // Use existing selection if available, otherwise use current day
-                        const currentSelection = selection && selection.start && selection.end ? selection : {
-                            start: dag,
-                            end: dag,
-                            medewerkerId: medewerker.Username,
-                            medewerkerData: medewerker
-                        };
-                        console.log('⚖️ Context menu Zittingsvrij clicked. Existing selection:', selection, 'Using selection:', currentSelection);
-                        setSelection(currentSelection);
+                        // Use existing selection if available, valid, and for the same employee
+                        if (selection && selection.start && selection.end && selection.medewerkerId && selection.medewerkerId === medewerker.Username) {
+                            console.log('⚖️ Context menu Zittingsvrij clicked. Using existing selection for same employee:', selection);
+                            // Keep existing selection as-is
+                        } else {
+                            const currentSelection = {
+                                start: dag,
+                                end: dag,
+                                medewerkerId: medewerker.Username,
+                                medewerkerData: medewerker
+                            };
+                            console.log('⚖️ Context menu Zittingsvrij clicked. Creating new selection:', currentSelection);
+                            if (selection && selection.medewerkerId !== medewerker.Username) {
+                                console.log('🔄 Switching from employee', selection.medewerkerId, 'to', medewerker.Username);
+                            }
+                            setSelection(currentSelection);
+                        }
                         setIsZittingsvrijModalOpen(true);
                         setContextMenu(null);
                     }
@@ -1772,7 +1810,14 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                                     onClick: () => handleCellClick(medewerker, dag),
                                                     onContextMenu: (e) => {
                                                         e.preventDefault();
-                                                        showContextMenu(e, medewerker, dag, item);
+                                                        console.log('🖱️ Cell right-clicked:', {
+                                                            employee: medewerker.Username,
+                                                            date: dag.toDateString(),
+                                                            hasItem: !!item,
+                                                            item: item,
+                                                            currentSelection: selection
+                                                        });
+                                                        showContextMenu(e, medewerker, dag, item || null);
                                                     },
                                                     style: isFirstClick ? { position: 'relative' } : {}
                                                 },
