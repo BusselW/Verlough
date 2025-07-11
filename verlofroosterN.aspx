@@ -36,7 +36,7 @@
         import ProfielKaarten from './js/ui/profielkaarten.js';
         import { roosterTutorial, openHandleiding as handleidingOpenen } from './js/tutorial/roosterHandleiding.js';
         import { getProfilePhotoUrl } from './js/utils/userUtils.js';
-        import RoosterApp from './js/core/roosterApp.js';
+        import RoosterApp from './js/ui/RoosterApp.js';
 
         const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
