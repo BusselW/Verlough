@@ -1164,10 +1164,12 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                             h('i', { className: 'fas fa-exclamation-triangle' }),
                             'Melding'
                         ),
-                        h('h1', null, 'Verlofrooster'),
-                        
-                        // Admin buttons based on permissions
-                        h('div', { className: 'admin-buttons' },
+                        h('h1', null, 'Verlofrooster')
+                    ),
+                    
+                    // Right side - Admin buttons based on permissions
+                    h('div', { className: 'header-acties' },
+                        h('div', { className: 'nav-buttons-right' },
                             userPermissions && !userPermissions.loading && userPermissions.isAdmin && h('button', {
                                 className: 'btn btn-admin',
                                 onClick: () => window.location.href = 'pages/adminCentrum/adminCentrumN.aspx',
@@ -1178,7 +1180,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                             ),
                             
                             userPermissions && !userPermissions.loading && userPermissions.isFunctional && h('button', {
-                                className: 'btn btn-beheer',
+                                className: 'btn btn-functional',
                                 onClick: () => window.location.href = 'pages/beheerCentrum/beheerCentrumN.aspx',
                                 title: 'Beheer Centrum'
                             },
@@ -1187,7 +1189,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                             ),
                             
                             userPermissions && !userPermissions.loading && userPermissions.isTaakbeheer && h('button', {
-                                className: 'btn btn-behandelen',
+                                className: 'btn btn-taakbeheer',
                                 onClick: () => window.location.href = 'pages/behandelCentrum/behandelCentrumN.aspx',
                                 title: 'Behandel Centrum'
                             },
