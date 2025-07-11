@@ -3,7 +3,7 @@ import MedewerkerRow from './userinfo.js';
 import { fetchSharePointList, getUserInfo, getCurrentUser, createSharePointListItem, updateSharePointListItem, deleteSharePointListItem, trimLoginNaamPrefix } from '../services/sharepointService.js';
 import { getCurrentUserGroups, isUserInAnyGroup } from '../services/permissionService.js';
 import * as linkInfo from '../services/linkInfo.js';
-import LoadingLogic, { loadFilteredData, shouldReloadData, updateCacheKey, clearAllCache, logLoadingStatus } from '../services/loadingLogic.js';
+import LoadingLogic, { loadFilteredData, shouldReloadData, updateCacheKey, clearAllCache, logLoadingStatus, getCachedData } from '../services/loadingLogic.js';
 import ContextMenu, { canManageOthersEvents, canUserModifyItem } from './ContextMenu.js';
 import FAB from './FloatingActionButton.js';
 import Modal from './Modal.js';
@@ -433,28 +433,139 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         setError(null);
         
         try {
-            const result = await loadFilteredData(
-                weergaveType,
-                huidigJaar,
-                huidigMaand,
-                huidigWeek,
-                forceReload
-            );
+            // Get current user info
+            const userInfo = await getCurrentUser();
             
-            if (result.error) {
-                throw new Error(result.error);
+            // Check if we need to reload data for the current period
+            const needsReload = forceReload || shouldReloadData(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+            
+            if (needsReload) {
+                console.log('📊 Loading data for new period...');
+                // Update cache key for current period
+                updateCacheKey(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+            } else {
+                console.log('✅ Using cached data for current period');
             }
+
+            console.log('📊 Fetching SharePoint lists...');
             
-            console.log('✅ Data refreshed successfully');
-            setMedewerkers(result.medewerkers || []);
-            setTeams(result.teams || []);
-            setShiftTypes(result.shiftTypes || {});
-            setVerlofItems(result.verlofItems || []);
-            setZittingsvrijItems(result.zittingsvrijItems || []);
-            setCompensatieUrenItems(result.compensatieUrenItems || []);
-            setUrenPerWeekItems(result.urenPerWeekItems || []);
-            setDagenIndicators(result.dagenIndicators || {});
-            setCurrentUser(result.currentUser);
+            // Always load static data (these are small lists and don't change often)
+            const [medewerkersData, teamsData, verlofredenenData, urenPerWeekData, dagenIndicatorsData] = await Promise.all([
+                fetchSharePointList('Medewerkers'),
+                fetchSharePointList('Teams'),
+                fetchSharePointList('Verlofredenen'),
+                fetchSharePointList('UrenPerWeek'),
+                fetchSharePointList('DagenIndicators')
+            ]);
+
+            // Load period-specific data with smart filtering
+            let verlofData, zittingsvrijData, compensatieUrenData;
+            
+            if (needsReload) {
+                console.log('🔍 Loading period-specific data with filtering...');
+                [verlofData, zittingsvrijData, compensatieUrenData] = await Promise.all([
+                    loadFilteredData(fetchSharePointList, 'Verlof', 'verlof', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand),
+                    loadFilteredData(fetchSharePointList, 'IncidenteelZittingVrij', 'zittingsvrij', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand),
+                    loadFilteredData(fetchSharePointList, 'CompensatieUren', 'compensatie', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand)
+                ]);
+                
+                // Log loading statistics
+                logLoadingStatus();
+            } else {
+                // Use cached data
+                verlofData = getCachedData('verlof') || [];
+                zittingsvrijData = getCachedData('zittingsvrij') || [];
+                compensatieUrenData = getCachedData('compensatie') || [];
+                
+                console.log(`📁 Using cached data: ${verlofData.length} verlof, ${zittingsvrijData.length} zittingsvrij, ${compensatieUrenData.length} compensatie items`);
+            }
+
+            console.log('✅ Data fetched successfully, processing...');
+            
+            // Process teams data
+            const teamsMapped = (teamsData || []).map(item => ({ 
+                id: item.ID || item.Title, 
+                naam: item.Naam || item.Title, 
+                kleur: item.Kleur || '#cccccc' 
+            }));
+            setTeams(teamsMapped);
+            
+            // Create mapping from team name to team ID 
+            const teamNameToIdMap = teamsMapped.reduce((acc, t) => { 
+                acc[t.naam] = t.id; 
+                return acc; 
+            }, {});
+            
+            // Process shift types
+            const transformedShiftTypes = (verlofredenenData || []).reduce((acc, item) => {
+                if (item.Title) { 
+                    acc[item.ID] = { 
+                        id: item.ID, 
+                        label: item.Title, 
+                        kleur: item.Kleur || '#999999', 
+                        afkorting: item.Afkorting || '??' 
+                    }; 
+                }
+                return acc;
+            }, {});
+            setShiftTypes(transformedShiftTypes);
+            
+            // Process medewerkers data
+            const medewerkersProcessed = (medewerkersData || [])
+                .filter(item => item.Naam && item.Actief !== false)
+                .map(item => ({ 
+                    ...item, 
+                    id: item.ID, 
+                    naam: item.Naam, 
+                    team: teamNameToIdMap[item.Team] || '', 
+                    Username: item.Username || null 
+                }));
+            setMedewerkers(medewerkersProcessed);
+            
+            // Process verlof items
+            setVerlofItems((verlofData || []).map(v => ({ 
+                ...v, 
+                StartDatum: new Date(v.StartDatum), 
+                EindDatum: new Date(v.EindDatum) 
+            })));
+            
+            // Process other items
+            setZittingsvrijItems((zittingsvrijData || []).map(z => ({ 
+                ...z, 
+                StartDatum: new Date(z.StartDatum), 
+                EindDatum: new Date(z.EindDatum) 
+            })));
+            
+            setCompensatieUrenItems((compensatieUrenData || []).map(c => ({ 
+                ...c, 
+                StartCompensatieUren: new Date(c.StartCompensatieUren) 
+            })));
+            
+            // Process UrenPerWeek items 
+            const processedUrenPerWeek = (urenPerWeekData || []).map(item => ({
+                ...item,
+                Ingangsdatum: item.Ingangsdatum ? new Date(item.Ingangsdatum) : null,
+                CycleStartDate: item.CycleStartDate ? new Date(item.CycleStartDate) : null
+            }));
+            setUrenPerWeekItems(processedUrenPerWeek);
+            
+            // Process DagenIndicators
+            const indicatorsMapped = (dagenIndicatorsData || []).reduce((acc, item) => {
+                if (item.Title) {
+                    acc[item.Title] = { 
+                        ...item, 
+                        kleur: item.Kleur || '#cccccc', 
+                        Beschrijving: item.Beschrijving || '' 
+                    };
+                }
+                return acc;
+            }, {});
+            setDagenIndicators(indicatorsMapped);
+
+            // Set current user
+            setCurrentUser(userInfo);
+            
+            console.log('✅ Data processing complete!');
             
         } catch (error) {
             console.error('❌ Error refreshing data:', error);
