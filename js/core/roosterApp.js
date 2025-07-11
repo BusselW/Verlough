@@ -1792,7 +1792,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                             if (!teamMedewerkers || teamMedewerkers.length === 0) return null;
 
                             return h(Fragment, { key: teamId },
-                                h('tr', { className: 'team-rij' }, h('td', { colSpan: periodeData.length + 1 }, h('div', { className: 'team-header', style: { '--team-kleur': team.kleur } }, team.naam))),
+                                h('tr', { className: 'team-rij' }, h('td', { colSpan: periodeData.length + 1 }, h('div', { className: 'team-header', style: { backgroundColor: team.kleur } }, team.naam))),
                                 (teamMedewerkers || []).map(medewerker =>
                                     h('tr', { key: medewerker.id, className: 'medewerker-rij' },
                                         h('td', { className: 'medewerker-kolom' }, h(MedewerkerRow, { medewerker: medewerker || {} })),

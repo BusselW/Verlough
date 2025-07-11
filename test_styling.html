@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Styling Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="/css/verlofrooster_stijl.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <h1>Verlofrooster Styling Test</h1>
+        
+        <!-- Test team header with different colors -->
+        <table class="rooster-table">
+            <thead>
+                <tr>
+                    <th class="medewerker-kolom">Medewerker</th>
+                    <th class="dag-kolom">Ma</th>
+                    <th class="dag-kolom">Di</th>
+                    <th class="dag-kolom">Wo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Team 1 with blue color -->
+                <tr class="team-rij">
+                    <td colspan="4">
+                        <div class="team-header" style="background-color: #4a90e2;">Team Administratie</div>
+                    </td>
+                </tr>
+                <tr class="medewerker-rij">
+                    <td class="medewerker-kolom">
+                        <div class="medewerker-info">
+                            <img class="medewerker-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='%23ccc'%3E%3Ccircle cx='16' cy='16' r='16'/%3E%3C/svg%3E" alt="Avatar">
+                            <div class="medewerker-text">
+                                <div class="medewerker-naam">Jan Janssen</div>
+                                <div class="medewerker-functie">Administratief medewerker</div>
+                                <div class="medewerker-teamleader">Teamleider: Maria Jansen</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="dag-kolom">VER</td>
+                    <td class="dag-kolom">-</td>
+                    <td class="dag-kolom">VER</td>
+                </tr>
+                
+                <!-- Team 2 with green color -->
+                <tr class="team-rij">
+                    <td colspan="4">
+                        <div class="team-header" style="background-color: #27ae60;">Team Ontwikkeling</div>
+                    </td>
+                </tr>
+                <tr class="medewerker-rij">
+                    <td class="medewerker-kolom">
+                        <div class="medewerker-info">
+                            <img class="medewerker-avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='%23ccc'%3E%3Ccircle cx='16' cy='16' r='16'/%3E%3C/svg%3E" alt="Avatar">
+                            <div class="medewerker-text">
+                                <div class="medewerker-naam">Peter van der Berg</div>
+                                <div class="medewerker-functie">Software Developer</div>
+                                <div class="medewerker-teamleader">Teamleider: Sarah de Wit</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="dag-kolom">-</td>
+                    <td class="dag-kolom">ZIE</td>
+                    <td class="dag-kolom">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
