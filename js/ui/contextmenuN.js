@@ -188,8 +188,20 @@ const filterSubItems = async (subItems, currentUsername) => {
  * @param {Function} props.onClose - Function to close the menu
  * @param {Array} props.items - Menu items array
  * @param {string} props.currentUsername - Current user's username
+ * @param {Object} props.firstClickData - First click data for two-click selection
+ * @param {Object} props.selection - Current selection state
+ * @param {Object} props.contextData - Additional context data (medewerker, dag, item)
  */
-const ContextMenuN = ({ x, y, onClose, items = [], currentUsername = null }) => {
+const ContextMenuN = ({ 
+    x, 
+    y, 
+    onClose, 
+    items = [], 
+    currentUsername = null,
+    firstClickData = null,
+    selection = null,
+    contextData = null
+}) => {
     const menuRef = useRef(null);
     const [activeSubMenu, setActiveSubMenu] = useState(null);
     const [adjustedPosition, setAdjustedPosition] = useState({ x, y });
@@ -296,18 +308,33 @@ const ContextMenuN = ({ x, y, onClose, items = [], currentUsername = null }) => 
 
         return h('div', {
             key: index,
-            className: `context-menu-item ${item.disabled ? 'disabled' : ''} ${isActive && hasSubItems ? 'submenu-open' : ''}`,
-            onClick: (e) => {
-                e.stopPropagation();
-                if (item.disabled) return;
-                
-                if (hasSubItems) {
-                    setActiveSubMenu(isActive ? null : index);
-                } else if (item.onClick) {
-                    item.onClick(e);
-                    onClose();
-                }
-            },
+            className: `context-menu-item ${item.disabled ? 'disabled' : ''} ${isActive && hasSubItems ? 'submenu-open' : ''}`,                        onClick: (e) => {
+                            e.stopPropagation();
+                            if (item.disabled) return;
+                            
+                            if (hasSubItems) {
+                                setActiveSubMenu(isActive ? null : index);
+                            } else if (item.onClick) {
+                                // Pass context data to onClick handlers
+                                const contextForHandler = {
+                                    firstClickData,
+                                    selection,
+                                    contextData,
+                                    currentUsername,
+                                    event: e
+                                };
+                                
+                                console.log('🎯 ContextMenuN: Executing onClick with context:', {
+                                    itemLabel: item.label,
+                                    hasFirstClick: !!firstClickData,
+                                    hasSelection: !!selection,
+                                    hasContextData: !!contextData
+                                });
+                                
+                                item.onClick(contextForHandler);
+                                onClose();
+                            }
+                        },
             onMouseEnter: () => {
                 if (hasSubItems) {
                     setActiveSubMenu(index);
@@ -352,7 +379,23 @@ const ContextMenuN = ({ x, y, onClose, items = [], currentUsername = null }) => 
                             e.stopPropagation();
                             if (subItem.disabled) return;
                             if (subItem.onClick) {
-                                subItem.onClick(e);
+                                // Pass context data to submenu onClick handlers too
+                                const contextForHandler = {
+                                    firstClickData,
+                                    selection,
+                                    contextData,
+                                    currentUsername,
+                                    event: e
+                                };
+                                
+                                console.log('🎯 ContextMenuN SubItem: Executing onClick with context:', {
+                                    itemLabel: subItem.label,
+                                    hasFirstClick: !!firstClickData,
+                                    hasSelection: !!selection,
+                                    hasContextData: !!contextData
+                                });
+                                
+                                subItem.onClick(contextForHandler);
                                 onClose();
                             }
                         }
