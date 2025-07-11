@@ -145,6 +145,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     const [showTooltip, setShowTooltip] = useState(false);
     const [tooltipTimeout, setTooltipTimeout] = useState(null);
     const [firstClickData, setFirstClickData] = useState(null);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     
     // Header dropdown states
     const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
@@ -473,6 +474,50 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         }
     }, [weergaveType, huidigJaar, huidigMaand, huidigWeek]);
 
+    // Graceful refresh for form submissions
+    const gracefulRefresh = useCallback(async () => {
+        try {
+            setIsRefreshing(true);
+            
+            // Use a shorter delay to make it feel more responsive
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Force reload to get latest data without showing main loading spinner
+            const data = await loadFilteredData(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand, true);
+            
+            // Process shift types to include default statuses
+            const processedShiftTypes = { ...(data.shiftTypes || {}) };
+            Object.keys(processedShiftTypes).forEach(key => {
+                const shiftType = processedShiftTypes[key];
+                // Set default status for VER items to "Nieuw" and ZKT items to "Goedgekeurd"
+                if (shiftType.afkorting === 'VER') {
+                    shiftType.defaultStatus = 'Nieuw';
+                } else if (shiftType.afkorting === 'ZKT') {
+                    shiftType.defaultStatus = 'Goedgekeurd';
+                }
+            });
+
+            // Update all states silently
+            setMedewerkers(data.medewerkers || []);
+            setVerlofItems(data.verlofItems || []);
+            setCompensatieUrenItems(data.compensatieUrenItems || []);
+            setUrenPerWeekItems(data.urenPerWeekItems || []);
+            setZittingsvrijItems(data.zittingsvrijItems || []);
+            setTeams(data.teams || []);
+            setShiftTypes(processedShiftTypes);
+            setDagenIndicators(data.dagenIndicators || {});
+            
+            console.log('✅ Graceful refresh completed');
+            
+        } catch (error) {
+            console.error('❌ Error in graceful refresh:', error);
+            // Fall back to regular refresh if graceful fails
+            await refreshData(true);
+        } finally {
+            setIsRefreshing(false);
+        }
+    }, [weergaveType, huidigJaar, huidigMaand, huidigWeek, refreshData]);
+
     // Initial data load when user is validated
     useEffect(() => {
         // Only start loading data after user is validated
@@ -522,7 +567,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             const result = await createSharePointListItem('Verlof', formData);
             console.log('Verlofaanvraag ingediend:', result);
             setIsVerlofModalOpen(false);
-            refreshData();
+            gracefulRefresh();
         } catch (error) {
             console.error('Fout bij het indienen van verlofaanvraag:', error);
             console.error('Error details:', {
@@ -532,7 +577,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             });
             alert('Fout bij het indienen van verlofaanvraag: ' + error.message);
         }
-    }, [refreshData]);
+    }, [gracefulRefresh]);
 
     const handleZiekteSubmit = useCallback(async (formData) => {
         try {
@@ -540,12 +585,12 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             const result = await createSharePointListItem('Verlof', formData);
             console.log('Ziekmelding ingediend:', result);
             setIsZiekModalOpen(false);
-            refreshData();
+            gracefulRefresh();
         } catch (error) {
             console.error('Fout bij het indienen van ziekmelding:', error);
             alert('Fout bij het indienen van ziekmelding: ' + error.message);
         }
-    }, [refreshData]);
+    }, [gracefulRefresh]);
 
     const handleCompensatieSubmit = useCallback(async (formData) => {
         try {
@@ -553,12 +598,12 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             const result = await createSharePointListItem('CompensatieUren', formData);
             console.log('✅ Compensatie-uren ingediend successfully:', result);
             setIsCompensatieModalOpen(false);
-            refreshData();
+            gracefulRefresh();
         } catch (error) {
             console.error('❌ Fout bij het indienen van compensatie-uren:', error);
             alert('Fout bij het indienen van compensatie-uren: ' + error.message);
         }
-    }, [refreshData]);
+    }, [gracefulRefresh]);
 
     const handleZittingsvrijSubmit = useCallback(async (formData) => {
         try {
@@ -570,12 +615,12 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             const result = await createSharePointListItem(listName, formData);
             console.log('✅ Zittingsvrij ingediend successfully:', result);
             setIsZittingsvrijModalOpen(false);
-            refreshData();
+            gracefulRefresh();
         } catch (error) {
             console.error('❌ Fout bij het indienen van zittingsvrij:', error);
             alert('Fout bij het indienen van zittingsvrij: ' + error.message);
         }
-    }, [refreshData]);
+    }, [gracefulRefresh]);
 
     // Context menu handler
     const showContextMenu = useCallback(async (e, medewerker, dag, item) => {
@@ -742,7 +787,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                 );
                                 
                                 // Refresh data after deletion
-                                await refreshData();
+                                await gracefulRefresh();
                                 console.log('✅ Item deleted successfully');
                             } catch (error) {
                                 console.error('❌ Error deleting item:', error);
@@ -977,7 +1022,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 item: item
             }
         });
-    }, [medewerkers, currentUser, canUserModifyItem, handleVerlofSubmit, handleZittingsvrijSubmit, handleCompensatieSubmit, refreshData]);
+    }, [medewerkers, currentUser, canUserModifyItem, handleVerlofSubmit, handleZittingsvrijSubmit, handleCompensatieSubmit, gracefulRefresh]);
 
     // Computed values
     const ziekteRedenId = useMemo(() => {
@@ -1564,6 +1609,29 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
 
     // Render de roosterkop en de medewerkerrijen
     return h('div', { className: 'app-container' },
+        // Subtle refreshing indicator
+        isRefreshing && h('div', {
+            style: {
+                position: 'fixed',
+                top: '10px',
+                right: '20px',
+                background: 'rgba(59, 130, 246, 0.9)',
+                color: 'white',
+                padding: '8px 16px',
+                borderRadius: '20px',
+                fontSize: '12px',
+                fontWeight: 500,
+                zIndex: 9999,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+                animation: 'fadeIn 0.3s ease-out'
+            }
+        },
+            h('i', { className: 'fas fa-sync-alt', style: { animation: 'spin 1s linear infinite' } }),
+            'Gegevens bijwerken...'
+        ),
         h('div', { className: 'sticky-header-container' },
             h('header', { id: 'header', className: 'header' },
                 h('div', { className: 'header-content' },
