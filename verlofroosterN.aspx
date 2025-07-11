@@ -8,9 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- CSS bestanden -->
-    <link href="css/verlofrooster_stijl.css" rel="stylesheet">
-    <link href="css/verlofrooster_styling.css" rel="stylesheet">
-    <link rel="icon" href="data:," />
+    <link href="css/verlofrooster_s.css" rel="stylesheet">
+    <link href="css/verlofrooster_s1.css" rel="stylesheet">
+    <link rel="icon" href="icons/favicon/favicon.svg" />
 
     <!-- React en configuratie bestanden -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
