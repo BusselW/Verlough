@@ -318,7 +318,18 @@ const ContextMenuN = ({ x, y, onClose, items = [], currentUsername = null }) => 
             }
         },
             // Icon
-            item.icon && h('i', { className: `fas ${item.icon}` }),
+            item.icon && (item.iconType === 'svg' ? 
+                h('img', { 
+                    src: item.icon, 
+                    alt: item.label,
+                    style: { 
+                        width: '16px', 
+                        height: '16px', 
+                        marginRight: '8px' 
+                    } 
+                }) : 
+                h('i', { className: `fas ${item.icon}` })
+            ),
             // Label text
             h('span', { className: 'context-menu-item-text' }, item.label),
             // Submenu arrow
@@ -346,7 +357,18 @@ const ContextMenuN = ({ x, y, onClose, items = [], currentUsername = null }) => 
                             }
                         }
                     },
-                        subItem.icon && h('i', { className: `fas ${subItem.icon}` }),
+                        subItem.icon && (subItem.iconType === 'svg' ? 
+                            h('img', { 
+                                src: subItem.icon, 
+                                alt: subItem.label,
+                                style: { 
+                                    width: '16px', 
+                                    height: '16px', 
+                                    marginRight: '8px' 
+                                } 
+                            }) : 
+                            h('i', { className: `fas ${subItem.icon}` })
+                        ),
                         h('span', { className: 'context-menu-item-text' }, subItem.label)
                     )
                 )
