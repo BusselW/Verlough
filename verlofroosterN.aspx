@@ -10,7 +10,6 @@
     <!-- CSS bestanden -->
     <link href="css/verlofrooster_stijl.css" rel="stylesheet">
     <link href="css/verlofrooster_styling.css" rel="stylesheet">
-    <link href="css/header.css" rel="stylesheet">
     <link rel="icon" href="data:," />
 
     <!-- React en configuratie bestanden -->

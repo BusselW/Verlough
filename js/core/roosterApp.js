@@ -29,7 +29,6 @@ import CompensatieUrenForm from '../ui/forms/CompensatieUrenForm.js';
 import ZiekteMeldingForm from '../ui/forms/ZiekteMeldingForm.js';
 import ZittingsvrijForm from '../ui/forms/ZittingsvrijForm.js';
 import MedewerkerRow from '../ui/userinfo.js';
-import Header from '../ui/header.js';
 
 const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
@@ -1165,10 +1164,38 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                             h('i', { className: 'fas fa-exclamation-triangle' }),
                             'Melding'
                         ),
-                        h('h1', null, 'Verlofrooster')
-                    ),
-                    // Right side - Permission-based navigation
-                    h(Header, { userPermissions, currentUser })
+                        h('h1', null, 'Verlofrooster'),
+                        
+                        // Admin buttons based on permissions
+                        h('div', { className: 'admin-buttons' },
+                            userPermissions && !userPermissions.loading && userPermissions.isAdmin && h('button', {
+                                className: 'btn btn-admin',
+                                onClick: () => window.location.href = 'pages/adminCentrum/adminCentrumN.aspx',
+                                title: 'Administratie Centrum'
+                            },
+                                h('i', { className: 'fas fa-cog' }),
+                                'Admin'
+                            ),
+                            
+                            userPermissions && !userPermissions.loading && userPermissions.isFunctional && h('button', {
+                                className: 'btn btn-beheer',
+                                onClick: () => window.location.href = 'pages/beheerCentrum/beheerCentrumN.aspx',
+                                title: 'Beheer Centrum'
+                            },
+                                h('i', { className: 'fas fa-tools' }),
+                                'Beheer'
+                            ),
+                            
+                            userPermissions && !userPermissions.loading && userPermissions.isTaakbeheer && h('button', {
+                                className: 'btn btn-behandelen',
+                                onClick: () => window.location.href = 'pages/behandelCentrum/behandelCentrumN.aspx',
+                                title: 'Behandel Centrum'
+                            },
+                                h('i', { className: 'fas fa-clipboard-check' }),
+                                'Behandelen'
+                            )
+                        )
+                    )
                 )
             ),
             h('div', { id: 'toolbar', className: 'toolbar' },
