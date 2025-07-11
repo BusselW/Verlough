@@ -575,10 +575,6 @@
             );
         };
             
-        // Make permission functions globally available for forms and other components
-        window.canManageOthersEvents = canManageOthersEvents;
-        window.canUserModifyItem = canUserModifyItem;
-        
         // =====================
         // Render Application
         // =====================

@@ -1,4 +1,5 @@
 import { getCurrentUserInfo } from '../../services/sharepointService.js';
+import { canManageOthersEvents } from '../contextmenuN.js';
 
 const { createElement: h, useState, useEffect } = React;
 
@@ -63,12 +64,10 @@ const CompensatieUrenForm = ({ onSubmit, onClose, initialData = {}, medewerkers 
         const initializeForm = async () => {
             // Check if user can manage events for others
             let userCanManageOthers = false;
-            if (typeof window.canManageOthersEvents === 'function') {
-                try {
-                    userCanManageOthers = await window.canManageOthersEvents();
-                } catch (error) {
-                    console.error('Error checking manage others permission:', error);
-                }
+            try {
+                userCanManageOthers = await canManageOthersEvents();
+            } catch (error) {
+                console.error('Error checking manage others permission:', error);
             }
             setCanManageOthers(userCanManageOthers);
             console.log('User can manage others events (compensatie):', userCanManageOthers);

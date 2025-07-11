@@ -20,7 +20,7 @@ import { fetchSharePointList, getUserInfo, createSharePointListItem, updateShare
 import { getCurrentUserGroups, isUserInAnyGroup } from '../services/permissionService.js';
 import * as linkInfo from '../services/linkInfo.js';
 import LoadingLogic, { loadFilteredData, shouldReloadData, updateCacheKey, clearAllCache, logLoadingStatus } from '../services/loadingLogic.js';
-import ContextMenu, { canManageOthersEvents, canUserModifyItem } from '../ui/ContextMenu.js';
+import ContextMenuN, { canManageOthersEvents, canUserModifyItem } from '../ui/contextmenuN.js';
 import ProfielKaarten from '../ui/profielkaarten.js';
 import FAB from '../ui/FloatingActionButton.js';
 import Modal from '../ui/Modal.js';
@@ -1638,7 +1638,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             )
         ),
         // Context menu
-        contextMenu && h(ContextMenu, {
+        contextMenu && h(ContextMenuN, {
             x: contextMenu.x,
             y: contextMenu.y,
             items: contextMenu.items,
