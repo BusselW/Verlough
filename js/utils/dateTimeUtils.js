@@ -104,20 +104,37 @@ export const getDagenInMaand = (maand, jaar) => {
 };
 
 /**
- * Format a date object to YYYY-MM-DD string
+ * Format a date object to include both formatted string and display components
  * @param {Date} datum - The date to format
- * @returns {string} Formatted date string
+ * @returns {Object} Object with dateString, dagNaam, and dagNummer properties
  */
 export const formatteerDatum = (datum) => {
     if (!(datum instanceof Date) || isNaN(datum)) {
         // Handle invalid date input gracefully
         console.error("Invalid date provided to formatteerDatum:", datum);
-        return 'invalid-date';
+        return {
+            dateString: 'invalid-date',
+            dagNaam: '??',
+            dagNummer: '??'
+        };
     }
+    
     const jaar = datum.getFullYear();
     const maand = (datum.getMonth() + 1).toString().padStart(2, '0');
     const dag = datum.getDate().toString().padStart(2, '0');
-    return `${jaar}-${maand}-${dag}`;
+    const dateString = `${jaar}-${maand}-${dag}`;
+    
+    // Get day name
+    const dagNaam = getDagNaam(datum);
+    
+    // Get day number
+    const dagNummer = datum.getDate().toString();
+    
+    return {
+        dateString,
+        dagNaam,
+        dagNummer
+    };
 };
 
 

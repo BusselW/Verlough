@@ -29,8 +29,8 @@ body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 1.5rem;
-    gap: 1.5rem;
+    padding: 0; /* Remove padding to allow full width utilization */
+    gap: 0; /* Remove gap to maximize space usage */
     min-height: 100vh;
     box-sizing: border-box;
     /* Ensure proper scrolling behavior for sticky headers */
@@ -38,6 +38,19 @@ body {
 
 .sticky-header-container {
     flex-shrink: 0;
+    padding: 1.5rem 1.5rem 1rem 1.5rem; /* Add padding back for headers */
+}
+
+.main-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    flex-grow: 1;
+    position: relative;
+    /* Critical: This container needs overflow for sticky headers to work */
+    overflow: auto;
+    height: 0; /* Force flex child to respect flex-grow */
+    margin: 0 1.5rem 1.5rem 1.5rem; /* Add margin to maintain spacing while allowing full table width */
 }
 
 .btn {
@@ -581,22 +594,13 @@ body {
 /* ==========================================================================
    Rooster Tabel (Responsive improvements)
    ========================================================================== */
-.main-content {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    flex-grow: 1;
-    position: relative;
-    /* Critical: This container needs overflow for sticky headers to work */
-    overflow: auto;
-    height: 0; /* Force flex child to respect flex-grow */
-}
+
 
 .rooster-table {
     width: 100%;
     border-collapse: collapse;
-    /* Change from fixed to auto layout for better responsiveness */
-    table-layout: auto;
+    /* Use fixed layout for equal column distribution */
+    table-layout: fixed;
     min-width: fit-content;
 }
 
