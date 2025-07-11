@@ -1195,6 +1195,18 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                             },
                                 h('i', { className: 'fas fa-clipboard-check' }),
                                 'Behandelen'
+                            ),
+                            
+                            // Tour button
+                            h('button', {
+                                className: 'btn btn-tour',
+                                onClick: () => {
+                                    if (window.startTutorial) window.startTutorial();
+                                },
+                                title: 'Start interactieve tour'
+                            },
+                                h('i', { className: 'fas fa-route' }),
+                                'Tour'
                             )
                         )
                     )
