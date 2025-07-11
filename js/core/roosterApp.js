@@ -21,6 +21,7 @@ import { getCurrentUserGroups, isUserInAnyGroup } from '../services/permissionSe
 import * as linkInfo from '../services/linkInfo.js';
 import LoadingLogic, { loadFilteredData, shouldReloadData, updateCacheKey, clearAllCache, logLoadingStatus } from '../services/loadingLogic.js';
 import ContextMenu, { canManageOthersEvents, canUserModifyItem } from '../ui/ContextMenu.js';
+import ProfielKaarten from '../ui/profielkaarten.js';
 import FAB from '../ui/FloatingActionButton.js';
 import Modal from '../ui/Modal.js';
 import DagCell, { renderCompensatieMomenten } from '../ui/dagCell.js';
@@ -144,6 +145,23 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     const [showTooltip, setShowTooltip] = useState(false);
     const [tooltipTimeout, setTooltipTimeout] = useState(null);
     const [firstClickData, setFirstClickData] = useState(null);
+    
+    // Header dropdown states
+    const [helpDropdownOpen, setHelpDropdownOpen] = useState(false);
+    const [settingsDropdownOpen, setSettingsDropdownOpen] = useState(false);
+    
+    // Permission states for proper SharePoint group checking
+    const [permissions, setPermissions] = useState({
+        isAdmin: false,
+        isFunctional: false,
+        isTaakbeheer: false,
+        loading: true
+    });
+    const [userInfo, setUserInfo] = useState({
+        naam: currentUser?.Title || '',
+        pictureUrl: '',
+        loading: !currentUser
+    });
 
     // Debug modal state changes
     useEffect(() => {
@@ -154,6 +172,94 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             ziek: isZiekModalOpen
         });
     }, [isCompensatieModalOpen, isZittingsvrijModalOpen, isVerlofModalOpen, isZiekModalOpen]);
+
+    // Load proper SharePoint group permissions
+    useEffect(() => {
+        const loadPermissions = async () => {
+            try {
+                console.log('🔐 Loading SharePoint group permissions...');
+                
+                // Define the SharePoint groups for each permission level
+                const adminGroups = ["1. Sharepoint beheer", "1.1. Mulder MT"];
+                const functionalGroups = ["1. Sharepoint beheer", "1.1. Mulder MT", "2.6 Roosteraars"];
+                const taakbeheerGroups = ["1. Sharepoint beheer", "1.1. Mulder MT", "2.6 Roosteraars", "2.3. Senioren beoordelen", "2.4. Senioren administratie"];
+                
+                // Check permissions for each group
+                const [isAdmin, isFunctional, isTaakbeheer] = await Promise.all([
+                    isUserInAnyGroup(adminGroups),
+                    isUserInAnyGroup(functionalGroups),
+                    isUserInAnyGroup(taakbeheerGroups)
+                ]);
+                
+                console.log('🔐 Permissions loaded:', { isAdmin, isFunctional, isTaakbeheer });
+                
+                setPermissions({
+                    isAdmin,
+                    isFunctional,
+                    isTaakbeheer,
+                    loading: false
+                });
+            } catch (error) {
+                console.error('❌ Error loading permissions:', error);
+                setPermissions({
+                    isAdmin: false,
+                    isFunctional: false,
+                    isTaakbeheer: false,
+                    loading: false
+                });
+            }
+        };
+        
+        loadPermissions();
+    }, []);
+
+    // Load user info and profile photo
+    useEffect(() => {
+        if (currentUser && currentUser.Email) {
+            setUserInfo(prev => ({ 
+                ...prev, 
+                naam: currentUser.Title || currentUser.LoginName, 
+                loading: false 
+            }));
+            
+            // Get profile photo URL from SharePoint
+            try {
+                const photoUrl = `/_layouts/15/userphoto.aspx?size=M&username=${encodeURIComponent(currentUser.Email)}`;
+                setUserInfo(prev => ({ ...prev, pictureUrl: photoUrl }));
+            } catch (error) {
+                console.warn('Error getting profile photo URL:', error);
+                // Fallback to SharePoint default user photo
+                setUserInfo(prev => ({ 
+                    ...prev,
+                    pictureUrl: `/_layouts/15/userphoto.aspx?size=M&username=${encodeURIComponent(currentUser.Email || '')}`
+                }));
+            }
+        }
+    }, [currentUser]);
+
+    // Close dropdowns when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (helpDropdownOpen && !event.target.closest('.help-dropdown')) {
+                setHelpDropdownOpen(false);
+            }
+            if (settingsDropdownOpen && !event.target.closest('.user-dropdown')) {
+                setSettingsDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [helpDropdownOpen, settingsDropdownOpen]);
+
+    // Initialize profile cards for employee hover information
+    useEffect(() => {
+        console.log('🃏 Initializing profile cards...');
+        try {
+            ProfielKaarten.init('.medewerker-naam, .medewerker-avatar');
+        } catch (error) {
+            console.error('❌ Error initializing profile cards:', error);
+        }
+    }, [medewerkers]); // Re-initialize when employees change
 
     useEffect(() => {
         const jaren = [huidigJaar - 1, huidigJaar, huidigJaar + 1];
@@ -1167,10 +1273,10 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                         h('h1', null, 'Verlofrooster')
                     ),
                     
-                    // Right side - Admin buttons based on permissions
+                    // Right side - Admin buttons and dropdowns
                     h('div', { className: 'header-acties' },
                         h('div', { className: 'nav-buttons-right' },
-                            userPermissions && !userPermissions.loading && userPermissions.isAdmin && h('button', {
+                            permissions && !permissions.loading && permissions.isAdmin && h('button', {
                                 className: 'btn btn-admin',
                                 onClick: () => window.location.href = 'pages/adminCentrum/adminCentrumN.aspx',
                                 title: 'Administratie Centrum'
@@ -1179,7 +1285,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                 'Admin'
                             ),
                             
-                            userPermissions && !userPermissions.loading && userPermissions.isFunctional && h('button', {
+                            permissions && !permissions.loading && permissions.isFunctional && h('button', {
                                 className: 'btn btn-functional',
                                 onClick: () => window.location.href = 'pages/beheerCentrum/beheerCentrumN.aspx',
                                 title: 'Beheer Centrum'
@@ -1188,7 +1294,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                 'Beheer'
                             ),
                             
-                            userPermissions && !userPermissions.loading && userPermissions.isTaakbeheer && h('button', {
+                            permissions && !permissions.loading && permissions.isTaakbeheer && h('button', {
                                 className: 'btn btn-taakbeheer',
                                 onClick: () => window.location.href = 'pages/behandelCentrum/behandelCentrumN.aspx',
                                 title: 'Behandel Centrum'
@@ -1197,16 +1303,87 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                 'Behandelen'
                             ),
                             
-                            // Tour button
-                            h('button', {
-                                className: 'btn btn-tour',
-                                onClick: () => {
-                                    if (window.startTutorial) window.startTutorial();
+                            // Help dropdown
+                            h('div', { className: 'help-dropdown' },
+                                h('button', {
+                                    className: 'btn btn-help',
+                                    onClick: () => setHelpDropdownOpen(!helpDropdownOpen),
+                                    title: 'Hulp en documentatie'
                                 },
-                                title: 'Start interactieve tour'
-                            },
-                                h('i', { className: 'fas fa-route' }),
-                                'Tour'
+                                    h('i', { className: 'fas fa-question-circle' }),
+                                    'Help',
+                                    h('i', {
+                                        className: `fas fa-chevron-${helpDropdownOpen ? 'up' : 'down'}`,
+                                        style: { fontSize: '0.8rem', marginLeft: '0.5rem' }
+                                    })
+                                ),
+                                helpDropdownOpen && h('div', { className: 'help-dropdown-menu' },
+                                    h('button', {
+                                        className: 'help-dropdown-item',
+                                        onClick: () => {
+                                            if (window.startTutorial) window.startTutorial();
+                                            setHelpDropdownOpen(false);
+                                        }
+                                    },
+                                        h('i', { className: 'fas fa-route' }),
+                                        h('div', { className: 'help-item-content' },
+                                            h('span', { className: 'help-item-title' }, 'Interactieve tour'),
+                                            h('span', { className: 'help-item-description' }, 'Ontdek de belangrijkste functies van het rooster')
+                                        )
+                                    ),
+                                    h('button', {
+                                        className: 'help-dropdown-item',
+                                        onClick: () => {
+                                            if (window.openHandleiding) window.openHandleiding();
+                                            setHelpDropdownOpen(false);
+                                        },
+                                        title: 'Open uitgebreide handleiding'
+                                    },
+                                        h('i', { className: 'fas fa-book' }),
+                                        h('div', { className: 'help-item-content' },
+                                            h('span', { className: 'help-item-title' }, 'Handleiding'),
+                                            h('span', { className: 'help-item-description' }, 'Uitgebreide documentatie en instructies')
+                                        )
+                                    )
+                                )
+                            ),
+                            
+                            // User dropdown with profile picture
+                            h('div', { id: 'user-dropdown', className: 'user-dropdown' },
+                                h('button', {
+                                    className: 'btn btn-settings user-settings-btn',
+                                    onClick: () => setSettingsDropdownOpen(!settingsDropdownOpen),
+                                    title: 'Gebruikersinstellingen'
+                                },
+                                    h('img', {
+                                        className: 'user-avatar-small',
+                                        src: userInfo.pictureUrl,
+                                        alt: userInfo.naam,
+                                        onError: (e) => { e.target.onerror = null; e.target.src = '_layouts/15/userphoto.aspx?size=S'; }
+                                    }),
+                                    h('span', { className: 'user-name' }, userInfo.naam),
+                                    h('i', {
+                                        className: `fas fa-chevron-${settingsDropdownOpen ? 'up' : 'down'}`,
+                                        style: { fontSize: '0.8rem', marginLeft: '0.5rem' }
+                                    })
+                                ),
+                                settingsDropdownOpen && h('div', { className: 'user-dropdown-menu' },
+                                    h('div', { className: 'dropdown-item-group' },
+                                        h('button', {
+                                            className: 'dropdown-item',
+                                            onClick: () => {
+                                                const baseUrl = "https://som.org.om.local/sites/verlofrooster";
+                                                window.location.href = `${baseUrl}/pages/instellingenCentrum/instellingenCentrumN.aspx`;
+                                            }
+                                        },
+                                            h('i', { className: 'fas fa-user-edit' }),
+                                            h('div', { className: 'dropdown-item-content' },
+                                                h('span', { className: 'dropdown-item-title' }, 'Persoonlijke instellingen'),
+                                                h('span', { className: 'dropdown-item-description' }, 'Beheer uw profiel en voorkeuren')
+                                            )
+                                        )
+                                    )
+                                )
                             )
                         )
                     )
