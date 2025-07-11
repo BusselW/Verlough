@@ -1235,16 +1235,30 @@ tr.medewerker-rij td {
 }
 
 /* Team header row styling */
+.team-rij {
+    display: table-row;
+    border: none !important;
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
 .team-rij td {
     padding: 0 !important;
     border: none !important; /* Remove any inherited borders */
     background: transparent !important; /* Ensure clean background */
     margin: 0 !important;
     height: auto !important;
+    vertical-align: top;
+    border-left: none !important; /* Override the dashed border for team headers */
+    border-right: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
 }
 
 .team-header {
-    /* Don't set background-color in CSS - let JavaScript handle it via inline styles */
+    display: block;
+    width: 100%;
     color: white;
     padding: 0.6rem 1rem;
     font-weight: 600;
@@ -1257,26 +1271,10 @@ tr.medewerker-rij td {
     z-index: 6;
     border: none; /* Ensure no borders on team headers */
     box-shadow: none; /* Remove any shadows */
-}
-
-/* Additional team header fixes to prevent spacing issues */
-.team-rij {
-    border: none !important;
-    background: transparent !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.team-rij td {
-    border-left: none !important; /* Override the dashed border for team headers */
-    border-right: none !important;
-    border-top: none !important;
-    border-bottom: none !important;
-}
-
-.team-rij * {
-    border: none !important;
-    margin: 0 !important;
+    background-color: #4a90e2; /* Default background color */
+    text-align: left;
+    margin: 0;
+    border-radius: 4px;
 }
 
 /* Ensure team headers span full width without gaps */
@@ -1285,276 +1283,29 @@ tr.medewerker-rij td {
     border-collapse: collapse !important;
 }
 
-/* Verlof block styling within cells */
-.verlof-blok {
-    position: absolute;
-    top: 4px;
-    bottom: 4px;
-    left: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
+/* Enhanced team row visibility */
+tr.team-rij {
+    display: table-row;
+    height: auto;
+    background: transparent;
+}
+
+tr.team-rij td {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+/* Team header hover effects */
+.team-header:hover {
+    opacity: 0.9;
+    cursor: default;
+}
+
+/* Ensure team headers are properly visible in different themes */
+.team-header {
+    min-height: 40px;
+    line-height: 1.4;
     box-sizing: border-box;
-    border-radius: 4px;
-    /* Add transition for smooth glow effects */
-    transition: box-shadow 0.3s ease, border 0.3s ease;
-}
-
-/* Status-based solid border effects for VER (verlof/vakantie) items only */
-.verlof-blok[data-afkorting="VER"].status-nieuw,
-.verlof-blok.ver-item.status-nieuw {
-    opacity: 0.4 !important; /* 40% opacity for new VER items */
-    border: 3px solid #d35400 !important; /* Dark orange solid border */
-}
-
-.verlof-blok[data-afkorting="VER"].status-goedgekeurd,
-.verlof-blok.ver-item.status-goedgekeurd {
-    opacity: 1 !important; /* Full opacity for approved */
-    border: 3px solid #27ae60 !important; /* Dark green solid border */
-}
-
-.verlof-blok[data-afkorting="VER"].status-afgekeurd,
-.verlof-blok.ver-item.status-afgekeurd {
-    opacity: 1 !important; /* Full opacity for rejected */
-    border: 3px solid #c0392b !important; /* Dark red solid border */
-}
-
-/* Enhanced hover effects for VER items only */
-.verlof-blok[data-afkorting="VER"].status-nieuw:hover,
-.verlof-blok.ver-item.status-nieuw:hover {
-    opacity: 0.6 !important; /* Slightly more visible on hover */
-    border: 4px solid #d35400 !important;
-}
-
-.verlof-blok[data-afkorting="VER"].status-goedgekeurd:hover,
-.verlof-blok.ver-item.status-goedgekeurd:hover {
-    border: 4px solid #27ae60 !important;
-}
-
-.verlof-blok[data-afkorting="VER"].status-afgekeurd:hover,
-.verlof-blok.ver-item.status-afgekeurd:hover {
-    border: 4px solid #c0392b !important;
-}
-
-.verlof-blok:not(.eind-blok) {
-    border-right: 1px dashed rgba(255, 255, 255, 0.35);
-}
-
-/* Dag indicator blocks (Zittingsvrij, UrenPerWeek types like VVO/VVD/VVM)
-   ========================================================================== */
-
-.dag-indicator-blok {
-    position: absolute;
-    top: 4px;
-    bottom: 4px;
-    left: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-    box-sizing: border-box;
-    border-radius: 4px;
-    transition: box-shadow 0.3s ease, border 0.3s ease;
-}
-
-/* Zittingsvrij specific styling */
-.zittingsvrij-blok {
-    background-color: #8e44ad !important; /* Purple color for zittingsvrij */
-}
-
-.zittingsvrij-blok:hover {
-    background-color: #7d3c98 !important;
-    box-shadow: 0 0 8px rgba(142, 68, 173, 0.4);
-}
-
-/* UrenPerWeek block styling */
-.urenperweek-blok {
-    /* Background color will be set dynamically via style attribute based on type */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Specific colors for UrenPerWeek types (if not set via dagenIndicators data) */
-.urenperweek-blok[data-afkorting="VVO"] {
-    background-color: #3498db !important; /* Blue for Vaste Vrije Ochtend */
-}
-
-.urenperweek-blok[data-afkorting="VVD"] {
-    background-color: #e74c3c !important; /* Red for Vaste Vrije Dag */
-}
-
-.urenperweek-blok[data-afkorting="VVM"] {
-    background-color: #f39c12 !important; /* Orange for Vaste Vrije Middag */
-}
-
-.urenperweek-blok:hover {
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-    filter: brightness(0.9);
-}
-
-/* Ziekte block styling (red background) */
-.ziekte-blok {
-    background-color: #e74c3c !important; /* Red color for ziekte */
-}
-
-.ziekte-blok:hover {
-    background-color: #c0392b !important;
-    box-shadow: 0 0 8px rgba(231, 76, 60, 0.4);
-}
-
-/* Compensatie-uren Styling
-   ========================================================================== */
-
-/* Compensatie icon styling in calendar cells */
-.compensatie-uur-container {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 1px;
-    position: relative;
-    cursor: pointer; /* Make it clear these are clickable */
-}
-
-.compensatie-uur-blok {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2px;
-    border-radius: 3px;
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 8px;
-    font-weight: 500;
-    color: white;
-    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
-    border: 1px solid rgba(255,255,255,0.3);
-    box-sizing: border-box;
-    transition: all 0.2s ease; /* Smooth transition for hover effects */
-}
-
-/* Hover effects for compensatie blocks */
-.compensatie-uur-container:hover .compensatie-uur-blok {
-    transform: scale(1.1);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    border-color: rgba(255,255,255,0.5);
-}
-
-.compensatie-uur-container:hover .compensatie-uur-blok .compensatie-icon-svg {
-    filter: brightness(1.2) contrast(1.1) !important;
-}
-
-.compensatie-uur-blok.compensatie-neutraal {
-    background-color: transparent; /* Transparent background */
-}
-
-.compensatie-uur-blok.ruildag-plus {
-    background-color: transparent; /* Transparent background */
-}
-
-.compensatie-uur-blok.ruildag-min {
-    background-color: transparent; /* Transparent background */
-}
-
-.compensatie-icon-svg {
-    width: 24px !important;
-    height: 24px !important;
-    display: block !important;
-    max-width: 24px !important;
-    max-height: 24px !important;
-}
-
-/* Apply colors to the icons based on type */
-.compensatie-uur-blok.compensatie-neutraal .compensatie-icon-svg {
-    filter: brightness(0) saturate(100%) invert(57%) sepia(98%) saturate(1000%) hue-rotate(359deg) brightness(102%) contrast(101%) !important; /* More orange color */
-}
-
-.compensatie-uur-blok.ruildag-plus .compensatie-icon-svg {
-    filter: brightness(0) saturate(100%) invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%) !important; /* Green color */
-}
-
-.compensatie-uur-blok.ruildag-min .compensatie-icon-svg {
-    filter: brightness(0) saturate(100%) invert(17%) sepia(83%) saturate(5813%) hue-rotate(3deg) brightness(108%) contrast(114%) !important; /* Red color */
-}
-
-/* More specific selectors to override any inherited styles */
-.dag-cel .compensatie-uur-container .compensatie-icon-svg {
-    width: 24px !important;
-    height: 24px !important;
-}
-
-.dag-cel .compensatie-uur-container .compensatie-uur-blok img.compensatie-icon-svg {
-    width: 24px !important;
-    height: 24px !important;
-}
-
-/* Rules for main table rendering system (not using DagCell) */
-.dag-kolom .compensatie-uur-container .compensatie-uur-blok .compensatie-icon-svg {
-    width: 24px !important;
-    height: 24px !important;
-}
-
-.dag-kolom .compensatie-uur-container .compensatie-uur-blok img.compensatie-icon-svg {
-    width: 24px !important;
-    height: 24px !important;
-}
-
-/* General rules for any compensatie icons in table cells */
-td .compensatie-uur-container {
-    width: 28px;
-    height: 28px;
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    margin: 1px;
-}
-
-td .compensatie-uur-container .compensatie-icon-svg {
-    width: 24px !important;
-    height: 24px !important;
-    filter: brightness(0) invert(1) !important;
-}
-
-td .compensatie-uur-container img.compensatie-icon-svg {
-    width: 24px !important;
-    height: 24px !important;
-    filter: brightness(0) invert(1) !important;
-}
-
-/* Form help text styling */
-.help-text {
-    font-size: 0.85rem;
-    color: #6c757d;
-    margin-top: 0.25rem;
-    font-style: italic;
-}
-
-/* Form check styling improvements */
-.form-check {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-.form-check input[type="checkbox"] {
-    width: auto;
-    margin: 0;
-}
-
-.form-check label {
-    margin: 0;
-    font-weight: normal;
-    cursor: pointer;
 }
 
 /* ==========================================================================
