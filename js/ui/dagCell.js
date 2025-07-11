@@ -189,10 +189,11 @@ const DagCell = ({ dag, medewerker, onContextMenu, getVerlofVoorDag, getZittings
     };
 
     const renderZittingsvrijBlok = (zittingsvrij) => {
-        // Use a standard color for zittingsvrij indicators with proper styling
+        // Use the color from the zittingsvrij item's Kleur property, fallback to standard purple
+        const backgroundColor = zittingsvrij.Kleur || '#8e44ad';
         return h('div', {
             className: 'dag-indicator-blok zittingsvrij-blok',
-            style: { backgroundColor: '#8e44ad' }, // Consistent purple color for zittingsvrij
+            style: { backgroundColor }, // Use dynamic color from the item
             'data-afkorting': 'ZV',
             'data-medewerker': medewerker.Naam,
             'data-startdatum': zittingsvrij.StartDatum,

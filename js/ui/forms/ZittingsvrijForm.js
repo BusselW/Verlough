@@ -220,8 +220,6 @@ const ZittingsvrijForm = ({ onSubmit, onCancel, initialData = {}, medewerkers = 
     };
 
     return h('form', { onSubmit: handleSubmit, className: 'modal-form' },
-        h('h2', { className: 'form-title' }, 'Zittingsvrij maken'),
-        
         h('div', { className: 'form-content modal-form-content' },
             h('div', { className: 'form-row' },
             h('div', { className: 'form-groep' },

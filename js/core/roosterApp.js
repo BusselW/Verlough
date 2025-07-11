@@ -1438,14 +1438,14 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             // Show tooltip after first click
             setShowTooltip(true);
 
-            // Auto-hide tooltip after 5 seconds
+            // Auto-hide tooltip after 4 seconds
             if (tooltipTimeout) {
                 clearTimeout(tooltipTimeout);
             }
 
             const timeout = setTimeout(() => {
                 setShowTooltip(false);
-            }, 5000);
+            }, 4000);
             setTooltipTimeout(timeout);
 
         } else if (firstClickData.medewerker.Username === medewerker.Username) {
@@ -1476,14 +1476,14 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             // Show tooltip for this new selection too
             setShowTooltip(true);
 
-            // Auto-hide tooltip after 5 seconds
+            // Auto-hide tooltip after 4 seconds
             if (tooltipTimeout) {
                 clearTimeout(tooltipTimeout);
             }
 
             const timeout = setTimeout(() => {
                 setShowTooltip(false);
-            }, 5000);
+            }, 4000);
             setTooltipTimeout(timeout);
         }
     }
@@ -1718,45 +1718,44 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 ),
                 (Object.keys(shiftTypes).length > 0 || Object.keys(dagenIndicators).length > 0) && h('div', { id: 'legenda-container', className: 'legenda-container' },
                     h('span', { className: 'legenda-titel' }, 'Legenda:'),
-                    // Verlof/Ziekte types (VER, ZKT, etc.)
-                    ...Object.values(shiftTypes || {}).map((type, index) => [
-                        index > 0 && h('span', { key: `divider-shift-${index}`, className: 'legenda-divider' }, '|'),
+                    // Verlof/Ziekte types (VER, ZKT, etc.) - no dividers between individual items
+                    ...Object.values(shiftTypes || {}).map((type) => 
                         h('div', { key: type.id, className: 'legenda-item' },
                             h('div', { className: 'legenda-kleur', style: { backgroundColor: type.kleur } }),
                             h('span', null, type.label) // Use just the label, not afkorting - label
                         )
-                    ]).flat().filter(Boolean),
-                    // Rooster indicatoren (VVM, VVO, VVD, etc.)
+                    ),
+                    // Group divider between shift types and day indicators
                     Object.values(dagenIndicators || {}).length > 0 && Object.values(shiftTypes || {}).length > 0 && h('span', { key: 'main-divider-1', className: 'legenda-divider' }, '|'),
-                    ...Object.values(dagenIndicators || {}).map((indicator, index) => [
-                        index > 0 && h('span', { key: `divider-dagen-${index}`, className: 'legenda-divider' }, '|'),
+                    // Rooster indicatoren (VVM, VVO, VVD, etc.) - no dividers between individual items
+                    ...Object.values(dagenIndicators || {}).map((indicator) => 
                         h('div', { key: indicator.Title, className: 'legenda-item' },
                             h('div', { className: 'legenda-kleur', style: { backgroundColor: indicator.kleur } }),
                             h('span', null, indicator.Title)
                         )
-                    ]).flat().filter(Boolean),
-                    // Compensatie icons - show all 3 types
+                    ),
+                    // Group divider between day indicators and compensatie items
                     (Object.values(shiftTypes || {}).length > 0 || Object.values(dagenIndicators || {}).length > 0) && h('span', { key: 'main-divider-2', className: 'legenda-divider' }, '|'),
+                    // Compensatie icons - no dividers between individual items
                     h('div', { key: 'compensatie-min', className: 'legenda-item' },
                         h('div', { className: 'legenda-icon' },
                             h('img', { src: './icons/compensatieuren/Minuren.svg', alt: 'Min uren', style: { width: '16px', height: '16px' } })
                         ),
                         h('span', null, 'Min Uren')
                     ),
-                    h('span', { key: 'divider-comp-1', className: 'legenda-divider' }, '|'),
                     h('div', { key: 'compensatie-plus', className: 'legenda-item' },
                         h('div', { className: 'legenda-icon' },
                             h('img', { src: './icons/compensatieuren/Plusuren.svg', alt: 'Plus uren', style: { width: '16px', height: '16px' } })
                         ),
                         h('span', null, 'Plus Uren')
                     ),
-                    h('span', { key: 'divider-comp-2', className: 'legenda-divider' }, '|'),
                     h('div', { key: 'compensatie-neutraal', className: 'legenda-item' },
                         h('div', { className: 'legenda-icon' },
                             h('img', { src: './icons/compensatieuren/neutraleuren.svg', alt: 'Neutrale uren', style: { width: '16px', height: '16px' } })
                         ),
                         h('span', null, 'Neutrale Uren')
                     ),
+                    // Group divider between compensatie and horen items
                     h('span', { key: 'divider-horen', className: 'legenda-divider' }, '|'),
                     h('div', { key: 'horen-ja', className: 'legenda-item' },
                         h('div', { className: 'legenda-icon' },
@@ -1764,7 +1763,6 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                         ),
                         h('span', null, 'Beschikbaar om te horen')
                     ),
-                    h('span', { key: 'divider-horen-2', className: 'legenda-divider' }, '|'),
                     h('div', { key: 'horen-nee', className: 'legenda-item' },
                         h('div', { className: 'legenda-icon' },
                             h('img', { src: './icons/profilecards/horen-nee.svg', alt: 'Niet beschikbaar om te horen', style: { width: '16px', height: '16px' } })
@@ -1848,11 +1846,8 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                                     firstClickData.medewerker.Username === medewerker.Username &&
                                                     firstClickData.dag.toDateString() === dag.toDateString();
                                                 
-                                                // Create tooltip component for the first clicked cell
-                                                const tooltipElement = (isFirstClick && showTooltip) ?
-                                                    h('div', {
-                                                        className: 'selection-tooltip visible'
-                                                    }, 'Klik nu op een tweede dag en open het menu met je rechtermuisknop.') : null;
+                                                // Remove inline tooltip from cell since we'll show it as a popup notification
+                                                const tooltipElement = null;
 
                                                 let teRenderenBlok = null;
 
@@ -2057,7 +2052,28 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             medewerkers: medewerkers,
             selection: selection,
             initialData: selection && selection.itemData ? selection.itemData : {}
-        }))
+        })),
+        // Date selection notification popup
+        showTooltip && h('div', {
+            className: 'date-selection-notification',
+            style: {
+                position: 'fixed',
+                top: '20px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
+                color: 'white',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                boxShadow: '0 8px 32px rgba(59, 130, 243, 0.4)',
+                zIndex: 10000,
+                fontWeight: 500,
+                fontSize: '14px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)',
+                animation: 'slideInDown 0.3s ease-out'
+            }
+        }, 'Klik nu op de laatste dag waarop je verlof wil aanvragen en kies daarna het soort verlof dat je wil doorgeven.')
     );
 };
 

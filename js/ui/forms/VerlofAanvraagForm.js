@@ -249,8 +249,6 @@ const VerlofAanvraagForm = ({ onSubmit, onClose, initialData = {}, medewerkers =
 
     return h('div', { className: 'modal-form-wrapper' },
         h('form', { onSubmit: handleSubmit, className: 'form-container', id: 'verlof-form' },
-            h('h2', { className: 'form-title' }, 'Verlof Aanvragen'),
-            
             h('div', { className: 'form-fields' },
                 h('input', { type: 'hidden', name: 'Status', value: status }),
 

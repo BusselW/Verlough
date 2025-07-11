@@ -39,7 +39,7 @@ const ZiekteMeldingForm = ({ onSubmit, onClose, shiftTypes = {}, initialData = {
     const [endDate, setEndDate] = useState('');
     const [endTime, setEndTime] = useState('');
     const [omschrijving, setOmschrijving] = useState('');
-    const [status, setStatus] = useState('Nieuw');
+    const [status, setStatus] = useState('Goedgekeurd'); // ZKT items default to Goedgekeurd
     const [redenId, setRedenId] = useState(1); // Fixed RedenID for Ziekte
     const [canManageOthers, setCanManageOthers] = useState(false);
 
@@ -143,7 +143,6 @@ const ZiekteMeldingForm = ({ onSubmit, onClose, shiftTypes = {}, initialData = {
     };
 
     return h('form', { onSubmit: handleSubmit, className: 'form-container' },
-        h('h2', { className: 'form-title' }, 'Ziek Melden'),
         h('input', { type: 'hidden', name: 'Status', value: status }),
 
         h('div', { className: 'form-row' },
