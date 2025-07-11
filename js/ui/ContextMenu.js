@@ -9,14 +9,16 @@ import { isUserInAnyGroup } from '../services/permissionService.js';
  */
 const canManageOthersEvents = async () => {
     const privilegedGroups = [
-        "1.1. Sharepoint beheer",
+        "1. Sharepoint beheer",
         "1.1. Mulder MT",
         "2.6 Roosteraars",
         "2.3. Senioren beoordelen"
     ];
 
     try {
-        return await isUserInAnyGroup(privilegedGroups);
+        const result = await isUserInAnyGroup(privilegedGroups);
+        console.log('🔐 canManageOthersEvents check:', { groups: privilegedGroups, result });
+        return result;
     } catch (error) {
         console.error('Error checking user permissions for managing others events:', error);
         return false;
@@ -30,15 +32,28 @@ const canManageOthersEvents = async () => {
  * @returns {Promise<boolean>} - True if user can edit/delete the item
  */
 const canUserModifyItem = async (item, currentUsername) => {
-    if (!item || !currentUsername) return false;
+    if (!item || !currentUsername) {
+        console.log('❌ canUserModifyItem: Missing item or currentUsername', { item: !!item, currentUsername });
+        return false;
+    }
+    
+    console.log('🔍 canUserModifyItem: Checking permissions for item:', { 
+        itemOwner: item.MedewerkerID || item.Gebruikersnaam, 
+        currentUsername 
+    });
     
     // Check if user has privileged access (can modify any item)
     const hasPrivilegedAccess = await canManageOthersEvents();
+    console.log('🔐 canUserModifyItem: Privileged access check result:', hasPrivilegedAccess);
+    
     if (hasPrivilegedAccess) return true;
     
     // Check if it's the user's own item
     const itemOwner = item.MedewerkerID || item.Gebruikersnaam;
-    return itemOwner === currentUsername;
+    const isOwnItem = itemOwner === currentUsername;
+    console.log('👤 canUserModifyItem: Own item check:', { itemOwner, currentUsername, isOwnItem });
+    
+    return isOwnItem;
 };
 
 /**

@@ -575,9 +575,13 @@
             );
         };
             
-                    // =====================
-                    // Render Application
-                    // =====================
+        // Make permission functions globally available for forms and other components
+        window.canManageOthersEvents = canManageOthersEvents;
+        window.canUserModifyItem = canUserModifyItem;
+        
+        // =====================
+        // Render Application
+        // =====================
                     const container = document.getElementById('root');
                     const root = ReactDOM.createRoot(container);
                     
