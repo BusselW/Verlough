@@ -899,7 +899,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         h('div', { id: 'rooster-container', className: 'rooster-container' },
             h('table', { id: 'rooster-table', className: 'rooster-table' },
                 h('thead', null,
-                    h('tr', null, createHeaderCells())
+                    h('tr', null, ...createHeaderCells())
                 ),
                 h('tbody', null,
                     gefilterdeMedewerkers.map(medewerker => 
