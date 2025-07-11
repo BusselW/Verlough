@@ -34,87 +34,9 @@ import { calculateWeekType } from '../services/scheduleLogic.js';
 const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
 const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) => {
-    // Helper function to create header cells
-    const createHeaderCells = () => {
-        const cells = [
-            h('th', { className: 'medewerker-kolom', id: 'medewerker-kolom' }, 
-                h('div', { 
-                    className: 'medewerker-header-container',
-                    style: {
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '8px'
-                    }
-                },
-                    h('span', null, 'Medewerker'),
-                    h('button', {
-                        className: 'sort-button',
-                        onClick: toggleSortDirection,
-                        title: `Huidige sortering: ${sortDirection === 'asc' ? 'A-Z' : 'Z-A'} (klik om te wisselen)`,
-                        style: {
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            padding: '4px 6px',
-                            borderRadius: '4px',
-                            color: '#6b7280',
-                            fontSize: '12px',
-                            fontWeight: '600',
-                            transition: 'all 0.2s ease',
-                            display: 'flex',
-                            alignItems: 'center',
-                            lineHeight: 1
-                        },
-                        onMouseOver: (e) => {
-                            e.target.style.backgroundColor = '#f3f4f6';
-                            e.target.style.color = '#374151';
-                        },
-                        onMouseOut: (e) => {
-                            e.target.style.backgroundColor = 'transparent';
-                            e.target.style.color = '#6b7280';
-                        }
-                    }, 
-                    h('i', { 
-                        className: `fas ${sortDirection === 'asc' ? 'fa-sort-down' : 'fa-sort-up'}`,
-                        style: { fontSize: '10px' }
-                    })
-                )
-            ))
-        ];
-        
-        (periodeData || []).forEach((dag, index) => {
-            const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-            const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
-            const isToday = isVandaag(dag);
-            const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''}`;
-           
-            // Create a ref callback to add tooltip for holiday
-            const headerRef = (element) => {
-                if (element && feestdagNaam && !element.dataset.tooltipAttached) {
-                    TooltipManager.attach(element, () => {
-                        return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
-                    });
-                }
-            };
-           
-            cells.push(h('th', {
-                key: `dag-${index}-${dag.toISOString()}`,
-                className: classes,
-                ref: headerRef
-            },
-                h('div', { className: 'dag-header' },
-                    h('span', { className: 'dag-naam' }, formatteerDatum(dag).dagNaam),
-                    h('span', { className: 'dag-nummer' }, formatteerDatum(dag).dagNummer),
-                    isToday && h('div', { className: 'vandaag-indicator' })
-                )
-            ));
-        });
-        
-        return cells;
-    };
-    
     console.log('🏠 RoosterApp component initialized');
+    
+    // All React hooks must be declared first
     const [weergaveType, setWeergaveType] = useState('maand');
     const [huidigJaar, setHuidigJaar] = useState(new Date().getFullYear());
     const [huidigMaand, setHuidigMaand] = useState(new Date().getMonth());
@@ -433,28 +355,36 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         setError(null);
         
         try {
-            const result = await loadFilteredData(
-                weergaveType,
-                huidigJaar,
-                huidigMaand,
-                huidigWeek,
-                forceReload
-            );
-            
-            if (result.error) {
-                throw new Error(result.error);
-            }
+            // Load all required data using direct SharePoint calls
+            const [
+                medewerkers,
+                teams,
+                verlofItems,
+                compensatieUrenItems,
+                zittingsvrijItems,
+                urenPerWeekItems
+            ] = await Promise.all([
+                fetchSharePointList('Medewerkers'),
+                fetchSharePointList('Teams'),
+                fetchSharePointList('Verlof'),
+                fetchSharePointList('CompensatieUren'),
+                fetchSharePointList('IncidenteelZittingVrij'),
+                fetchSharePointList('UrenPerWeek')
+            ]);
+
+            // Get current user info
+            const currentUser = await getCurrentUser();
             
             console.log('✅ Data refreshed successfully');
-            setMedewerkers(result.medewerkers || []);
-            setTeams(result.teams || []);
-            setShiftTypes(result.shiftTypes || {});
-            setVerlofItems(result.verlofItems || []);
-            setZittingsvrijItems(result.zittingsvrijItems || []);
-            setCompensatieUrenItems(result.compensatieUrenItems || []);
-            setUrenPerWeekItems(result.urenPerWeekItems || []);
-            setDagenIndicators(result.dagenIndicators || {});
-            setCurrentUser(result.currentUser);
+            setMedewerkers(medewerkers || []);
+            setTeams(teams || []);
+            setShiftTypes({}); // TODO: Load shift types if needed
+            setVerlofItems(verlofItems || []);
+            setZittingsvrijItems(zittingsvrijItems || []);
+            setCompensatieUrenItems(compensatieUrenItems || []);
+            setUrenPerWeekItems(urenPerWeekItems || []);
+            setDagenIndicators({}); // TODO: Calculate indicators if needed
+            setCurrentUser(currentUser);
             
         } catch (error) {
             console.error('❌ Error refreshing data:', error);
@@ -805,132 +735,194 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         );
     }
 
+    // Initialize controls in toolbar areas
+    useEffect(() => {
+        // Render period navigation into designated area
+        const periodeContainer = document.getElementById('periode-navigatie');
+        if (periodeContainer) {
+            const periodeControls = h('div', { className: 'periode-controls' },
+                h('button', { 
+                    className: 'nav-btn prev-btn',
+                    onClick: vorigePeriode,
+                    title: 'Vorige periode' 
+                }, '‹'),
+                h('span', { className: 'periode-titel' }, getPeriodeTitel()),
+                h('button', { 
+                    className: 'nav-btn next-btn',
+                    onClick: volgendePeriode,
+                    title: 'Volgende periode' 
+                }, '›'),
+                h('button', { 
+                    className: 'vandaag-btn',
+                    onClick: vandaag,
+                    title: 'Ga naar vandaag' 
+                }, 'Vandaag'),
+                h('div', { className: 'weergave-toggle' },
+                    h('button', {
+                        className: `toggle-btn ${weergaveType === 'maand' ? 'active' : ''}`,
+                        onClick: () => setWeergaveType('maand')
+                    }, 'Maand'),
+                    h('button', {
+                        className: `toggle-btn ${weergaveType === 'week' ? 'active' : ''}`,
+                        onClick: () => setWeergaveType('week')
+                    }, 'Week')
+                )
+            );
+            const periodeRoot = ReactDOM.createRoot(periodeContainer);
+            periodeRoot.render(periodeControls);
+        }
+
+        // Render filters into designated area
+        const filterContainer = document.getElementById('filter-groep');
+        if (filterContainer) {
+            const filterControls = h('div', { className: 'filter-controls' },
+                h('div', { className: 'search-container' },
+                    h('input', {
+                        type: 'text',
+                        className: 'search-input',
+                        placeholder: 'Zoek medewerker...',
+                        value: zoekTerm,
+                        onChange: (e) => setZoekTerm(e.target.value)
+                    }),
+                    h('i', { className: 'fas fa-search search-icon' })
+                ),
+                h('div', { className: 'team-filter' },
+                    h('select', {
+                        className: 'team-select',
+                        value: geselecteerdTeam,
+                        onChange: (e) => setGeselecteerdTeam(e.target.value)
+                    },
+                        h('option', { value: '' }, 'Alle teams'),
+                        teams.map(team => h('option', { key: team.ID, value: team.Title }, team.Title))
+                    )
+                ),
+                h('div', { className: 'horen-filter' },
+                    h('select', { 
+                        id: 'horen-filter',
+                        className: 'horen-select'
+                    },
+                        h('option', { value: 'alle' }, 'Alle medewerkers'),
+                        h('option', { value: 'ja' }, 'Horen: Ja'),
+                        h('option', { value: 'nee' }, 'Horen: Nee')
+                    )
+                )
+            );
+            const filterRoot = ReactDOM.createRoot(filterContainer);
+            filterRoot.render(filterControls);
+        }
+    }, [weergaveType, zoekTerm, geselecteerdTeam, teams, periodeData]);
+
+    // Helper function to create header cells (moved after all hooks)
+    const createHeaderCells = () => {
+        const cells = [
+            h('th', { className: 'medewerker-kolom', id: 'medewerker-kolom' }, 
+                h('div', { 
+                    className: 'medewerker-header-container',
+                    style: {
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '8px'
+                    }
+                },
+                    h('span', null, 'Medewerker'),
+                    h('button', {
+                        className: 'sort-button',
+                        onClick: toggleSortDirection,
+                        title: `Huidige sortering: ${sortDirection === 'asc' ? 'A-Z' : 'Z-A'} (klik om te wisselen)`,
+                        style: {
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '4px 6px',
+                            borderRadius: '4px',
+                            color: '#6b7280',
+                            fontSize: '12px',
+                            fontWeight: '600',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            lineHeight: 1
+                        },
+                        onMouseOver: (e) => {
+                            e.target.style.backgroundColor = '#f3f4f6';
+                            e.target.style.color = '#374151';
+                        },
+                        onMouseOut: (e) => {
+                            e.target.style.backgroundColor = 'transparent';
+                            e.target.style.color = '#6b7280';
+                        }
+                    }, 
+                    h('i', { 
+                        className: `fas ${sortDirection === 'asc' ? 'fa-sort-down' : 'fa-sort-up'}`,
+                        style: { fontSize: '10px' }
+                    })
+                )
+            ))
+        ];
+        
+        (periodeData || []).forEach((dag, index) => {
+            const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
+            const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
+            const isToday = isVandaag(dag);
+            const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''}`;
+           
+            // Create a ref callback to add tooltip for holiday
+            const headerRef = (element) => {
+                if (element && feestdagNaam && !element.dataset.tooltipAttached) {
+                    TooltipManager.attach(element, () => {
+                        return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
+                    });
+                }
+            };
+           
+            cells.push(h('th', {
+                key: `dag-${index}-${dag.toISOString()}`,
+                className: classes,
+                ref: headerRef
+            },
+                h('div', { className: 'dag-header' },
+                    h('span', { className: 'dag-naam' }, formatteerDatum(dag).dagNaam),
+                    h('span', { className: 'dag-nummer' }, formatteerDatum(dag).dagNummer),
+                    isToday && h('div', { className: 'vandaag-indicator' })
+                )
+            ));
+        });
+        
+        return cells;
+    };
+
     // Main render
     return h(Fragment, null,
-        // Toolbar
-        h('div', { id: 'toolbar', className: 'toolbar' },
-            // Period navigation controls
-            h('div', { id: 'periode-navigatie', className: 'periode-navigatie' },
-                h('div', { className: 'periode-controls' },
-                    h('button', { 
-                        className: 'nav-btn prev-btn',
-                        onClick: vorigePeriode,
-                        title: 'Vorige periode' 
-                    }, '‹'),
-                    h('span', { className: 'periode-titel' }, getPeriodeTitel()),
-                    h('button', { 
-                        className: 'nav-btn next-btn',
-                        onClick: volgendePeriode,
-                        title: 'Volgende periode' 
-                    }, '›'),
-                    h('button', { 
-                        className: 'vandaag-btn',
-                        onClick: vandaag,
-                        title: 'Ga naar vandaag' 
-                    }, 'Vandaag'),
-                    h('div', { className: 'weergave-toggle' },
-                        h('button', {
-                            className: `toggle-btn ${weergaveType === 'maand' ? 'active' : ''}`,
-                            onClick: () => setWeergaveType('maand')
-                        }, 'Maand'),
-                        h('button', {
-                            className: `toggle-btn ${weergaveType === 'week' ? 'active' : ''}`,
-                            onClick: () => setWeergaveType('week')
-                        }, 'Week')
-                    )
-                )
-            ),
 
-            // Filter controls
-            h('div', { id: 'filter-groep', className: 'filter-groep' },
-                h('div', { className: 'filter-controls' },
-                    h('div', { className: 'search-container' },
-                        h('input', {
-                            type: 'text',
-                            className: 'search-input',
-                            placeholder: 'Zoek medewerker...',
-                            value: zoekTerm,
-                            onChange: (e) => setZoekTerm(e.target.value)
-                        }),
-                        h('i', { className: 'fas fa-search search-icon' })
-                    ),
-                    h('div', { className: 'team-filter' },
-                        h('select', {
-                            className: 'team-select',
-                            value: geselecteerdTeam,
-                            onChange: (e) => setGeselecteerdTeam(e.target.value)
-                        },
-                            h('option', { value: '' }, 'Alle teams'),
-                            teams.map(team => h('option', { key: team.ID, value: team.Title }, team.Title))
-                        )
-                    ),
-                    h('div', { className: 'horen-filter' },
-                        h('select', { 
-                            id: 'horen-filter',
-                            className: 'horen-select'
-                        },
-                            h('option', { value: 'alle' }, 'Alle medewerkers'),
-                            h('option', { value: 'ja' }, 'Horen: Ja'),
-                            h('option', { value: 'nee' }, 'Horen: Nee')
-                        )
-                    )
-                )
-            ),
-
-            // Legend
-            h('div', { id: 'legenda-container', className: 'legenda-container' },
-                h('div', { className: 'legenda' },
-                    h('span', { className: 'legenda-title' }, 'Legenda:'),
-                    h('div', { className: 'legenda-item' },
-                        h('span', { className: 'legenda-kleur verlof-goedgekeurd' }),
-                        h('span', null, 'VER - Verlof')
-                    ),
-                    h('div', { className: 'legenda-item' },
-                        h('span', { className: 'legenda-kleur ziekte' }),
-                        h('span', null, 'ZK - Ziekte')
-                    ),
-                    h('div', { className: 'legenda-item' },
-                        h('span', { className: 'legenda-kleur compensatie-uren' }),
-                        h('span', null, 'CU - Compensatie-uren')
-                    ),
-                    h('div', { className: 'legenda-item' },
-                        h('span', { className: 'legenda-kleur zittingsvrij' }),
-                        h('span', null, 'ZV - Zittingsvrij')
-                    )
-                )
-            )
-        ),
-
-        // Main table content
-        h('div', { className: 'main-content' },
-            h('div', { id: 'rooster-container', className: 'rooster-container' },
-                h('table', { id: 'rooster-table', className: 'rooster-table' },
-                    h('thead', null,
-                        h('tr', null, createHeaderCells())
-                    ),
-                    h('tbody', null,
-                        gefilterdeMedewerkers.map(medewerker => 
-                            h(MedewerkerRow, {
-                                key: medewerker.ID,
-                                medewerker,
-                                periodeData,
-                                verlofItems,
-                                zittingsvrijItems,
-                                compensatieUrenItems,
-                                urenPerWeekItems,
-                                shiftTypes,
-                                feestdagen,
-                                dagenIndicators,
-                                onCellClick: handleCellClick,
-                                onContextMenu: showContextMenu,
-                                getVerlofVoorDag,
-                                getZittingsvrijVoorDag,
-                                getCompensatieUrenVoorDag,
-                                getUrenPerWeekForDate,
-                                selection,
-                                firstClickData
-                            })
-                        )
+        // Main table
+        h('div', { id: 'rooster-container', className: 'rooster-container' },
+            h('table', { id: 'rooster-table', className: 'rooster-table' },
+                h('thead', null,
+                    h('tr', null, ...createHeaderCells())
+                ),
+                h('tbody', null,
+                    gefilterdeMedewerkers.map(medewerker => 
+                        h(MedewerkerRow, {
+                            key: medewerker.ID,
+                            medewerker,
+                            periodeData,
+                            verlofItems,
+                            zittingsvrijItems,
+                            compensatieUrenItems,
+                            urenPerWeekItems,
+                            shiftTypes,
+                            feestdagen,
+                            dagenIndicators,
+                            onCellClick: handleCellClick,
+                            onContextMenu: showContextMenu,
+                            getVerlofVoorDag,
+                            getZittingsvrijVoorDag,
+                            getCompensatieUrenVoorDag,
+                            getUrenPerWeekForDate,
+                            selection,
+                            firstClickData
+                        })
                     )
                 )
             )
