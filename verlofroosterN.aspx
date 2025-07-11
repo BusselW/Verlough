@@ -25,6 +25,10 @@
     <!-- Hoofd script van de applicatie, nu als module om 'import' te gebruiken -->
     <script type="module">
         console.log('🚀 Main script starting execution...');
+        
+        // Make React available to imported ES6 modules that expect it globally
+        window.React = React;
+        
         // Importeer de benodigde componenten en functies
         import { fetchSharePointList, getUserInfo, getCurrentUser, createSharePointListItem, updateSharePointListItem, deleteSharePointListItem, trimLoginNaamPrefix } from './js/services/sharepointService.js';
         import { getCurrentUserGroups, isUserInAnyGroup } from './js/services/permissionService.js';
@@ -36,7 +40,7 @@
         import ProfielKaarten from './js/ui/profielkaarten.js';
         import { roosterTutorial, openHandleiding as handleidingOpenen } from './js/tutorial/roosterHandleiding.js';
         import { getProfilePhotoUrl } from './js/utils/userUtils.js';
-        import RoosterApp from './js/ui/RoosterApp.js';
+        import RoosterApp from './js/core/roosterAppN.js';
 
         const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
@@ -498,42 +502,11 @@
         const App = ({ currentUser, userPermissions }) => {
             console.log('🎯 App component rendering with permissions:', userPermissions);
             
-            return h(Fragment, null,
-                // Application Header
-                h('div', { id: 'header', className: 'header' },
-                    h('div', { className: 'header-content' },
-                        h('div', { className: 'header-left' },
-                            h('button', {
-                                id: 'btn-melding',
-                                className: 'btn btn-melding',
-                                onClick: () => {
-                                    // Open feedback/melding functionality
-                                    window.open('mailto:support@verlofrooster.nl?subject=Feedback Verlofrooster', '_blank');
-                                },
-                                title: 'Feedback of problemen melden'
-                            },
-                                h('i', { className: 'fas fa-bug' }),
-                                'Melding'
-                            ),
-                            h('div', { className: 'logo-container' },
-                                h('h1', { className: 'app-title' }, 'Verlofrooster')
-                            )
-                        ),
-                        h('div', { className: 'header-right' },
-                            h(NavigationButtons, { userPermissions, currentUser })
-                        )
-                    )
-                ),
-
-                // Main Application Content
-                h('div', { id: 'app-container', className: 'app-container' },
-                    h(RoosterApp, { 
-                        isUserValidated: true, 
-                        currentUser: currentUser, 
-                        userPermissions: userPermissions
-                    })
-                )
-            );
+            return h(RoosterApp, { 
+                isUserValidated: true, 
+                currentUser: currentUser, 
+                userPermissions: userPermissions
+            });
         };
 
         // =====================
