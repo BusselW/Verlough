@@ -25,6 +25,10 @@
     <!-- Hoofd script van de applicatie, nu als module om 'import' te gebruiken -->
     <script type="module">
         console.log('🚀 Main script starting execution...');
+        
+        // Make React available to imported ES6 modules that expect it globally
+        window.React = React;
+        
         // Importeer de benodigde componenten en functies
         import { fetchSharePointList, getUserInfo, getCurrentUser, createSharePointListItem, updateSharePointListItem, deleteSharePointListItem, trimLoginNaamPrefix } from './js/services/sharepointService.js';
         import { getCurrentUserGroups, isUserInAnyGroup } from './js/services/permissionService.js';
@@ -498,75 +502,11 @@
         const App = ({ currentUser, userPermissions }) => {
             console.log('🎯 App component rendering with permissions:', userPermissions);
             
-            return h(Fragment, null,
-                // Application Header
-                h('div', { id: 'header', className: 'header' },
-                    h('div', { className: 'header-content' },
-                        h('div', { className: 'header-left' },
-                            h('button', {
-                                id: 'btn-melding',
-                                className: 'btn btn-melding',
-                                onClick: () => {
-                                    // Open feedback/melding functionality
-                                    window.open('mailto:support@verlofrooster.nl?subject=Feedback Verlofrooster', '_blank');
-                                },
-                                title: 'Feedback of problemen melden'
-                            },
-                                h('i', { className: 'fas fa-bug' }),
-                                'Melding'
-                            ),
-                            h('div', { className: 'logo-container' },
-                                h('h1', { className: 'app-title' }, 'Verlofrooster')
-                            )
-                        ),
-                        h('div', { className: 'header-right' },
-                            h(NavigationButtons, { userPermissions, currentUser })
-                        )
-                    )
-                ),
-
-                // Main Application Content
-                h('div', { id: 'app-container', className: 'app-container' },
-                    h('div', { id: 'toolbar', className: 'toolbar' },
-                        h('div', { id: 'periode-navigatie', className: 'periode-navigatie' },
-                            // Period navigation will be handled by RoosterApp
-                        ),
-                        h('div', { id: 'filter-groep', className: 'filter-groep' },
-                            // Filters will be handled by RoosterApp
-                        ),
-                        h('div', { id: 'legenda-container', className: 'legenda-container' },
-                            h('div', { className: 'legenda' },
-                                h('span', { className: 'legenda-title' }, 'Legenda:'),
-                                h('div', { className: 'legenda-item' },
-                                    h('span', { className: 'legenda-kleur verlof-goedgekeurd' }),
-                                    h('span', null, 'VER - Verlof')
-                                ),
-                                h('div', { className: 'legenda-item' },
-                                    h('span', { className: 'legenda-kleur ziekte' }),
-                                    h('span', null, 'ZK - Ziekte')
-                                ),
-                                h('div', { className: 'legenda-item' },
-                                    h('span', { className: 'legenda-kleur compensatie-uren' }),
-                                    h('span', null, 'CU - Compensatie-uren')
-                                ),
-                                h('div', { className: 'legenda-item' },
-                                    h('span', { className: 'legenda-kleur zittingsvrij' }),
-                                    h('span', null, 'ZV - Zittingsvrij')
-                                )
-                            )
-                        )
-                    ),
-
-                    // Main Rooster Content
-                    h('div', { className: 'main-content' },
-                        h(RoosterApp, { 
-                            isUserValidated: true, 
-                            currentUser: currentUser, 
-                            userPermissions: userPermissions
-                        })
-                    )
-                )
-            );
+            return h(RoosterApp, { 
+                isUserValidated: true, 
+                currentUser: currentUser, 
+                userPermissions: userPermissions
+            });
         };
 
         // =====================

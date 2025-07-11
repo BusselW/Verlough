@@ -29,6 +29,7 @@ import CompensatieUrenForm from '../ui/forms/CompensatieUrenForm.js';
 import ZiekteMeldingForm from '../ui/forms/ZiekteMeldingForm.js';
 import ZittingsvrijForm from '../ui/forms/ZittingsvrijForm.js';
 import MedewerkerRow from '../ui/userinfo.js';
+import NavigationButtons from '../ui/NavigationButtons.js';
 
 const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
@@ -36,7 +37,6 @@ const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } 
 // Hoofd RoosterApp Component
 // =====================
 const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) => {
-    const NavigationButtons = userPermissions.NavigationButtons || (() => null);
 
     // Helper function to create header cells
     const createHeaderCells = () => {
@@ -89,15 +89,15 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         
         (periodeData || []).forEach((dag, index) => {
             const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-            const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
+            const headerFeestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
             const isToday = isVandaag(dag);
-            const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''}`;
+            const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${headerFeestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''}`;
            
             // Create a ref callback to add tooltip for holiday
             const headerRef = (element) => {
-                if (element && feestdagNaam && !element.dataset.tooltipAttached && typeof TooltipManager !== 'undefined') {
+                if (element && headerFeestdagNaam && !element.dataset.tooltipAttached && typeof TooltipManager !== 'undefined') {
                     TooltipManager.attach(element, () => {
-                        return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
+                        return TooltipManager.createFeestdagTooltip(headerFeestdagNaam, dag);
                     });
                 }
             };
@@ -138,7 +138,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     const [urenPerWeekItems, setUrenPerWeekItems] = useState([]);
     const [dagenIndicators, setDagenIndicators] = useState({});
     const [contextMenu, setContextMenu] = useState(null);
-    const [currentUser, setCurrentUser] = useState(null);
+    // currentUser is now passed as prop, no need for local state
     const [isVerlofModalOpen, setIsVerlofModalOpen] = useState(false);
     const [isCompensatieModalOpen, setIsCompensatieModalOpen] = useState(false);
     const [isZiekModalOpen, setIsZiekModalOpen] = useState(false);
@@ -189,10 +189,8 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 throw new Error('SharePoint service not available');
             }
 
-            // Fetch current user info
-            console.log('👤 Fetching current user...');
-            const userInfo = await getCurrentUser();
-            setCurrentUser(userInfo);
+            // Current user is passed as prop, no need to fetch again
+            console.log('👤 Using currentUser from props:', currentUser);
 
             // Check if we need to reload data for the current period
             const needsReload = forceReload || shouldReloadData(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
@@ -1317,10 +1315,10 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
 
                                             return dagenMetBlokInfo.map(({ dag, item, isStart, isEnd, isMiddle, compensatieMomenten }) => {
                                                 const isWeekend = dag.getDay() === 0 || dag.getDay() === 6;
-                                                const feestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
+                                                const dagFeestdagNaam = feestdagen[dag.toISOString().split('T')[0]];
                                                 const isSelected = isDateInSelection(dag, medewerker.Username);
                                                 const isToday = isVandaag(dag);
-                                                const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${feestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''} ${isSelected ? 'selected' : ''}`;
+                                                const classes = `dag-kolom ${isWeekend ? 'weekend' : ''} ${dagFeestdagNaam ? 'feestdag' : ''} ${isToday ? 'vandaag' : ''} ${isSelected ? 'selected' : ''}`;
 
                                                 // Check if this is the first-clicked cell
                                                 const isFirstClick = firstClickData &&

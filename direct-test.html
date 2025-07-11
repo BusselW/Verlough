@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verlofrooster - Direct Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/verlofrooster_stijl.css" rel="stylesheet">
+    <link href="css/verlofrooster_styling.css" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="js/config/configLijst.js"></script>
+</head>
+<body>
+    <div id="root">Loading...</div>
+    <script type="module">
+        console.log('🚀 Starting minimal test...');
+        
+        // Make React available globally for modules
+        window.React = React;
+        
+        const { useState, useEffect, createElement: h } = React;
+        
+        try {
+            // Test if basic imports work
+            console.log('📚 Testing basic imports...');
+            const { maandNamenVolledig } = await import('./js/utils/dateTimeUtils.js');
+            console.log('✅ dateTimeUtils loaded');
+            
+            const { getInitialen } = await import('./js/utils/userUtils.js');
+            console.log('✅ userUtils loaded');
+            
+            // Test if RoosterApp can be imported
+            console.log('🏠 Testing RoosterApp import...');
+            const RoosterAppModule = await import('./js/core/roosterApp.js');
+            const RoosterApp = RoosterAppModule.default;
+            console.log('✅ RoosterApp imported successfully');
+            
+            // Create a simple test app
+            const TestApp = () => {
+                return h('div', null,
+                    h('h1', null, 'Verlofrooster Loading Test'),
+                    h('p', null, 'Basic imports working!'),
+                    h(RoosterApp, {
+                        isUserValidated: true,
+                        currentUser: { Title: 'Test User', LoginName: 'test\\user' },
+                        userPermissions: { isAdmin: false, isFunctional: false, isTaakbeheer: false, loading: false }
+                    })
+                );
+            };
+            
+            // Render the test app
+            const container = document.getElementById('root');
+            const root = ReactDOM.createRoot(container);
+            root.render(h(TestApp));
+            
+            console.log('🎉 Test app rendered successfully');
+            
+        } catch (error) {
+            console.error('❌ Test failed:', error);
+            document.getElementById('root').innerHTML = `
+                <div style="padding: 20px; background: #fee; border: 1px solid #f00; margin: 20px;">
+                    <h2>Load Error</h2>
+                    <p>${error.message}</p>
+                    <pre>${error.stack}</pre>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

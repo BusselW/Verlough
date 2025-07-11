@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Verlofrooster</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="js/config/configLijst.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="module">
+        console.log('🚀 Test script starting...');
+        
+        // Test if React is available
+        const { useState, useEffect, createElement: h } = React;
+        console.log('✅ React is available');
+        
+        // Test if configuration is loaded
+        if (window.appConfiguratie) {
+            console.log('✅ Configuration loaded:', Object.keys(window.appConfiguratie));
+        } else {
+            console.error('❌ Configuration not loaded');
+        }
+        
+        // Test basic component
+        const TestApp = () => {
+            return h('div', null, 
+                h('h1', null, 'Test App Loaded Successfully'),
+                h('p', null, 'React is working!')
+            );
+        };
+        
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(h(TestApp));
+        
+        console.log('🎉 Test complete');
+    </script>
+</body>
+</html>

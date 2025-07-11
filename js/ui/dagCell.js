@@ -109,16 +109,17 @@ const DagCell = ({ dag, medewerker, onContextMenu, getVerlofVoorDag, getZittings
     // Check if the day is a weekend or holiday
     const isWeekend = dag.isWeekend || dag.getDay() === 0 || dag.getDay() === 6;
     const isFeestdag = dag.isFeestdag || false;
-    const feestdagNaam = dag.feestdagNaam || null;
+    // Use feestdagNaam from props or dag object (avoiding duplicate declaration)
+    const dagFeestdagInfo = feestdagNaam || dag.feestdagNaam || null;
 
     // Set up a tooltip for the cell itself if it's a holiday
     useEffect(() => {
-        if (cellRef.current && isFeestdag && feestdagNaam && !cellRef.current.dataset.tooltipAttached) {
+        if (cellRef.current && isFeestdag && dagFeestdagInfo && !cellRef.current.dataset.tooltipAttached) {
             TooltipManager.attach(cellRef.current, () => {
-                return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
+                return TooltipManager.createFeestdagTooltip(dagFeestdagInfo, dag);
             });
         }
-    }, [isFeestdag, feestdagNaam]);
+    }, [isFeestdag, dagFeestdagInfo]);
 
     // Handle click for opening the appropriate modal
     const handleClick = () => {
@@ -239,7 +240,7 @@ const DagCell = ({ dag, medewerker, onContextMenu, getVerlofVoorDag, getZittings
 
     return h('td', {
         className: `dag-cel ${isWeekend ? 'weekend' : ''} ${isFeestdag ? 'feestdag' : ''} ${isSelected ? 'selected' : ''} ${isFirstClick ? 'first-click' : ''}`.trim(),
-        'data-feestdag': isFeestdag ? feestdagNaam : undefined,
+        'data-feestdag': isFeestdag ? dagFeestdagInfo : undefined,
         'data-datum': dag.toISOString ? dag.toISOString().split('T')[0] : dag.toString(),
         'data-medewerker': medewerker.Naam,
         onContextMenu: handleContextMenu,
