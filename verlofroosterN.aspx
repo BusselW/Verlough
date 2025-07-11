@@ -274,8 +274,25 @@
                     }
                     setCurrentUser(user);
 
-                    const permissions = await getCurrentUserGroups();
-                    setUserPermissions({ ...permissions, loading: false });
+                    // Load permissions based on group membership
+                    const adminGroups = ["1. Sharepoint beheer", "1.1. Mulder MT"];
+                    const functionalGroups = ["1. Sharepoint beheer", "1.1. Mulder MT", "2.6 Roosteraars"];
+                    const taakbeheerGroups = ["1. Sharepoint beheer", "1.1. Mulder MT", "2.6 Roosteraars", "2.3. Senioren beoordelen", "2.4. Senioren administratie"];
+
+                    const [isAdmin, isFunctional, isTaakbeheer] = await Promise.all([
+                        isUserInAnyGroup(adminGroups),
+                        isUserInAnyGroup(functionalGroups),
+                        isUserInAnyGroup(taakbeheerGroups)
+                    ]);
+
+                    const permissions = {
+                        isAdmin,
+                        isFunctional,
+                        isTaakbeheer,
+                        loading: false
+                    };
+                    
+                    setUserPermissions(permissions);
 
                     let userLoginName = user.LoginName.startsWith('i:0#.w|') ? user.LoginName.substring(7) : user.LoginName;
 
@@ -284,7 +301,7 @@
 
                     setIsRegistered(userExists);
                     console.log('✅ User validation complete, calling onUserValidated');
-                    onUserValidated(true, user, { ...permissions, loading: false });
+                    onUserValidated(true, user, permissions);
 
                 } catch (error) {
                     console.error('❌ Error checking user registration:', error);
