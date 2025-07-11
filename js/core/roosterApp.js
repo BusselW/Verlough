@@ -711,17 +711,33 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                         console.log('🗑️ Verwijderen clicked with context:', context);
                         const itemData = context?.contextData?.item || item;
                         
-                        const itemDescription = isVerlof ? 'verlof aanvraag' : 
-                                              isZittingsvrij ? 'zittingsvrij periode' : 
-                                              isCompensatie ? 'compensatie uren' : 'item';
+                        // Determine item type from the actual item being deleted
+                        const isVerlofItem = 'RedenId' in itemData;
+                        const isZittingsvrijItem = 'ZittingsVrijeDagTijd' in itemData;
+                        const isCompensatieItem = 'StartCompensatieUren' in itemData;
+                        
+                        const itemDescription = isVerlofItem ? 'verlof aanvraag' : 
+                                              isZittingsvrijItem ? 'zittingsvrij periode' : 
+                                              isCompensatieItem ? 'compensatie uren' : 'item';
                         
                         if (confirm(`Weet je zeker dat je deze ${itemDescription} wilt verwijderen?`)) {
                             try {
                                 console.log('🗑️ Deleting item:', itemData);
+                                console.log('🗑️ Item type detection:', {
+                                    isVerlof: isVerlofItem,
+                                    isZittingsvrij: isZittingsvrijItem,
+                                    isCompensatie: isCompensatieItem,
+                                    itemId: itemData.ID || itemData.Id
+                                });
+                                
+                                const listName = isVerlofItem ? 'Verlof' : 
+                                               isZittingsvrijItem ? 'IncidenteelZittingVrij' : 
+                                               isCompensatieItem ? 'CompensatieUren' : 'Unknown';
+                                
+                                console.log('🗑️ Using list name:', listName);
+                                
                                 await deleteSharePointListItem(
-                                    isVerlof ? 'Verlof' : 
-                                    isZittingsvrij ? 'ZittingsVrij' : 
-                                    isCompensatie ? 'CompensatieUren' : 'Unknown',
+                                    listName,
                                     itemData.ID || itemData.Id
                                 );
                                 
@@ -730,7 +746,13 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                 console.log('✅ Item deleted successfully');
                             } catch (error) {
                                 console.error('❌ Error deleting item:', error);
-                                alert('Fout bij verwijderen. Probeer het opnieuw.');
+                                console.error('❌ Error details:', {
+                                    message: error.message,
+                                    stack: error.stack,
+                                    itemData: itemData,
+                                    itemId: itemData.ID || itemData.Id
+                                });
+                                alert(`Fout bij verwijderen: ${error.message || 'Onbekende fout'}`);
                             }
                         }
                         setContextMenu(null);

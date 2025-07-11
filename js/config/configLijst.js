@@ -642,17 +642,34 @@ if (typeof window.getLijstConfig === 'undefined') {
         if (window.appConfiguratie && window.appConfiguratie[lijstKey]) {
             return window.appConfiguratie[lijstKey];
         }
+        
+        // Enhanced debugging for missing configurations
         console.warn(`[getLijstConfig] Configuratie voor sleutel '${lijstKey}' niet gevonden.`);
+        console.warn(`[getLijstConfig] Beschikbare sleutels:`, Object.keys(window.appConfiguratie || {}));
+        
+        // Check for common typos in zittingsvrij
+        if (lijstKey && lijstKey.toLowerCase().includes('zittingsvrij') || lijstKey.toLowerCase().includes('zitingsvrij')) {
+            console.warn(`[getLijstConfig] Mogelijk typfout in zittingsvrij. Controleer op 'IncidenteelZittingVrij'`);
+            if (window.appConfiguratie?.IncidenteelZittingVrij) {
+                console.warn(`[getLijstConfig] Gevonden correcte configuratie: IncidenteelZittingVrij`);
+            }
+        }
+        
+        // Log call stack to help identify source
+        console.trace(`[getLijstConfig] Call stack voor ontbrekende sleutel '${lijstKey}':`);
+        
         return null;
     };
    
     // Create legacy sharepointLijstConfiguraties for backward compatibility
     window.sharepointLijstConfiguraties = window.appConfiguratie;
    
-    console.log("Compatibility layer toegevoegd voor appConfiguratie -> getLijstConfig");
-    console.log("Available configurations:", Object.keys(window.appConfiguratie));
+    // console.log("Compatibility layer toegevoegd voor appConfiguratie -> getLijstConfig");
+
+    
+    
 }
 
-console.log("js/config/appConfig.js geladen.");
-console.log("window.appConfiguratie loaded:", typeof window.appConfiguratie);
-console.log("window.getLijstConfig available:", typeof window.getLijstConfig);
+// console.log("js/config/appConfig.js geladen.");
+// console.log("window.appConfiguratie loaded:", typeof window.appConfiguratie);
+// console.log("window.getLijstConfig available:", typeof window.getLijstConfig);

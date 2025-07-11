@@ -2088,427 +2088,275 @@ td .compensatie-uur-container img.compensatie-icon-svg {
     border-radius: 8px;
 }
 
-/* Responsive modal adjustments */
-@media (max-width: 768px) {
-    .modal {
-        margin: 1rem;
-        max-width: calc(100vw - 2rem);
-    }
-    
-    .form-acties {
-        flex-direction: column;
-    }
-    
-    .form-acties .btn-danger {
-        margin-right: 0;
-        order: 2;
-    }
-    
-    .form-row {
-        flex-direction: column;
-        gap: 1rem;
-    }
-}
-
 /* ==========================================================================
-   Modal Form Specific Styling
+   Profile Card Styles
    ========================================================================== */
 
-/* Modal form wrapper for proper layout */
-.modal-form-wrapper {
+#profile-card-container {
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+    max-width: 350px;
+    width: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    border: 1px solid #e0e0e0;
+}
+
+.profile-card {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    min-width: 280px;
+    max-width: 350px;
+}
+
+.profile-card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.profile-card-avatar {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.profile-card-avatar img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    object-fit: cover;
+    background-color: #f8f9fa;
+}
+
+.profile-card-info {
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+
+.profile-card-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.profile-card-function {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 2px;
+}
+
+.profile-card-team-leader,
+.profile-card-senior {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.profile-card-email {
+    font-size: 0.85rem;
+    margin-top: 4px;
+    opacity: 0.9;
+}
+
+.profile-card-email a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.profile-card-email a:hover {
+    text-decoration: underline;
+}
+
+.profile-card-hearing {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    margin-top: 4px;
+    opacity: 0.9;
+}
+
+.profile-card-hearing-icon {
+    width: 16px;
+    height: 16px;
+    filter: brightness(0) invert(1);
+}
+
+.profile-card-hours {
+    padding: 16px;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+}
+
+.profile-card-hours-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: #333;
+}
+
+.profile-card-hours-grid {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    gap: 2px;
 }
 
-/* Modal form content container with proper padding */
-.modal-form-content {
-    padding: 1.5rem;
-    flex-grow: 1;
-}
-
-/* ==========================================================================
-   Horen Status Styling
-   ========================================================================== */
-
-.horen-status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    flex-shrink: 0;
-    width: 20px;
-    height: 20px;
-    margin-left: auto; /* Push to the right */
-}
-
-.horen-status img {
-    width: 16px;
-    height: 16px;
-    transition: transform 0.2s ease;
-}
-
-.horen-ja img {
-    filter: drop-shadow(0 0 2px rgba(0, 180, 0, 0.3));
-}
-
-.horen-nee img {
-    filter: drop-shadow(0 0 2px rgba(180, 0, 0, 0.3));
-}
-
-.horen-status:hover img {
-    transform: scale(1.2);
-}
-
-.horen-icon {
-    width: 18px;
-    height: 18px;
-    transition: transform 0.2s ease;
-}
-
-.medewerker-profile {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    min-width: 0; /* Ensures text truncation works */
-    overflow: hidden;
-}
-
-/* ==========================================================================
-   Custom Tooltips Styling
-   ========================================================================== */
-.custom-tooltip {
-    position: fixed;
-    display: none;
-    z-index: 9999;
-    background-color: rgba(33, 33, 33, 0.95);
-    color: #fff;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    max-width: 300px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    backdrop-filter: blur(2px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    line-height: 1.4;
-}
-
-.custom-tooltip-title {
-    font-weight: 600;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    padding-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.custom-tooltip-title .tooltip-icon {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    opacity: 0.8;
-}
-
-.custom-tooltip-content {
-    font-size: 0.8rem;
-    line-height: 1.4;
-}
-
-.custom-tooltip-info {
-    display: flex;
-    align-items: flex-start;
-    margin-top: 6px;
-}
-
-.custom-tooltip-label {
-    font-weight: 600;
-    margin-right: 6px;
-    min-width: 70px;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.custom-tooltip-value {
-    flex: 1;
-}
-
-/* Tooltip status indicators */
-.tooltip-status {
-    display: inline-block;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.7rem;
-    margin-top: 4px;
-    font-weight: 600;
-    text-transform: uppercase;
-}
-
-.tooltip-status-new {
-    background-color: #3498db;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-}
-
-.tooltip-status-approved {
-    background-color: #27ae60;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-}
-
-.tooltip-status-rejected {
-    background-color: #e74c3c;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-}
-
-.tooltip-status-sick {
-    background-color: #e67e22;
-    color: white;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-}
-
-/* Holiday tooltip styling */
-.tooltip-holiday {
-    background-color: rgba(66, 66, 77, 0.95);
-}
-
-.tooltip-holiday .custom-tooltip-title {
-    color: #ffeb3b;
-}
-
-/* ==========================================================================
-   Medewerker Header Sorting Styles
-   ========================================================================== */
-
-.medewerker-header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.day-header {
+    display: grid;
+    grid-template-columns: 30px 1fr 50px 60px;
     gap: 8px;
-    width: 100%;
-    position: relative;
-}
-
-.medewerker-header-container::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
-    opacity: 0.6;
-    border-radius: 1px;
-}
-
-.sort-button {
-    background: none !important;
-    border: none !important;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 4px;
-    color: #6b7280;
-    font-size: 14px;
     font-weight: 600;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    line-height: 1;
-    min-width: 22px;
-    height: 22px;
-    justify-content: center;
-    opacity: 0.7;
+    font-size: 0.8rem;
+    color: #666;
+    padding: 4px 0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 4px;
 }
 
-.sort-button:hover {
-    background-color: #f3f4f6 !important;
-    color: #374151 !important;
-    transform: scale(1.15);
-    opacity: 1;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.sort-button:active {
-    transform: scale(0.95);
-    transition: transform 0.1s ease;
-}
-
-.sort-button:focus {
-    outline: 2px solid #3b82f6;
-    outline-offset: 2px;
-}
-
-/* Enhanced medewerker column styling */
-.medewerker-kolom {
-    position: relative;
-    min-width: 200px;
-}
-
-.medewerker-kolom th {
-    padding: 12px 16px;
-}
-
-/* ==========================================================================
-   ADMIN BUTTONS STYLING
-   ========================================================================== */
-
-.admin-buttons {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-left: 1rem;
-}
-
-.btn-admin,
-.btn-beheer,
-.btn-behandelen {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-    white-space: nowrap;
-}
-
-.btn-admin {
-    background: linear-gradient(135deg, #dc2626, #b91c1c);
-    color: white;
-    border-color: #dc2626;
-}
-
-.btn-admin:hover {
-    background: linear-gradient(135deg, #b91c1c, #991b1b);
-    border-color: #b91c1c;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn-beheer {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    color: white;
-    border-color: #2563eb;
-}
-
-.btn-beheer:hover {
-    background: linear-gradient(135deg, #1d4ed8, #1e40af);
-    border-color: #1d4ed8;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn-behandelen {
-    background: linear-gradient(135deg, #059669, #047857);
-    color: white;
-    border-color: #059669;
-}
-
-.btn-behandelen:hover {
-    background: linear-gradient(135deg, #047857, #065f46);
-    border-color: #047857;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.btn-admin i,
-.btn-beheer i,
-.btn-behandelen i {
-    font-size:  0.75rem;
-}
-
-/* Dark theme support */
-body.dark-theme .btn-admin,
-body.dark-theme .btn-beheer,
-body.dark-theme .btn-behandelen {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-theme .btn-admin:hover,
-body.dark-theme .btn-beheer:hover,
-body.dark-theme .btn-behandelen:hover {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
-
-/* ==========================================================================
-   Selection Tooltip
-   ========================================================================== */
-.selection-tooltip {
-    position: absolute;
-    top: -45px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #ff8800, #ff6600);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 8px;
+.day-row {
+    display: grid;
+    grid-template-columns: 30px 1fr 50px 60px;
+    gap: 8px;
+    padding: 4px 0;
     font-size: 0.85rem;
+    align-items: center;
+}
+
+.day-row:nth-child(even) {
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 4px;
+    padding: 4px 4px;
+    margin: 0 -4px;
+}
+
+.day-name {
+    font-weight: 600;
+    color: #333;
+}
+
+.day-time {
+    color: #555;
+    font-size: 0.8rem;
+}
+
+.day-hours {
+    color: #333;
     font-weight: 500;
+    text-align: center;
+}
+
+.day-type {
+    display: flex;
+    justify-content: center;
+}
+
+.day-type-chip {
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-align: center;
     white-space: nowrap;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(255, 136, 0, 0.3);
-    border: 2px solid #ff9900;
+}
+
+.day-type-chip.werk {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.day-type-chip.verlof {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.day-type-chip.ziek {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.day-type-chip.compensatie {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.day-type-chip.vrij {
+    background-color: #e2e3e5;
+    color: #383d41;
+}
+
+.day-type-chip.default {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+/* ==========================================================================
+   Profile Card Animation & Positioning
+   ========================================================================== */
+
+#profile-card-container {
     opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
-    transition: all 0.3s ease-out;
-    pointer-events: none;
-    animation: pulseGlow 2s ease-in-out infinite;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.selection-tooltip.visible {
+#profile-card-container.show {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
 }
 
-.selection-tooltip::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 8px solid transparent;
-    border-top-color: #ff6600;
-    filter: drop-shadow(0 2px 4px rgba(255, 136, 0, 0.2));
+/* Dark theme support for profile cards */
+body.dark-theme .profile-card {
+    background: #2d3748;
+    color: #e2e8f0;
+    border: 1px solid #4a5568;
 }
 
-@keyframes pulseGlow {
-    0%, 100% {
-        box-shadow: 0 4px 12px rgba(255, 136, 0, 0.3);
-    }
-    50% {
-        box-shadow: 0 6px 20px rgba(255, 136, 0, 0.5);
-    }
+body.dark-theme .profile-card-header {
+    background: linear-gradient(135deg, #4c51bf 0%, #553c9a 100%);
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
-    .selection-tooltip {
-        font-size: 0.75rem;
-        padding: 6px 10px;
-        top: -40px;
-    }
-    
-    .selection-tooltip::after {
-        border-width: 6px;
-    }
+body.dark-theme .profile-card-hours {
+    background: #374151;
+    border-top-color: #4a5568;
+}
+
+body.dark-theme .profile-card-hours-title {
+    color: #e2e8f0;
+}
+
+body.dark-theme .day-header {
+    color: #a0aec0;
+    border-bottom-color: #4a5568;
+}
+
+body.dark-theme .day-row:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-theme .day-name {
+    color: #e2e8f0;
+}
+
+body.dark-theme .day-time {
+    color: #cbd5e0;
+}
+
+body.dark-theme .day-hours {
+    color: #e2e8f0;
 }
