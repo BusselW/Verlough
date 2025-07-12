@@ -49,22 +49,5 @@ export function renderHorenStatus(medewerker) {
  * @param {Object} medewerker - The medewerker object to check
  * @returns {boolean} True if the medewerker can hear, false otherwise
  */
-export function getHorenStatus(medewerker) {
-    return medewerker && medewerker.Horen === true;
-}
-
-/**
- * Filters medewerkers based on their hearing status
- * @param {Array} medewerkers - Array of medewerker objects
- * @param {boolean} horenStatus - The status to filter by (true for can hear, false for cannot hear)
- * @returns {Array} Filtered array of medewerkers
- */
-export function filterMedewerkersByHorenStatus(medewerkers, horenStatus) {
-    if (!Array.isArray(medewerkers)) return [];
-    
-    return medewerkers.filter(medewerker => 
-        medewerker && medewerker.Horen === horenStatus
-    );
-}
 
 console.log("Horen module loaded successfully.");
