@@ -1,26 +1,37 @@
-const { createElement: h, useEffect, useRef, useState, useLayoutEffect } = React;
+/**
+ * @file contextmenuN.js
+ * @description Modern ES6 Context Menu component with proper permission handling
+ * This component provides right-click context menus with SharePoint group-based permissions
+ */
 
-// Import permission service for permission-based menu items
 import { isUserInAnyGroup } from '../services/permissionService.js';
 
-/**
- * Utility function to check if user can manage events for others
- * This mirrors the same function from k.aspx
- */
-const canManageOthersEvents = async () => {
-    const privilegedGroups = [
-        "1. Sharepoint beheer",
-        "1.1. Mulder MT",
-        "2.6 Roosteraars",
-        "2.3. Senioren beoordelen"
-    ];
+const { createElement: h, useEffect, useRef, useState, useLayoutEffect } = React;
 
+/**
+ * SharePoint groups with permission to manage other people's events
+ */
+const PRIVILEGED_GROUPS = [
+    "1. Sharepoint beheer",
+    "1.1. Mulder MT", 
+    "2.6 Roosteraars",
+    "2.3. Senioren beoordelen"
+];
+
+/**
+ * Check if current user can manage events for others
+ * @returns {Promise<boolean>} True if user has privileged access
+ */
+export const canManageOthersEvents = async () => {
     try {
-        const result = await isUserInAnyGroup(privilegedGroups);
-        // console.log('🔐 canManageOthersEvents check:', { groups: privilegedGroups, result });
+        const result = await isUserInAnyGroup(PRIVILEGED_GROUPS);
+        console.log('🔐 canManageOthersEvents check:', { 
+            groups: PRIVILEGED_GROUPS, 
+            result 
+        });
         return result;
     } catch (error) {
-        console.error('Error checking user permissions for managing others events:', error);
+        console.error('❌ Error checking user permissions for managing others events:', error);
         return false;
     }
 };
@@ -29,75 +40,74 @@ const canManageOthersEvents = async () => {
  * Check if user can edit/delete a specific item
  * @param {object} item - The item to check permissions for
  * @param {string} currentUsername - The current user's username
- * @returns {Promise<boolean>} - True if user can edit/delete the item
+ * @returns {Promise<boolean>} True if user can edit/delete the item
  */
-const canUserModifyItem = async (item, currentUsername) => {
+export const canUserModifyItem = async (item, currentUsername) => {
     if (!item || !currentUsername) {
-        // console.log('❌ canUserModifyItem: Missing item or currentUsername', { item: !!item, currentUsername });
+        console.log('❌ canUserModifyItem: Missing item or currentUsername', { 
+            item: !!item, 
+            currentUsername 
+        });
         return false;
     }
     
-    // console.log('🔍 canUserModifyItem: Checking permissions for item:', { 
-    //     itemOwner: item.MedewerkerID || item.Gebruikersnaam, 
-    //     currentUsername 
-    // });
+    console.log('🔍 canUserModifyItem: Checking permissions for item:', { 
+        itemOwner: item.MedewerkerID || item.Gebruikersnaam, 
+        currentUsername 
+    });
     
     // Check if user has privileged access (can modify any item)
     const hasPrivilegedAccess = await canManageOthersEvents();
-    // console.log('🔐 canUserModifyItem: Privileged access check result:', hasPrivilegedAccess);
+    console.log('🔐 canUserModifyItem: Privileged access check result:', hasPrivilegedAccess);
     
     if (hasPrivilegedAccess) return true;
     
     // Check if it's the user's own item
     const itemOwner = item.MedewerkerID || item.Gebruikersnaam;
     const isOwnItem = itemOwner === currentUsername;
-    // console.log('👤 canUserModifyItem: Own item check:', { itemOwner, currentUsername, isOwnItem });
+    console.log('👤 canUserModifyItem: Own item check:', { 
+        itemOwner, 
+        currentUsername, 
+        isOwnItem 
+    });
     
     return isOwnItem;
 };
 
 /**
- * Een herbruikbaar Context Menu component.
- * Dit component rendert een contextmenu op de opgegeven coördinaten.
- * Het sluit automatisch wanneer er buiten het menu wordt geklikt.
- * @param {object} props
- * @param {number} props.x - X-coördinaat voor positionering.
- * @param {number} props.y - Y-coördinaat voor positionering.
- * @param {function} props.onClose - Functie om het menu te sluiten.
- * @param {Array<object>} props.items - Array van menu-items. Elk item: { label: string, onClick?: function, subItems?: Array<object>, icon?: string, requiredGroups?: Array<string> }.
+ * Permission-aware context menu hook
+ * @param {Array} items - Menu items with potential permission requirements
+ * @param {string} currentUsername - Current user's username
+ * @returns {Object} Filtered items and permission state
  */
-const ContextMenu = ({ x, y, onClose, items = [] }) => {
-    const menuRef = useRef(null);
-    const [activeSubMenu, setActiveSubMenu] = useState(null);
+export const useContextMenuPermissions = (items = [], currentUsername = null) => {
     const [filteredItems, setFilteredItems] = useState([]);
     const [permissionsLoaded, setPermissionsLoaded] = useState(false);
-    const [adjustedPosition, setAdjustedPosition] = useState({ x, y });
 
-    // Filter items based on permissions
     useEffect(() => {
-        const filterItems = async (itemsToFilter) => {
-            // console.log('ContextMenu filtering items:', itemsToFilter);
+        const filterItemsByPermissions = async () => {
+            console.log('🔍 Filtering context menu items by permissions...');
+            setPermissionsLoaded(false);
+            
             const filtered = [];
             
-            for (const item of itemsToFilter) {
+            for (const item of items) {
                 let shouldInclude = true;
                 
-                // Check permissions for this item
-                if (item.requiredGroups && item.requiredGroups.length > 0) {
+                // Check if item requires specific permissions
+                if (item.requiresPrivilegedAccess) {
+                    shouldInclude = await canManageOthersEvents();
+                    console.log(`🔐 Item "${item.label}" requires privileged access: ${shouldInclude}`);
+                } else if (item.requiresOwnership && item.itemData && currentUsername) {
+                    shouldInclude = await canUserModifyItem(item.itemData, currentUsername);
+                    console.log(`👤 Item "${item.label}" requires ownership: ${shouldInclude}`);
+                } else if (item.requiredGroups && item.requiredGroups.length > 0) {
                     try {
                         shouldInclude = await isUserInAnyGroup(item.requiredGroups);
-                        // console.log(`Permission check for "${item.label}":`, shouldInclude, 'groups:', item.requiredGroups);
+                        console.log(`🔐 Item "${item.label}" group check: ${shouldInclude}`);
                     } catch (error) {
-                        console.warn(`Could not check permissions for menu item ${item.label}:`, error);
-                        // For now, show the item if permission check fails, except for sensitive operations
-                        shouldInclude = true; // Always show Zittingsvrij for everyone
-                    }
-                } else {
-                    // Only log for items that might need permission checks but don't have requiredGroups set
-                    if (['Bewerken', 'Verwijderen', 'Commentaar aanpassen'].includes(item.label)) {
-                        // console.log(`"${item.label}" - permissions already checked in parent component`);
-                    } else {
-                        // console.log(`No permission check needed for "${item.label}"`);
+                        console.warn(`⚠️ Could not check permissions for "${item.label}":`, error);
+                        shouldInclude = false;
                     }
                 }
                 
@@ -106,7 +116,9 @@ const ContextMenu = ({ x, y, onClose, items = [] }) => {
                     
                     // Recursively filter sub-items if they exist
                     if (item.subItems && item.subItems.length > 0) {
-                        filteredItem.subItems = await filterItems(item.subItems);
+                        const subItemsResult = await filterSubItems(item.subItems, currentUsername);
+                        filteredItem.subItems = subItemsResult;
+                        
                         // Only include parent if it has visible sub-items or its own action
                         if (filteredItem.subItems.length > 0 || item.onClick) {
                             filtered.push(filteredItem);
@@ -117,22 +129,87 @@ const ContextMenu = ({ x, y, onClose, items = [] }) => {
                 }
             }
             
-            // console.log('ContextMenu filtered result:', filtered);
-            return filtered;
-        };
-
-        if (items.length > 0) {
-            filterItems(items).then(filtered => {
-                setFilteredItems(filtered);
-                setPermissionsLoaded(true);
+            console.log('✅ Context menu items filtered:', {
+                original: items.length,
+                filtered: filtered.length,
+                items: filtered.map(item => item.label)
             });
+            
+            setFilteredItems(filtered);
+            setPermissionsLoaded(true);
+        };
+        
+        if (items.length > 0) {
+            filterItemsByPermissions();
         } else {
             setFilteredItems([]);
             setPermissionsLoaded(true);
         }
-    }, [items]);
+    }, [items, currentUsername]);
 
-    // Handle clicks outside the menu to close it
+    return { filteredItems, permissionsLoaded };
+};
+
+/**
+ * Helper function to filter sub-items recursively
+ */
+const filterSubItems = async (subItems, currentUsername) => {
+    const filtered = [];
+    
+    for (const subItem of subItems) {
+        let shouldInclude = true;
+        
+        if (subItem.requiresPrivilegedAccess) {
+            shouldInclude = await canManageOthersEvents();
+        } else if (subItem.requiresOwnership && subItem.itemData && currentUsername) {
+            shouldInclude = await canUserModifyItem(subItem.itemData, currentUsername);
+        } else if (subItem.requiredGroups && subItem.requiredGroups.length > 0) {
+            try {
+                shouldInclude = await isUserInAnyGroup(subItem.requiredGroups);
+            } catch (error) {
+                console.warn(`⚠️ Could not check permissions for sub-item "${subItem.label}":`, error);
+                shouldInclude = false;
+            }
+        }
+        
+        if (shouldInclude) {
+            filtered.push(subItem);
+        }
+    }
+    
+    return filtered;
+};
+
+/**
+ * Modern Context Menu component with ES6 module patterns
+ * @param {Object} props - Component props
+ * @param {number} props.x - X coordinate for positioning
+ * @param {number} props.y - Y coordinate for positioning
+ * @param {Function} props.onClose - Function to close the menu
+ * @param {Array} props.items - Menu items array
+ * @param {string} props.currentUsername - Current user's username
+ * @param {Object} props.firstClickData - First click data for two-click selection
+ * @param {Object} props.selection - Current selection state
+ * @param {Object} props.contextData - Additional context data (medewerker, dag, item)
+ */
+const ContextMenuN = ({ 
+    x, 
+    y, 
+    onClose, 
+    items = [], 
+    currentUsername = null,
+    firstClickData = null,
+    selection = null,
+    contextData = null
+}) => {
+    const menuRef = useRef(null);
+    const [activeSubMenu, setActiveSubMenu] = useState(null);
+    const [adjustedPosition, setAdjustedPosition] = useState({ x, y });
+    
+    // Use the permission-aware hook
+    const { filteredItems, permissionsLoaded } = useContextMenuPermissions(items, currentUsername);
+
+    // Handle clicks outside the menu
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -140,201 +217,223 @@ const ContextMenu = ({ x, y, onClose, items = [] }) => {
             }
         };
 
+        const handleEscapeKey = (event) => {
+            if (event.key === 'Escape') {
+                onClose();
+            }
+        };
+
+        // Add event listeners
         document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleEscapeKey);
 
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleEscapeKey);
         };
     }, [onClose]);
-    
-    // Handle submenu position adjustments when they open
-    useEffect(() => {
-        if (activeSubMenu) {
-            // Give a moment for the submenu to render
-            setTimeout(() => {
-                const submenuItems = document.querySelectorAll('.submenu');
-                
-                submenuItems.forEach(submenu => {
-                    const rect = submenu.getBoundingClientRect();
-                    const viewportWidth = window.innerWidth;
-                    const viewportHeight = window.innerHeight;
-                    
-                    // Check if submenu goes off right edge
-                    if (rect.right > viewportWidth) {
-                        submenu.classList.add('submenu-rtl');
-                    }
-                    
-                    // Check if submenu goes off bottom edge
-                    if (rect.bottom > viewportHeight) {
-                        const adjustedTop = Math.max(-4, viewportHeight - rect.height - submenu.parentElement.getBoundingClientRect().top);
-                        submenu.style.top = `${adjustedTop}px`;
-                    }
-                });
-            }, 10);
-        }
-    }, [activeSubMenu]);
-    
-    // Adjust position when menu renders or changes size
+
+    // Adjust position to prevent menu from going off-screen
     useLayoutEffect(() => {
-        if (menuRef.current && permissionsLoaded && filteredItems.length > 0) {
-            const menuRect = menuRef.current.getBoundingClientRect();
+        if (menuRef.current && permissionsLoaded) {
+            const rect = menuRef.current.getBoundingClientRect();
             const viewportWidth = window.innerWidth;
             const viewportHeight = window.innerHeight;
-            
+
             let adjustedX = x;
             let adjustedY = y;
-            
-            // Get whether the menu is flipped vertically (opening upward)
-            const isFlippedVertical = menuRef.current.classList.contains('context-menu-flip-vertical');
-            
-            // Check if menu extends beyond right edge
-            if (x + menuRect.width > viewportWidth) {
-                adjustedX = Math.max(10, viewportWidth - menuRect.width - 10); // 10px padding
+
+            // Adjust horizontal position
+            if (x + rect.width > viewportWidth) {
+                adjustedX = viewportWidth - rect.width - 10;
             }
-            
-            // Check if menu extends beyond bottom edge
-            if (y + menuRect.height > viewportHeight && !isFlippedVertical) {
-                // If there's not enough space to flip upward, adjust the Y position
-                adjustedY = Math.max(10, viewportHeight - menuRect.height - 10); // 10px padding
+
+            // Adjust vertical position
+            if (y + rect.height > viewportHeight) {
+                adjustedY = viewportHeight - rect.height - 10;
             }
-            
-            // Ensure menu doesn't go off the left or top edge
+
+            // Ensure minimum positioning
             adjustedX = Math.max(10, adjustedX);
             adjustedY = Math.max(10, adjustedY);
-            
-            if (adjustedX !== adjustedPosition.x || adjustedY !== adjustedPosition.y) {
-                setAdjustedPosition({ x: adjustedX, y: adjustedY });
-            }
-        }
-    }, [x, y, permissionsLoaded, filteredItems, adjustedPosition.x, adjustedPosition.y]);
 
-    // Add class to the context menu container if it should open upwards
-    useLayoutEffect(() => {
-        if (menuRef.current && permissionsLoaded && filteredItems.length > 0) {
-            const menuRect = menuRef.current.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-            
-            // If the menu would extend beyond the bottom edge, add a class to flip it
-            // This makes the menu open upward when it would otherwise go off the bottom of the screen
-            // Only flip if there's enough space above (menu height < current Y position)
-            if (y + menuRect.height > viewportHeight && y > menuRect.height) {
-                menuRef.current.classList.add('context-menu-flip-vertical');
-                // Adjust the transform origin for smooth animation
-                menuRef.current.style.transformOrigin = 'bottom center';
-            } else {
-                menuRef.current.classList.remove('context-menu-flip-vertical');
-                menuRef.current.style.transformOrigin = 'top center';
-            }
+            setAdjustedPosition({ x: adjustedX, y: adjustedY });
         }
-    }, [y, permissionsLoaded, filteredItems]);
-    
-    const handleItemClick = (e, item) => {
-        e.stopPropagation();
-        // console.log('Context menu item clicked:', item.label, item);
-        
-        if (item.subItems && item.subItems.length > 0) {
-            setActiveSubMenu(activeSubMenu === item.label ? null : item.label);
-        } else {
-            if (item.onClick) {
-                try {
-                    item.onClick();
-                } catch (error) {
-                    console.error('Error executing menu item onClick:', error);
-                }
-            }
-            onClose(); // Close menu on final selection
-        }
-    };
+    }, [x, y, permissionsLoaded, filteredItems]);
 
-    const renderMenuItems = (menuItems, isSubMenu = false) => {
-        return h('ul', { className: isSubMenu ? 'submenu-list' : 'context-menu-list' },
-            menuItems.map((item, index) => {
-                const isSubMenuOpen = activeSubMenu === item.label;
-                const hasSubItems = item.subItems && item.subItems.length > 0;
-                
-                // Function to check submenu position
-                const checkSubmenuPosition = (e) => {
-                    if (hasSubItems) {
-                        const rect = e.currentTarget.getBoundingClientRect();
-                        const viewportWidth = window.innerWidth;
-                        const viewportHeight = window.innerHeight;
-                        
-                        // Check if submenu would go off right edge
-                        const shouldOpenLeft = rect.right + 200 > viewportWidth; // 200px is min-width of submenu
-                        
-                        const submenu = e.currentTarget.querySelector('.submenu');
-                        if (submenu) {
-                            // Apply horizontal positioning
-                            if (shouldOpenLeft) {
-                                submenu.classList.add('submenu-rtl');
-                            } else {
-                                submenu.classList.remove('submenu-rtl');
+    // Don't render if no permissions loaded yet or no items to show
+    if (!permissionsLoaded) {
+        return h('div', {
+            style: {
+                position: 'fixed',
+                left: x,
+                top: y,
+                zIndex: 9999,
+                backgroundColor: 'white',
+                border: '1px solid #e5e7eb',
+                borderRadius: '8px',
+                padding: '8px',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                minWidth: '120px'
+            }
+        },
+            h('div', { 
+                style: { 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    padding: '8px'
+                } 
+            },
+                h('div', { className: 'loading-spinner-small' }),
+                h('span', { style: { marginLeft: '8px', fontSize: '12px' } }, 'Laden...')
+            )
+        );
+    }
+
+    if (filteredItems.length === 0) {
+        return null; // Don't show empty menus
+    }
+
+    const renderMenuItem = (item, index) => {
+        const hasSubItems = item.subItems && item.subItems.length > 0;
+        const isActive = activeSubMenu === index;
+
+        if (item.label === '---') {
+            return h('div', {
+                key: index,
+                className: 'context-menu-separator'
+            });
+        }
+
+        return h('div', {
+            key: index,
+            className: `context-menu-item ${item.disabled ? 'disabled' : ''} ${isActive && hasSubItems ? 'submenu-open' : ''}`,                        onClick: (e) => {
+                            e.stopPropagation();
+                            if (item.disabled) return;
+                            
+                            if (hasSubItems) {
+                                setActiveSubMenu(isActive ? null : index);
+                            } else if (item.onClick) {
+                                // Pass context data to onClick handlers
+                                const contextForHandler = {
+                                    firstClickData,
+                                    selection,
+                                    contextData,
+                                    currentUsername,
+                                    event: e
+                                };
+                                
+                                console.log('🎯 ContextMenuN: Executing onClick with context:', {
+                                    itemLabel: item.label,
+                                    hasFirstClick: !!firstClickData,
+                                    hasSelection: !!selection,
+                                    hasContextData: !!contextData
+                                });
+                                
+                                item.onClick(contextForHandler);
+                                onClose();
                             }
-                            
-                            // Get submenu dimensions
-                            const submenuRect = submenu.getBoundingClientRect();
-                            
-                            // Check if submenu would go off bottom edge
-                            if (rect.top + submenuRect.height > viewportHeight) {
-                                // Position from bottom instead of top
-                                const bottomOffset = Math.max(0, viewportHeight - rect.bottom);
-                                submenu.style.top = 'auto';
-                                submenu.style.bottom = `${bottomOffset}px`;
-                            } else {
-                                // Reset to default top positioning
-                                submenu.style.top = '-4px';
-                                submenu.style.bottom = 'auto';
+                        },
+            onMouseEnter: () => {
+                if (hasSubItems) {
+                    setActiveSubMenu(index);
+                }
+            },
+            style: {
+                position: 'relative'
+            }
+        },
+            // Icon
+            item.icon && (item.iconType === 'svg' ? 
+                h('img', { 
+                    src: item.icon, 
+                    alt: item.label,
+                    style: { 
+                        width: '16px', 
+                        height: '16px', 
+                        marginRight: '8px' 
+                    } 
+                }) : 
+                h('i', { className: `fas ${item.icon}` })
+            ),
+            // Label text
+            h('span', { className: 'context-menu-item-text' }, item.label),
+            // Submenu arrow
+            hasSubItems && h('i', { className: 'fas fa-chevron-right submenu-arrow' }),
+            // Submenu if active
+            isActive && hasSubItems && h('div', { 
+                className: 'submenu',
+                style: {
+                    position: 'absolute',
+                    left: '100%',
+                    top: '-4px',
+                    zIndex: 10000
+                }
+            },
+                item.subItems.map((subItem, subIndex) =>
+                    h('div', {
+                        key: subIndex,
+                        className: `context-menu-item ${subItem.disabled ? 'disabled' : ''}`,
+                        onClick: (e) => {
+                            e.stopPropagation();
+                            if (subItem.disabled) return;
+                            if (subItem.onClick) {
+                                // Pass context data to submenu onClick handlers too
+                                const contextForHandler = {
+                                    firstClickData,
+                                    selection,
+                                    contextData,
+                                    currentUsername,
+                                    event: e
+                                };
+                                
+                                console.log('🎯 ContextMenuN SubItem: Executing onClick with context:', {
+                                    itemLabel: subItem.label,
+                                    hasFirstClick: !!firstClickData,
+                                    hasSelection: !!selection,
+                                    hasContextData: !!contextData
+                                });
+                                
+                                subItem.onClick(contextForHandler);
+                                onClose();
                             }
                         }
-                    }
-                };
-
-                return h('li', {
-                    key: index,
-                    className: `context-menu-item ${hasSubItems ? 'has-submenu' : ''} ${isSubMenuOpen ? 'submenu-open' : ''}`,
-                    onClick: (e) => handleItemClick(e, item),
-                    onMouseEnter: checkSubmenuPosition
-                },
-                    // Icon if provided
-                    item.icon && (
-                        item.iconType === 'svg' 
-                            ? h('img', { 
-                                src: item.icon, 
-                                className: 'menu-icon menu-icon-svg',
-                                alt: item.label,
-                                style: { width: '16px', height: '16px' }
-                              })
-                            : h('i', { className: `fas ${item.icon} menu-icon` })
-                    ),
-                    // Label
-                    h('span', { className: 'menu-label' }, item.label),
-                    // Submenu arrow if has subitems
-                    hasSubItems && h('i', { className: 'fas fa-chevron-right submenu-arrow' }),
-                    // Submenu items
-                    hasSubItems && isSubMenuOpen && h('div', { className: 'submenu' }, renderMenuItems(item.subItems, true))
-                );
-            })
+                    },
+                        subItem.icon && (subItem.iconType === 'svg' ? 
+                            h('img', { 
+                                src: subItem.icon, 
+                                alt: subItem.label,
+                                style: { 
+                                    width: '16px', 
+                                    height: '16px', 
+                                    marginRight: '8px' 
+                                } 
+                            }) : 
+                            h('i', { className: `fas ${subItem.icon}` })
+                        ),
+                        h('span', { className: 'context-menu-item-text' }, subItem.label)
+                    )
+                )
+            )
         );
     };
-
-    // Don't render if permissions are still loading or no items available
-    if (!permissionsLoaded || filteredItems.length === 0) {
-        return null;
-    }
 
     return h('div', {
         ref: menuRef,
         className: 'context-menu-container',
-        style: { top: adjustedPosition.y, left: adjustedPosition.x },
-        onMouseLeave: () => setActiveSubMenu(null) // Close submenus when leaving the whole menu
+        style: {
+            position: 'fixed',
+            left: adjustedPosition.x,
+            top: adjustedPosition.y,
+            zIndex: 9999
+        },
+        onClick: (e) => e.stopPropagation()
     },
-        renderMenuItems(filteredItems)
+        filteredItems.map(renderMenuItem)
     );
 };
 
-export default ContextMenu;
+export default ContextMenuN;
 
-// Export the permission utility functions for use in other components
-export { canManageOthersEvents, canUserModifyItem };
-
-// console.log("ContextMenu component loaded successfully.");
+console.log('✅ ContextMenuN module loaded successfully.');

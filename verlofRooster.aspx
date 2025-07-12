@@ -32,7 +32,7 @@
         import { getCurrentUserGroups, isUserInAnyGroup } from './js/services/permissionService.js';
         import * as linkInfo from './js/services/linkInfo.js';
         import LoadingLogic, { loadFilteredData, shouldReloadData, updateCacheKey, clearAllCache, logLoadingStatus } from './js/services/loadingLogic.js';
-        import { canManageOthersEvents, canUserModifyItem } from './js/ui/contextmenuN.js';
+        import { canManageOthersEvents, canUserModifyItem } from './js/ui/contextmenu.js';
         import { roosterHandleiding, openHandleiding, roosterTutorial } from './js/tutorial/roosterHandleiding.js';
         import TooltipManager from './js/ui/tooltipbar.js';
         import ProfielKaarten from './js/ui/profielkaarten.js';
