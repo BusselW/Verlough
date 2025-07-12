@@ -222,16 +222,28 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 loading: false 
             }));
             
-            // Get profile photo URL from SharePoint
+            // Get profile photo URL from SharePoint with better error handling
             try {
-                const photoUrl = `/_layouts/15/userphoto.aspx?size=M&username=${encodeURIComponent(currentUser.Email)}`;
-                setUserInfo(prev => ({ ...prev, pictureUrl: photoUrl }));
+                const basePhotoUrl = `/_layouts/15/userphoto.aspx?size=M&username=${encodeURIComponent(currentUser.Email)}`;
+                
+                // Test if the photo URL works
+                const img = new Image();
+                img.onload = () => {
+                    setUserInfo(prev => ({ ...prev, pictureUrl: basePhotoUrl }));
+                };
+                img.onerror = () => {
+                    console.warn('Profile photo failed to load, using fallback');
+                    // Try alternative URL format
+                    const fallbackUrl = `/_layouts/15/userphoto.aspx?size=S&username=${encodeURIComponent(currentUser.Email)}`;
+                    setUserInfo(prev => ({ ...prev, pictureUrl: fallbackUrl }));
+                };
+                img.src = basePhotoUrl;
             } catch (error) {
                 console.warn('Error getting profile photo URL:', error);
                 // Fallback to SharePoint default user photo
                 setUserInfo(prev => ({ 
                     ...prev,
-                    pictureUrl: `/_layouts/15/userphoto.aspx?size=M&username=${encodeURIComponent(currentUser.Email || '')}`
+                    pictureUrl: `/_layouts/15/userphoto.aspx?size=S&username=${encodeURIComponent(currentUser.Email || '')}`
                 }));
             }
         }
@@ -255,7 +267,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     useEffect(() => {
         console.log('🃏 Initializing profile cards...');
         try {
-            ProfielKaarten.init('.medewerker-naam, .medewerker-avatar');
+            ProfielKaarten.init('.medewerker-kolom');
         } catch (error) {
             console.error('❌ Error initializing profile cards:', error);
         }
