@@ -778,7 +778,7 @@ const ProfielKaarten = (() => {
         });
         
         cardContainer.addEventListener('mouseleave', () => {
-            cardTimeout = setTimeout(hideProfileCard, 300);
+            cardTimeout = setTimeout(hideProfileCard, 200);
         });
         
         activeCard = cardContainer;
@@ -809,7 +809,7 @@ const ProfielKaarten = (() => {
      * Apply profile card hover behavior to elements
      * @param {string} selector - CSS selector for elements to apply hover behavior to
      */
-    const init = (selector = '.medewerker-naam, .medewerker-avatar') => {
+    const init = (selector = '.medewerker-kolom') => {
         console.log(`ProfielKaarten: Initializing with selector "${selector}"`);
         
         // Apply immediately for existing elements
@@ -854,7 +854,7 @@ const ProfielKaarten = (() => {
                         clearTimeout(cardTimeout);
                     }
                     
-                    // Set a delay before showing the card
+                    // Set a shorter delay before showing the card
                     cardTimeout = setTimeout(async () => {
                         try {
                             // First, verify the element is still in the DOM
@@ -891,7 +891,7 @@ const ProfielKaarten = (() => {
                             });
                             
                             cardContainer.addEventListener('mouseleave', () => {
-                                cardTimeout = setTimeout(hideProfileCard, 300);
+                                cardTimeout = setTimeout(hideProfileCard, 200);
                             });
                             
                             // Now fetch data asynchronously
@@ -957,7 +957,7 @@ const ProfielKaarten = (() => {
                             console.error('Error showing profile card:', error);
                             hideProfileCard();
                         }
-                    }, 500);
+                    }, 300);
                 });
                 
                 element.addEventListener('mouseleave', () => {
@@ -966,7 +966,7 @@ const ProfielKaarten = (() => {
                         cardTimeout = null;
                     }
                     
-                    cardTimeout = setTimeout(hideProfileCard, 300);
+                    cardTimeout = setTimeout(hideProfileCard, 200);
                 });
                 
                 // Mark as initialized

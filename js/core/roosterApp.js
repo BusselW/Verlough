@@ -1795,7 +1795,10 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                 h('tr', { className: 'team-rij' }, h('td', { colSpan: periodeData.length + 1 }, h('div', { className: 'team-header', style: { '--team-kleur': team.kleur } }, team.naam))),
                                 (teamMedewerkers || []).map(medewerker =>
                                     h('tr', { key: medewerker.id, className: 'medewerker-rij' },
-                                        h('td', { className: 'medewerker-kolom' }, h(MedewerkerRow, { medewerker: medewerker || {} })),
+                                        h('td', { 
+                                            className: 'medewerker-kolom',
+                                            'data-username': medewerker.Username // Add data-username for profile cards
+                                        }, h(MedewerkerRow, { medewerker: medewerker || {} })),
                                         // Render calendar cells for each day with proper data blocks
                                         ...(() => {
                                             const dagenMetBlokInfo = periodeData.map((dag) => {
