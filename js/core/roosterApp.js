@@ -139,6 +139,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     const [verlofItems, setVerlofItems] = useState([]);
     const [feestdagen, setFeestdagen] = useState({});
     const [loading, setLoading] = useState(false); // Start with false, let data loading set this to true
+    const [backgroundRefreshing, setBackgroundRefreshing] = useState(false); // For silent updates
     const [error, setError] = useState(null);
     const [huidigWeek, setHuidigWeek] = useState(getWeekNummer(new Date()));
     const [zoekTerm, setZoekTerm] = useState('');
@@ -486,6 +487,102 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         }
     }, [weergaveType, huidigJaar, huidigMaand, huidigWeek]);
 
+    // Silent background refresh function - no loading spinner
+    const silentRefreshData = useCallback(async (forceReload = true) => {
+        try {
+            console.log('🔄 Starting silent background refresh...');
+            setBackgroundRefreshing(true);
+            // Note: NOT setting setLoading(true) to avoid spinner
+
+            // Wait for configuration to be available with timeout
+            let configWaitAttempts = 0;
+            const maxConfigWaitAttempts = 50; // 5 seconds max wait
+            while (!window.appConfiguratie && configWaitAttempts < maxConfigWaitAttempts) {
+                await new Promise(r => setTimeout(r, 100));
+                configWaitAttempts++;
+            }
+
+            if (!window.appConfiguratie) {
+                throw new Error('Configuratie niet beschikbaar na wachten');
+            }
+
+            // Check if we need to reload data for the current period
+            const needsReload = forceReload || shouldReloadData(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+            
+            if (needsReload) {
+                console.log('🔄 Silent loading data for current period...');
+                updateCacheKey(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+            }
+
+            // Always load static data (these are small lists and don't change often)
+            const [medewerkersData, teamsData, verlofredenenData, urenPerWeekData, dagenIndicatorsData] = await Promise.all([
+                fetchSharePointList('Medewerkers'),
+                fetchSharePointList('Teams'),
+                fetchSharePointList('Verlofredenen'),
+                fetchSharePointList('UrenPerWeek'),
+                fetchSharePointList('DagenIndicators')
+            ]);
+
+            // Load period-specific data with smart filtering
+            let verlofData, zittingsvrijData, compensatieUrenData;
+            
+            if (needsReload) {
+                console.log('🔍 Silent loading period-specific data...');
+                [verlofData, zittingsvrijData, compensatieUrenData] = await Promise.all([
+                    loadFilteredData(fetchSharePointList, 'Verlof', 'verlof', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand),
+                    loadFilteredData(fetchSharePointList, 'IncidenteelZittingVrij', 'zittingsvrij', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand),
+                    loadFilteredData(fetchSharePointList, 'CompensatieUren', 'compensatie', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand)
+                ]);
+            } else {
+                // Use cached data
+                verlofData = LoadingLogic.getCachedData('verlof') || [];
+                zittingsvrijData = LoadingLogic.getCachedData('zittingsvrij') || [];
+                compensatieUrenData = LoadingLogic.getCachedData('compensatie') || [];
+            }
+
+            console.log('✅ Silent data refresh complete, updating state...');
+            const teamsMapped = (teamsData || []).map(item => ({ id: item.Title || item.ID?.toString(), naam: item.Naam || item.Title, kleur: item.Kleur || '#cccccc' }));
+            setTeams(teamsMapped);
+            const teamNameToIdMap = teamsMapped.reduce((acc, t) => { acc[t.naam] = t.id; return acc; }, {});
+            const transformedShiftTypes = (verlofredenenData || []).reduce((acc, item) => {
+                if (item.Title) { acc[item.ID] = { id: item.ID, label: item.Title, kleur: item.Kleur || '#999999', afkorting: item.Afkorting || '??' }; }
+                return acc;
+            }, {});
+            setShiftTypes(transformedShiftTypes);
+
+            const medewerkersTransformed = (medewerkersData || []).map(m => ({
+                id: m.ID,
+                naam: m.Title || 'Onbekend',
+                team: teamNameToIdMap[m.Team] || 'geen_team',
+                username: m.Username || '',
+                Username: m.Username || '',
+                Title: m.Title || 'Onbekend',
+                profilePhoto: getProfilePhotoUrl(m.Username),
+                horenStatus: m.HorenStatus
+            }));
+            setMedewerkers(medewerkersTransformed);
+            setVerlofItems(verlofData || []);
+            setZittingsvrijItems(zittingsvrijData || []);
+            setCompensatieUrenItems(compensatieUrenData || []);
+            setUrenPerWeekItems(urenPerWeekData || []);
+
+            const transformedDagenIndicators = (dagenIndicatorsData || []).reduce((acc, item) => {
+                if (item.Title) { acc[item.Title] = { Title: item.Title, kleur: item.Kleur || '#999999', Beschrijving: item.Beschrijving || '' }; }
+                return acc;
+            }, {});
+            setDagenIndicators(transformedDagenIndicators);
+
+            console.log('🎉 Silent refresh completed successfully');
+
+        } catch (err) {
+            console.error('❌ Error in silent refresh:', err);
+            // Don't set error state to avoid disrupting user experience
+            console.log('🔄 Silent refresh failed, user can continue with cached data');
+        } finally {
+            setBackgroundRefreshing(false);
+        }
+    }, [weergaveType, huidigJaar, huidigMaand, huidigWeek]);
+
     // Initial data load when user is validated
     useEffect(() => {
         // Only start loading data after user is validated
@@ -536,10 +633,10 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('Verlofaanvraag ingediend:', result);
             setIsVerlofModalOpen(false);
             
-            // Graceful data reload - only reload verlof data
+            // Graceful data reload - silent background refresh
             console.log('🔄 Gracefully reloading verlof data...');
             clearAllCache(); // Clear cache to ensure fresh data
-            await refreshData(true); // Force reload with fresh data
+            await silentRefreshData(true); // Silent reload without spinner
         } catch (error) {
             console.error('Fout bij het indienen van verlofaanvraag:', error);
             console.error('Error details:', {
@@ -549,7 +646,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             });
             alert('Fout bij het indienen van verlofaanvraag: ' + error.message);
         }
-    }, [refreshData]);
+    }, [silentRefreshData]);
 
     const handleZiekteSubmit = useCallback(async (formData) => {
         try {
@@ -562,7 +659,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.error('Fout bij het indienen van ziekmelding:', error);
             alert('Fout bij het indienen van ziekmelding: ' + error.message);
         }
-    }, [refreshData]);
+    }, [silentRefreshData]);
 
     const handleCompensatieSubmit = useCallback(async (formData) => {
         try {
@@ -571,15 +668,15 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('✅ Compensatie-uren ingediend successfully:', result);
             setIsCompensatieModalOpen(false);
             
-            // Graceful data reload - only reload compensatie data
+            // Graceful data reload - silent background refresh
             console.log('🔄 Gracefully reloading compensatie data...');
             clearAllCache(); // Clear cache to ensure fresh data
-            await refreshData(true); // Force reload with fresh data
+            await silentRefreshData(true); // Silent reload without spinner
         } catch (error) {
             console.error('❌ Fout bij het indienen van compensatie-uren:', error);
             alert('Fout bij het indienen van compensatie-uren: ' + error.message);
         }
-    }, [refreshData]);
+    }, [silentRefreshData]);
 
     const handleZittingsvrijSubmit = useCallback(async (formData) => {
         try {
@@ -592,15 +689,15 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('✅ Zittingsvrij ingediend successfully:', result);
             setIsZittingsvrijModalOpen(false);
             
-            // Graceful data reload - only reload zittingsvrij data
+            // Graceful data reload - silent background refresh
             console.log('🔄 Gracefully reloading zittingsvrij data...');
             clearAllCache(); // Clear cache to ensure fresh data
-            await refreshData(true); // Force reload with fresh data
+            await silentRefreshData(true); // Silent reload without spinner
         } catch (error) {
             console.error('❌ Fout bij het indienen van zittingsvrij:', error);
             alert('Fout bij het indienen van zittingsvrij: ' + error.message);
         }
-    }, [refreshData]);
+    }, [silentRefreshData]);
 
     // Context menu handler
     const showContextMenu = useCallback(async (e, medewerker, dag, item) => {
@@ -1616,6 +1713,39 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
 
     // Render de roosterkop en de medewerkerrijen
     return h('div', { className: 'app-container' },
+        // Subtle background refresh indicator
+        backgroundRefreshing && h('div', {
+            className: 'background-refresh-indicator',
+            style: {
+                position: 'fixed',
+                top: '10px',
+                right: '20px',
+                background: 'rgba(59, 130, 246, 0.9)',
+                color: 'white',
+                padding: '6px 12px',
+                borderRadius: '20px',
+                fontSize: '12px',
+                fontWeight: '500',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                zIndex: 1000,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                animation: 'fadeInOut 0.3s ease-in-out'
+            }
+        },
+            h('div', {
+                style: {
+                    width: '12px',
+                    height: '12px',
+                    border: '2px solid rgba(255,255,255,0.3)',
+                    borderTop: '2px solid white',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                }
+            }),
+            'Gegevens bijwerken...'
+        ),
         h('div', { className: 'sticky-header-container' },
             h('header', { id: 'header', className: 'header' },
                 h('div', { className: 'header-content' },
