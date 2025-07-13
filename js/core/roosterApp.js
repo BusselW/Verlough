@@ -24,9 +24,9 @@ import VerlofAanvraagForm from '../ui/forms/VerlofAanvraagForm.js';
 import CompensatieUrenForm from '../ui/forms/CompensatieUrenForm.js';
 import ZiekteMeldingForm from '../ui/forms/ZiekteMeldingForm.js';
 import ZittingsvrijForm from '../ui/forms/ZittingsvrijForm.js';
-import RoosterHeader from './ui/RoosterHeader.js';
-import Legenda from './ui/Legenda.js';
-import RoosterGrid from './ui/RoosterGrid.js';
+import RoosterHeader from '../ui/RoosterHeader.js';
+import Legenda from '../ui/Legenda.js';
+import RoosterGrid from '../ui/RoosterGrid.js';
 
 const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
