@@ -1,5 +1,5 @@
 import { getCurrentUserInfo } from '../../services/sharepointService.js';
-import { canManageOthersEvents } from '../contextmenuN.js';
+import { canManageOthersEvents } from '../ContextMenu.js';
 
 const { createElement: h, useState, useEffect } = React;
 
