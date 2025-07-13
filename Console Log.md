@@ -434,10 +434,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 // Handle IsRotatingSchedule field (defaults to false for backwards compatibility)  
                 const isRotatingSchedule = u.IsRotatingSchedule === true || u.IsRotatingSchedule === 'true';
                
-                // DEBUG: Log WeekType processing for rotating schedules
-                if (isRotatingSchedule) {
-                    console.log(`🔍 DEBUG: Processing rotating record ID ${u.Id} - Raw WeekType: '${u.WeekType}' (type: ${typeof u.WeekType}), Processed: '${weekType}'`);
-                }
+                // WeekType processing for rotating schedules
                
                 return {
                     ...u,
@@ -448,17 +445,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 };
             }));
            
-            // DEBUG: Log processed UrenPerWeek data to check for Week B records
-            console.log('🔍 DEBUG: Processed UrenPerWeek data:',
-                (urenPerWeekData || []).map(u => ({
-                    Id: u.Id,
-                    MedewerkerID: u.MedewerkerID,
-                    WeekType: u.WeekType,
-                    IsRotatingSchedule: u.IsRotatingSchedule,
-                    Ingangsdatum: u.Ingangsdatum,
-                    CycleStartDate: u.CycleStartDate
-                })).filter(u => u.IsRotatingSchedule) // Only show rotating schedules
-            );
+            // Processed UrenPerWeek data for employee scheduling
            
             const indicatorsMapped = (dagenIndicatorsData || []).reduce((acc, item) => {
                 if (item.Title) {
@@ -471,12 +458,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('✅ Data processing complete!');
 
             // Debug: Log medewerkers data for troubleshooting
-            console.log('DEBUG - Loaded medewerkers:', medewerkersProcessed.slice(0, 5).map(m => ({
-                Id: m.Id,
-                Title: m.Title,
-                Username: m.Username,
-                Team: m.Team
-            })));
+            // Medewerkers data loaded successfully
 
         } catch (err) {
             console.error('❌ Error in refreshData:', err);
@@ -1168,18 +1150,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
         for (const medewerkerId in map) {
             map[medewerkerId].sort((a, b) => b.Ingangsdatum - a.Ingangsdatum);
            
-            // DEBUG: Log grouped records for employees with rotating schedules
-            if (map[medewerkerId].some(record => record.IsRotatingSchedule)) {
-                console.log(`🔍 DEBUG: Grouped rotating schedule records for ${medewerkerId}:`,
-                    map[medewerkerId].map(r => ({
-                        Id: r.Id,
-                        WeekType: r.WeekType,
-                        IsRotatingSchedule: r.IsRotatingSchedule,
-                        Ingangsdatum: r.Ingangsdatum?.toLocaleDateString(),
-                        CycleStartDate: r.CycleStartDate?.toLocaleDateString()
-                    }))
-                );
-            }
+            // Process grouped records for employees with rotating schedules
         }
        
         return map;
@@ -1268,29 +1239,14 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 return null;
             }
            
-            // DEBUG: Enhanced logging for Week B lookup issues
-            if (medewerkerId.toLowerCase().includes('rauf') || Math.random() < 0.1) { // Log for Rauf or 10% of other calls
-                console.log(`🔍 DEBUG: Selected period for ${medewerkerId} on ${normalizedDate.toLocaleDateString()}:`);
-                console.log(`🔍 DEBUG: Period Ingangsdatum: ${selectedPeriod.ingangsdatum.toLocaleDateString()}`);
-                console.log(`🔍 DEBUG: Period is rotating: ${selectedPeriod.isRotating}`);
-                console.log(`🔍 DEBUG: Available records in period:`,
-                    selectedPeriod.records.map(r => ({
-                        Id: r.Id,
-                        WeekType: r.WeekType,
-                        IsRotatingSchedule: r.IsRotatingSchedule,
-                        CycleStartDate: r.CycleStartDate ? new Date(r.CycleStartDate).toLocaleDateString() : 'None'
-                    }))
-                );
-            }
+            // Enhanced Week B lookup processing
            
             if (selectedPeriod.isRotating) {
                 // This is a rotating schedule period - find the correct week type
                 const cycleStartDate = selectedPeriod.cycleStartDate || selectedPeriod.ingangsdatum;
                 const requiredWeekType = calculateWeekType(normalizedDate, cycleStartDate);
                
-                if (medewerkerId.toLowerCase().includes('rauf') || Math.random() < 0.1) {
-                    console.log(`🔍 DEBUG: Looking for Week ${requiredWeekType} in rotating period (calculated from cycle start: ${cycleStartDate.toLocaleDateString()})`);
-                }
+                // Week type lookup in rotating period
                
                 // Find the record for this week type in this period
                 const weekTypeRecord = selectedPeriod.records.find(record => {
