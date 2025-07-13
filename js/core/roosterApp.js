@@ -576,8 +576,13 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
 
         } catch (err) {
             console.error('❌ Error in silent refresh:', err);
-            // Don't set error state to avoid disrupting user experience
-            console.log('🔄 Silent refresh failed, user can continue with cached data');
+            // Only set error state if we have no existing data (first load scenario)
+            if (medewerkers.length === 0) {
+                console.error('🚨 Initial data load failed, showing error to user');
+                setError('Fout bij het laden van data: ' + err.message);
+            } else {
+                console.log('🔄 Silent refresh failed, user can continue with cached data');
+            }
         } finally {
             setBackgroundRefreshing(false);
         }
@@ -587,9 +592,10 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     useEffect(() => {
         // Only start loading data after user is validated
         if (isUserValidated) {
-            silentRefreshData();
+            // Use regular refreshData for initial load to show errors if needed
+            refreshData();
         }
-    }, [silentRefreshData, isUserValidated]);
+    }, [refreshData, isUserValidated]);
 
     // Effect to reload data when period changes (maand/week navigation)
     useEffect(() => {
