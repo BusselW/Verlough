@@ -59,28 +59,37 @@
             });
 
             useEffect(() => {
+                console.log('[NavigationButtons] useEffect triggered, currentUser:', currentUser);
+                
                 if (currentUser && currentUser.Email) {
+                    console.log('[NavigationButtons] Setting user info for:', currentUser.Title);
                     setUserInfo(prev => ({ ...prev, naam: currentUser.Title, loading: false }));
                     
-                    // Get profile photo URL - getProfilePhotoUrl returns a string, not a promise
+                    // Get profile photo URL - should be synchronous function
                     try {
+                        console.log('[NavigationButtons] About to call getProfilePhotoUrl');
                         const photoUrl = getProfilePhotoUrl(currentUser);
+                        console.log('[NavigationButtons] photoUrl result:', photoUrl);
+                        
                         if (photoUrl) {
                             setUserInfo(prev => ({ ...prev, pictureUrl: photoUrl }));
                         } else {
                             // Fallback if no photo URL returned
+                            console.log('[NavigationButtons] Using fallback photo URL');
                             setUserInfo(prev => ({ 
                                 ...prev, 
                                 pictureUrl: '_layouts/15/userphoto.aspx?size=S'
                             }));
                         }
                     } catch (error) {
-                        console.warn('Error calling getProfilePhotoUrl:', error);
+                        console.error('[NavigationButtons] Error calling getProfilePhotoUrl:', error);
                         setUserInfo(prev => ({ 
                             ...prev, 
                             pictureUrl: '_layouts/15/userphoto.aspx?size=S'
                         }));
                     }
+                } else {
+                    console.log('[NavigationButtons] No currentUser or Email, skipping photo fetch');
                 }
             }, [currentUser]);
 
