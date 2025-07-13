@@ -587,9 +587,9 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     useEffect(() => {
         // Only start loading data after user is validated
         if (isUserValidated) {
-            refreshData();
+            silentRefreshData();
         }
-    }, [refreshData, isUserValidated]);
+    }, [silentRefreshData, isUserValidated]);
 
     // Effect to reload data when period changes (maand/week navigation)
     useEffect(() => {
@@ -598,13 +598,13 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             
             // Check if we need to reload data for the new period
             if (shouldReloadData(weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand)) {
-                console.log('🔄 Triggering data reload for new period...');
-                refreshData(false); // Don't force reload, let loadingLogic decide
+                console.log('🔄 Triggering silent data reload for new period...');
+                silentRefreshData(false); // Don't force reload, let loadingLogic decide
             } else {
                 console.log('✅ Data already cached for this period');
             }
         }
-    }, [weergaveType, huidigJaar, huidigMaand, huidigWeek, isUserValidated, refreshData]);
+    }, [weergaveType, huidigJaar, huidigMaand, huidigWeek, isUserValidated, silentRefreshData]);
 
     // Form submission handlers
     const handleVerlofSubmit = useCallback(async (formData) => {
@@ -654,7 +654,11 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             const result = await createSharePointListItem('Verlof', formData);
             console.log('Ziekmelding ingediend:', result);
             setIsZiekModalOpen(false);
-            refreshData();
+            
+            // Graceful data reload - silent background refresh
+            console.log('🔄 Gracefully reloading ziekte data...');
+            clearAllCache(); // Clear cache to ensure fresh data
+            await silentRefreshData(true); // Silent reload without spinner
         } catch (error) {
             console.error('Fout bij het indienen van ziekmelding:', error);
             alert('Fout bij het indienen van ziekmelding: ' + error.message);
@@ -863,8 +867,9 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                     itemData.ID || itemData.Id
                                 );
                                 
-                                // Refresh data after deletion
-                                await refreshData();
+                                // Refresh data after deletion - silent background refresh
+                                clearAllCache(); // Clear cache to ensure fresh data
+                                await silentRefreshData(true);
                                 console.log('✅ Item deleted successfully');
                             } catch (error) {
                                 console.error('❌ Error deleting item:', error);
@@ -1099,7 +1104,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 item: item
             }
         });
-    }, [medewerkers, currentUser, canUserModifyItem, handleVerlofSubmit, handleZittingsvrijSubmit, handleCompensatieSubmit, refreshData]);
+    }, [medewerkers, currentUser, canUserModifyItem, handleVerlofSubmit, handleZittingsvrijSubmit, handleCompensatieSubmit, silentRefreshData]);
 
     // Computed values
     const ziekteRedenId = useMemo(() => {
