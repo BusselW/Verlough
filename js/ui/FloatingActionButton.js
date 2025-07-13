@@ -122,4 +122,4 @@ const FloatingActionButton = ({ actions = [], id }) => {
 
 export default FloatingActionButton;
 
-consolke.log("FloatingActionButton component loaded successfully.");
+console.log("FloatingActionButton component loaded successfully.");

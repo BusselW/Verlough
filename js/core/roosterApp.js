@@ -534,18 +534,22 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
 
             const medewerkersTransformed = (medewerkersData || []).map(m => ({
                 id: m.ID,
-                naam: m.Title || 'Onbekend',
+                naam: m.Naam || m.Title || 'Onbekend',
                 team: teamNameToIdMap[m.Team] || 'geen_team',
                 username: m.Username || '',
                 Username: m.Username || '',
-                Title: m.Title || 'Onbekend',
+                Title: m.Naam || m.Title || 'Onbekend',
                 profilePhoto: getProfilePhotoUrl(m.Username),
                 horenStatus: m.HorenStatus
             }));
             setMedewerkers(medewerkersTransformed);
-            setVerlofItems(verlofData || []);
-            setZittingsvrijItems(zittingsvrijData || []);
-            setCompensatieUrenItems(compensatieUrenData || []);
+            setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: new Date(v.StartDatum), EindDatum: new Date(v.EindDatum) })));
+            setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: new Date(z.ZittingsVrijeDagTijd), EindDatum: new Date(z.ZittingsVrijeDagTijdEind) })));
+            setCompensatieUrenItems((compensatieUrenData || []).map(c => ({
+                ...c,
+                StartCompensatieUren: new Date(c.StartCompensatieUren),
+                EindeCompensatieUren: new Date(c.EindeCompensatieUren)
+            })));
             setUrenPerWeekItems(urenPerWeekData || []);
 
             const transformedDagenIndicators = (dagenIndicatorsData || []).reduce((acc, item) => {
