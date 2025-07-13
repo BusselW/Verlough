@@ -639,9 +639,13 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('Verlofaanvraag ingediend:', result);
             setIsVerlofModalOpen(false);
             
-            // Graceful data reload - silent background refresh
+            // Graceful data reload - clear state and silent background refresh
             console.log('🔄 Gracefully reloading verlof data...');
             clearAllCache(); // Clear cache to ensure fresh data
+            
+            // Clear current verlof state to force clean re-render
+            setVerlofItems([]);
+            
             await silentRefreshData(true); // Silent reload without spinner
         } catch (error) {
             console.error('Fout bij het indienen van verlofaanvraag:', error);
@@ -661,9 +665,13 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('Ziekmelding ingediend:', result);
             setIsZiekModalOpen(false);
             
-            // Graceful data reload - silent background refresh
+            // Graceful data reload - clear state and silent background refresh
             console.log('🔄 Gracefully reloading ziekte data...');
             clearAllCache(); // Clear cache to ensure fresh data
+            
+            // Clear current verlof state to force clean re-render (ziekte goes to verlof list)
+            setVerlofItems([]);
+            
             await silentRefreshData(true); // Silent reload without spinner
         } catch (error) {
             console.error('Fout bij het indienen van ziekmelding:', error);
@@ -678,9 +686,13 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('✅ Compensatie-uren ingediend successfully:', result);
             setIsCompensatieModalOpen(false);
             
-            // Graceful data reload - silent background refresh
+            // Graceful data reload - clear state and silent background refresh
             console.log('🔄 Gracefully reloading compensatie data...');
             clearAllCache(); // Clear cache to ensure fresh data
+            
+            // Clear current compensatie state to force clean re-render
+            setCompensatieUrenItems([]);
+            
             await silentRefreshData(true); // Silent reload without spinner
         } catch (error) {
             console.error('❌ Fout bij het indienen van compensatie-uren:', error);
@@ -699,9 +711,13 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('✅ Zittingsvrij ingediend successfully:', result);
             setIsZittingsvrijModalOpen(false);
             
-            // Graceful data reload - silent background refresh
+            // Graceful data reload - clear state and silent background refresh
             console.log('🔄 Gracefully reloading zittingsvrij data...');
             clearAllCache(); // Clear cache to ensure fresh data
+            
+            // Clear current zittingsvrij state to force clean re-render
+            setZittingsvrijItems([]);
+            
             await silentRefreshData(true); // Silent reload without spinner
         } catch (error) {
             console.error('❌ Fout bij het indienen van zittingsvrij:', error);
@@ -873,8 +889,18 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                     itemData.ID || itemData.Id
                                 );
                                 
-                                // Refresh data after deletion - silent background refresh
+                                // Refresh data after deletion - clear state and silent background refresh
                                 clearAllCache(); // Clear cache to ensure fresh data
+                                
+                                // Clear relevant state based on item type to force clean re-render
+                                if (listName === 'Verlof') {
+                                    setVerlofItems([]);
+                                } else if (listName === 'IncidenteelZittingVrij') {
+                                    setZittingsvrijItems([]);
+                                } else if (listName === 'CompensatieUren') {
+                                    setCompensatieUrenItems([]);
+                                }
+                                
                                 await silentRefreshData(true);
                                 console.log('✅ Item deleted successfully');
                             } catch (error) {
