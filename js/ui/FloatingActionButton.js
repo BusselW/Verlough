@@ -1,5 +1,8 @@
 const { createElement: h, useState, useEffect, useRef } = React;
 
+// Declare console as global to avoid "console not defined" errors
+/* global console */
+
 // Import permission service
 import { isUserInAnyGroup } from '../services/permissionService.js';
 

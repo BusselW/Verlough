@@ -109,7 +109,7 @@ const DagCell = ({ dag, medewerker, onContextMenu, getVerlofVoorDag, getZittings
     // Check if the day is a weekend or holiday
     const isWeekend = dag.isWeekend || dag.getDay() === 0 || dag.getDay() === 6;
     const isFeestdag = dag.isFeestdag || false;
-    const feestdagNaam = dag.feestdagNaam || null;
+    // feestdagNaam is already passed as parameter, no need to redeclare
 
     // Set up a tooltip for the cell itself if it's a holiday
     useEffect(() => {
