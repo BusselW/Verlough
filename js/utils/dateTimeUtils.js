@@ -186,4 +186,52 @@ export const isVandaag = (datum) => {
 
 // Duplicate getWeekNummer function removed - already defined on line 72
 
+/**
+ * Create a Date object from ISO string that is timezone-safe for local dates
+ * @param {string|Date} dateInput - ISO date string or Date object
+ * @returns {Date} Date object adjusted for local timezone
+ */
+export const createLocalDate = (dateInput) => {
+    if (!dateInput) return null;
+    if (dateInput instanceof Date) return dateInput;
+    
+    // If it's already in ISO format with timezone, parse normally
+    if (typeof dateInput === 'string' && dateInput.includes('T')) {
+        return new Date(dateInput);
+    }
+    
+    // If it's a date string without time, treat as local date
+    if (typeof dateInput === 'string') {
+        const [year, month, day] = dateInput.split('-').map(Number);
+        return new Date(year, month - 1, day); // month is 0-indexed
+    }
+    
+    return new Date(dateInput);
+};
+
+/**
+ * Convert Date to ISO date string (YYYY-MM-DD) for consistent comparison
+ * @param {Date} date - Date object
+ * @returns {string} ISO date string (YYYY-MM-DD)
+ */
+export const toISODate = (date) => {
+    if (!date || !(date instanceof Date)) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+/**
+ * Compare two dates using ISO date strings for timezone-safe comparison
+ * @param {Date|string} date1 - First date
+ * @param {Date|string} date2 - Second date
+ * @returns {boolean} True if dates are the same day
+ */
+export const isSameISODate = (date1, date2) => {
+    const iso1 = date1 instanceof Date ? toISODate(date1) : date1;
+    const iso2 = date2 instanceof Date ? toISODate(date2) : date2;
+    return iso1 === iso2;
+};
+
 console.log("Date and Time Utilities loaded successfully.");

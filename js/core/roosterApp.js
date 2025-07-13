@@ -13,7 +13,10 @@ import {
     formatteerDatum,
     getDagenInWeek, 
     isVandaag,
-    getDagNaam 
+    getDagNaam,
+    createLocalDate,
+    toISODate,
+    isSameISODate
 } from '../utils/dateTimeUtils.js';
 import { getInitialen, getProfilePhotoUrl } from '../utils/userUtils.js';
 import { calculateWeekType } from '../services/scheduleLogic.js';
@@ -366,13 +369,13 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 .filter(item => item.Naam && item.Actief !== false)
                 .map(item => ({ ...item, id: item.ID, naam: item.Naam, team: teamNameToIdMap[item.Team] || '', Username: item.Username || null }));
             setMedewerkers(medewerkersProcessed);
-            setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: new Date(v.StartDatum), EindDatum: new Date(v.EindDatum) })));
-            setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: new Date(z.ZittingsVrijeDagTijd), EindDatum: new Date(z.ZittingsVrijeDagTijdEind) })));
+            setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: createLocalDate(v.StartDatum), EindDatum: createLocalDate(v.EindDatum) })));
+            setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: createLocalDate(z.ZittingsVrijeDagTijd), EindDatum: createLocalDate(z.ZittingsVrijeDagTijdEind) })));
             setCompensatieUrenItems((compensatieUrenData || []).map(c => ({
                 ...c,
-                StartCompensatieUren: new Date(c.StartCompensatieUren),
-                EindeCompensatieUren: new Date(c.EindeCompensatieUren),
-                ruildagStart: c.ruildagStart ? new Date(c.ruildagStart) : null
+                StartCompensatieUren: createLocalDate(c.StartCompensatieUren),
+                EindeCompensatieUren: createLocalDate(c.EindeCompensatieUren),
+                ruildagStart: c.ruildagStart ? createLocalDate(c.ruildagStart) : null
             })));
             setUrenPerWeekItems((urenPerWeekData || []).map(u => {
                 // Normalize Ingangsdatum by properly parsing and resetting time components
@@ -543,12 +546,12 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 horenStatus: m.HorenStatus
             }));
             setMedewerkers(medewerkersTransformed);
-            setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: new Date(v.StartDatum), EindDatum: new Date(v.EindDatum) })));
-            setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: new Date(z.ZittingsVrijeDagTijd), EindDatum: new Date(z.ZittingsVrijeDagTijdEind) })));
+            setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: createLocalDate(v.StartDatum), EindDatum: createLocalDate(v.EindDatum) })));
+            setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: createLocalDate(z.ZittingsVrijeDagTijd), EindDatum: createLocalDate(z.ZittingsVrijeDagTijdEind) })));
             setCompensatieUrenItems((compensatieUrenData || []).map(c => ({
                 ...c,
-                StartCompensatieUren: new Date(c.StartCompensatieUren),
-                EindeCompensatieUren: new Date(c.EindeCompensatieUren)
+                StartCompensatieUren: createLocalDate(c.StartCompensatieUren),
+                EindeCompensatieUren: createLocalDate(c.EindeCompensatieUren)
             })));
             setUrenPerWeekItems(urenPerWeekData || []);
 
@@ -625,14 +628,20 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('Verlofaanvraag ingediend:', result);
             setIsVerlofModalOpen(false);
             
-            // Graceful data reload - clear state and silent background refresh
+            // Graceful data reload - only refresh verlof data to minimize DOM changes
             console.log('🔄 Gracefully reloading verlof data...');
-            clearAllCache(); // Clear cache to ensure fresh data
             
-            // Clear current verlof state to force clean re-render
-            setVerlofItems([]);
-            
-            await silentRefreshData(true); // Silent reload without spinner
+            try {
+                // Only reload verlof data, not everything
+                const verlofData = await loadFilteredData(fetchSharePointList, 'Verlof', 'verlof', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+                setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: createLocalDate(v.StartDatum), EindDatum: createLocalDate(v.EindDatum) })));
+                console.log('✅ Verlof data refreshed successfully');
+            } catch (error) {
+                console.error('❌ Error refreshing verlof data:', error);
+                // Fallback to full refresh if needed
+                clearAllCache();
+                await silentRefreshData(true);
+            }
         } catch (error) {
             console.error('Fout bij het indienen van verlofaanvraag:', error);
             console.error('Error details:', {
@@ -651,14 +660,20 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('Ziekmelding ingediend:', result);
             setIsZiekModalOpen(false);
             
-            // Graceful data reload - clear state and silent background refresh
+            // Graceful data reload - only refresh verlof data (ziekte goes to verlof list)
             console.log('🔄 Gracefully reloading ziekte data...');
-            clearAllCache(); // Clear cache to ensure fresh data
             
-            // Clear current verlof state to force clean re-render (ziekte goes to verlof list)
-            setVerlofItems([]);
-            
-            await silentRefreshData(true); // Silent reload without spinner
+            try {
+                // Only reload verlof data since ziekte items go to the verlof list
+                const verlofData = await loadFilteredData(fetchSharePointList, 'Verlof', 'verlof', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+                setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: createLocalDate(v.StartDatum), EindDatum: createLocalDate(v.EindDatum) })));
+                console.log('✅ Ziekte data refreshed successfully');
+            } catch (error) {
+                console.error('❌ Error refreshing ziekte data:', error);
+                // Fallback to full refresh if needed
+                clearAllCache();
+                await silentRefreshData(true);
+            }
         } catch (error) {
             console.error('Fout bij het indienen van ziekmelding:', error);
             alert('Fout bij het indienen van ziekmelding: ' + error.message);
@@ -672,14 +687,24 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('✅ Compensatie-uren ingediend successfully:', result);
             setIsCompensatieModalOpen(false);
             
-            // Graceful data reload - clear state and silent background refresh
+            // Graceful data reload - only refresh compensatie data to minimize DOM changes
             console.log('🔄 Gracefully reloading compensatie data...');
-            clearAllCache(); // Clear cache to ensure fresh data
             
-            // Clear current compensatie state to force clean re-render
-            setCompensatieUrenItems([]);
-            
-            await silentRefreshData(true); // Silent reload without spinner
+            try {
+                // Only reload compensatie data, not everything
+                const compensatieData = await loadFilteredData(fetchSharePointList, 'CompensatieUren', 'compensatie', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+                setCompensatieUrenItems((compensatieData || []).map(c => ({
+                    ...c,
+                    StartCompensatieUren: createLocalDate(c.StartCompensatieUren),
+                    EindeCompensatieUren: createLocalDate(c.EindeCompensatieUren)
+                })));
+                console.log('✅ Compensatie data refreshed successfully');
+            } catch (error) {
+                console.error('❌ Error refreshing compensatie data:', error);
+                // Fallback to full refresh if needed
+                clearAllCache();
+                await silentRefreshData(true);
+            }
         } catch (error) {
             console.error('❌ Fout bij het indienen van compensatie-uren:', error);
             alert('Fout bij het indienen van compensatie-uren: ' + error.message);
@@ -697,14 +722,20 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             console.log('✅ Zittingsvrij ingediend successfully:', result);
             setIsZittingsvrijModalOpen(false);
             
-            // Graceful data reload - clear state and silent background refresh
+            // Graceful data reload - only refresh zittingsvrij data to minimize DOM changes
             console.log('🔄 Gracefully reloading zittingsvrij data...');
-            clearAllCache(); // Clear cache to ensure fresh data
             
-            // Clear current zittingsvrij state to force clean re-render
-            setZittingsvrijItems([]);
-            
-            await silentRefreshData(true); // Silent reload without spinner
+            try {
+                // Only reload zittingsvrij data, not everything
+                const zittingsvrijData = await loadFilteredData(fetchSharePointList, 'IncidenteelZittingVrij', 'zittingsvrij', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+                setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: createLocalDate(z.ZittingsVrijeDagTijd), EindDatum: createLocalDate(z.ZittingsVrijeDagTijdEind) })));
+                console.log('✅ Zittingsvrij data refreshed successfully');
+            } catch (error) {
+                console.error('❌ Error refreshing zittingsvrij data:', error);
+                // Fallback to full refresh if needed
+                clearAllCache();
+                await silentRefreshData(true);
+            }
         } catch (error) {
             console.error('❌ Fout bij het indienen van zittingsvrij:', error);
             alert('Fout bij het indienen van zittingsvrij: ' + error.message);
@@ -715,7 +746,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     const showContextMenu = useCallback(async (e, medewerker, dag, item) => {
         console.log('showContextMenu called:', {
             medewerker: medewerker?.Username,
-            dag: dag.toDateString(),
+            dag: toISODate(dag),
             item: item?.ID,
             hasItem: !!item,
             itemType: item ? Object.keys(item).filter(key => ['RedenId', 'StartCompensatieUren', 'ZittingsVrijeDagTijd'].includes(key)) : 'none',
@@ -875,9 +906,29 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                     itemData.ID || itemData.Id
                                 );
                                 
-                                // Refresh data after deletion - silent background refresh
-                                clearAllCache(); // Clear cache to ensure fresh data
-                                await silentRefreshData(true);
+                                // Refresh data after deletion - only refresh the specific data type
+                                try {
+                                    if (listName === 'Verlof') {
+                                        const verlofData = await loadFilteredData(fetchSharePointList, 'Verlof', 'verlof', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+                                        setVerlofItems((verlofData || []).map(v => ({ ...v, StartDatum: createLocalDate(v.StartDatum), EindDatum: createLocalDate(v.EindDatum) })));
+                                    } else if (listName === 'IncidenteelZittingVrij') {
+                                        const zittingsvrijData = await loadFilteredData(fetchSharePointList, 'IncidenteelZittingVrij', 'zittingsvrij', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+                                        setZittingsvrijItems((zittingsvrijData || []).map(z => ({ ...z, StartDatum: createLocalDate(z.ZittingsVrijeDagTijd), EindDatum: createLocalDate(z.ZittingsVrijeDagTijdEind) })));
+                                    } else if (listName === 'CompensatieUren') {
+                                        const compensatieData = await loadFilteredData(fetchSharePointList, 'CompensatieUren', 'compensatie', weergaveType, huidigJaar, weergaveType === 'week' ? huidigWeek : huidigMaand);
+                                        setCompensatieUrenItems((compensatieData || []).map(c => ({
+                                            ...c,
+                                            StartCompensatieUren: createLocalDate(c.StartCompensatieUren),
+                                            EindeCompensatieUren: createLocalDate(c.EindeCompensatieUren)
+                                        })));
+                                    }
+                                    console.log(`✅ ${listName} data refreshed after deletion`);
+                                } catch (error) {
+                                    console.error(`❌ Error refreshing ${listName} data:`, error);
+                                    // Fallback to full refresh if targeted refresh fails
+                                    clearAllCache();
+                                    await silentRefreshData(true);
+                                }
                                 console.log('✅ Item deleted successfully');
                             } catch (error) {
                                 console.error('❌ Error deleting item:', error);
