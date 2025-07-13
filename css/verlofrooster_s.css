@@ -1303,7 +1303,7 @@ tr.medewerker-rij td {
 }
 
 .team-header {
-    /* Don't set background-color in CSS - let JavaScript handle it via inline styles */
+    background-color: var(--team-kleur, #cccccc); /* Use CSS custom property set by JavaScript */
     color: white;
     padding: 0.6rem 1rem;
     font-weight: 600;
