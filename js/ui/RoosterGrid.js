@@ -165,6 +165,12 @@ const RoosterGrid = ({
                                                 teRenderenBlok = h('div', {
                                                     className: `${blokClasses.join(' ')} status-${status}`,
                                                     'data-afkorting': afkorting,
+                                                    'data-medewerker': medewerker.naam || medewerker.Username,
+                                                    'data-startdatum': item.StartDatum || dag.toISOString(),
+                                                    'data-einddatum': item.EindDatum || dag.toISOString(),
+                                                    'data-status': status,
+                                                    'data-titel': titel,
+                                                    'data-toelichting': item.Toelichting || item.Omschrijving || '',
                                                     style: { backgroundColor: kleur },
                                                     title: titel
                                                 }, isMiddle ? afkorting : '');

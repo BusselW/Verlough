@@ -12,7 +12,8 @@ import {
     getDagenInMaand, 
     formatteerDatum,
     getDagenInWeek, 
-    isVandaag 
+    isVandaag,
+    getDagNaam 
 } from '../utils/dateTimeUtils.js';
 import { getInitialen, getProfilePhotoUrl } from '../utils/userUtils.js';
 import { calculateWeekType } from '../services/scheduleLogic.js';
@@ -33,6 +34,7 @@ import MedewerkerRow from '../ui/userinfo.js';
 import Legenda from '../ui/Legenda.js';
 import RoosterHeader from '../ui/RoosterHeader.js';
 import RoosterGrid from '../ui/RoosterGrid.js';
+import TooltipManager from '../ui/tooltipbar.js';
 
 const { useState, useEffect, useMemo, useCallback, createElement: h, Fragment } = React;
 
@@ -97,10 +99,17 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
            
             // Create a ref callback to add tooltip for holiday
             const headerRef = (element) => {
-                if (element && feestdagNaam && !element.dataset.tooltipAttached && typeof TooltipManager !== 'undefined') {
-                    TooltipManager.attach(element, () => {
-                        return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
-                    });
+                if (element && feestdagNaam && !element.dataset.tooltipAttached) {
+                    // Set data attributes for tooltip system to find
+                    element.dataset.feestdag = feestdagNaam;
+                    element.dataset.datum = dag.toISOString().split('T')[0];
+                    
+                    // Attach tooltip if TooltipManager is available
+                    if (typeof TooltipManager !== 'undefined' && TooltipManager.attach) {
+                        TooltipManager.attach(element, () => {
+                            return TooltipManager.createFeestdagTooltip(feestdagNaam, dag);
+                        });
+                    }
                 }
             };
            
@@ -110,8 +119,8 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                 ref: headerRef
             },
                 h('div', { className: 'dag-header' },
-                    h('span', { className: 'dag-naam' }, formatteerDatum(dag).dagNaam),
-                    h('span', { className: 'dag-nummer' }, formatteerDatum(dag).dagNummer),
+                    h('span', { className: 'dag-naam' }, getDagNaam(dag)),
+                    h('span', { className: 'dag-nummer' }, dag.getDate()),
                     isToday && h('div', { className: 'vandaag-indicator' })
                 )
             ));
