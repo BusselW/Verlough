@@ -344,6 +344,7 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
 
             console.log('✅ Data fetched successfully, processing...');
             const teamsMapped = (teamsData || []).map(item => ({ id: item.Title || item.ID?.toString(), naam: item.Naam || item.Title, kleur: item.Kleur || '#cccccc' }));
+            console.log(`👥 Loaded ${teamsMapped.length} teams:`, teamsMapped.map(t => `${t.naam} (${t.id})`));
             setTeams(teamsMapped);
             const teamNameToIdMap = teamsMapped.reduce((acc, t) => { acc[t.naam] = t.id; return acc; }, {});
             const transformedShiftTypes = (verlofredenenData || []).reduce((acc, item) => {
@@ -525,7 +526,11 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             const result = await createSharePointListItem('Verlof', formData);
             console.log('Verlofaanvraag ingediend:', result);
             setIsVerlofModalOpen(false);
-            refreshData();
+            
+            // Graceful data reload - only reload verlof data
+            console.log('🔄 Gracefully reloading verlof data...');
+            clearAllCache(); // Clear cache to ensure fresh data
+            await refreshData(true); // Force reload with fresh data
         } catch (error) {
             console.error('Fout bij het indienen van verlofaanvraag:', error);
             console.error('Error details:', {
@@ -556,7 +561,11 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             const result = await createSharePointListItem('CompensatieUren', formData);
             console.log('✅ Compensatie-uren ingediend successfully:', result);
             setIsCompensatieModalOpen(false);
-            refreshData();
+            
+            // Graceful data reload - only reload compensatie data
+            console.log('🔄 Gracefully reloading compensatie data...');
+            clearAllCache(); // Clear cache to ensure fresh data
+            await refreshData(true); // Force reload with fresh data
         } catch (error) {
             console.error('❌ Fout bij het indienen van compensatie-uren:', error);
             alert('Fout bij het indienen van compensatie-uren: ' + error.message);
@@ -573,7 +582,11 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             const result = await createSharePointListItem(listName, formData);
             console.log('✅ Zittingsvrij ingediend successfully:', result);
             setIsZittingsvrijModalOpen(false);
-            refreshData();
+            
+            // Graceful data reload - only reload zittingsvrij data
+            console.log('🔄 Gracefully reloading zittingsvrij data...');
+            clearAllCache(); // Clear cache to ensure fresh data
+            await refreshData(true); // Force reload with fresh data
         } catch (error) {
             console.error('❌ Fout bij het indienen van zittingsvrij:', error);
             alert('Fout bij het indienen van zittingsvrij: ' + error.message);
@@ -1503,6 +1516,17 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
     }, [selection]);
 
     const gegroepeerdeData = useMemo(() => {
+        // Ensure we have valid teams and medewerkers data before processing
+        if (!teams || !Array.isArray(teams) || teams.length === 0) {
+            console.log('⚠️ Teams data not yet available for grouping');
+            return {};
+        }
+        
+        if (!medewerkers || !Array.isArray(medewerkers)) {
+            console.log('⚠️ Medewerkers data not yet available for grouping');
+            return {};
+        }
+
         const gefilterdeMedewerkers = medewerkers.filter(m => (!zoekTerm || m.naam.toLowerCase().includes(zoekTerm.toLowerCase())) && (!geselecteerdTeam || m.team === geselecteerdTeam));
         
         // Sort medewerkers by Title column from Medewerkers SharePoint list based on sortDirection
@@ -1518,14 +1542,30 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
             }
         });
         
-        const data = teams.reduce((acc, team) => { if (team && team.id) { acc[team.id] = gesorteerdeFilters.filter(m => m.team === team.id); } return acc; }, {});
+        // Create grouped data with better error handling
+        const data = teams.reduce((acc, team) => { 
+            if (team && team.id) { 
+                const teamMedewerkers = gesorteerdeFilters.filter(m => m.team === team.id);
+                if (teamMedewerkers.length > 0) {
+                    acc[team.id] = teamMedewerkers;
+                    console.log(`👥 Team '${team.naam}' has ${teamMedewerkers.length} members`);
+                }
+            } 
+            return acc; 
+        }, {});
+        
         const medewerkersZonderTeam = gesorteerdeFilters.filter(m => !m.team);
-        if (medewerkersZonderTeam.length > 0) { data['geen_team'] = medewerkersZonderTeam; }
+        if (medewerkersZonderTeam.length > 0) { 
+            data['geen_team'] = medewerkersZonderTeam; 
+            console.log(`👤 ${medewerkersZonderTeam.length} medewerkers without team`);
+        }
+        
+        console.log(`📊 Grouped data created with ${Object.keys(data).length} teams`);
         return data;
     }, [medewerkers, teams, zoekTerm, geselecteerdTeam, sortDirection]);
 
     // Show loading state while refreshing data or if data is not ready
-    if (loading || !periodeData || periodeData.length === 0) {
+    if (loading || !periodeData || periodeData.length === 0 || !teams || teams.length === 0) {
         return h('div', {
             className: 'flex items-center justify-center min-h-screen bg-gray-50',
             style: { fontFamily: 'Inter, sans-serif' }
