@@ -72,7 +72,7 @@ function MedewerkerRow({ medewerker }) {
                 h('span', { 
                     className: 'medewerker-naam', 
                     'data-username': medewerker.Username // Add data-username attribute for profile cards
-                }, medewerker.Naam || 'Onbekende medewerker'), // Fallback voor naam
+                }, medewerker.naam || medewerker.Title || 'Onbekende medewerker'), // Fallback voor naam
                 medewerker.Functie ? h('span', { className: 'medewerker-functie' }, medewerker.Functie) : null
             )
         ),

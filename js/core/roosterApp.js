@@ -871,18 +871,8 @@ const RoosterApp = ({ isUserValidated = true, currentUser, userPermissions }) =>
                                     itemData.ID || itemData.Id
                                 );
                                 
-                                // Refresh data after deletion - clear state and silent background refresh
+                                // Refresh data after deletion - silent background refresh
                                 clearAllCache(); // Clear cache to ensure fresh data
-                                
-                                // Clear relevant state based on item type to force clean re-render
-                                if (listName === 'Verlof') {
-                                    setVerlofItems([]);
-                                } else if (listName === 'IncidenteelZittingVrij') {
-                                    setZittingsvrijItems([]);
-                                } else if (listName === 'CompensatieUren') {
-                                    setCompensatieUrenItems([]);
-                                }
-                                
                                 await silentRefreshData(true);
                                 console.log('✅ Item deleted successfully');
                             } catch (error) {
