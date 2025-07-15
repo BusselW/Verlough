@@ -262,8 +262,28 @@ const ProfielKaarten = (() => {
                 return userData.PictureURL;
             }
             
+            // Try alternative SharePoint photo URLs with better error handling
+            const photoUrls = [
+                `/_layouts/15/userphoto.aspx?size=M&username=${encodeURIComponent(username)}`,
+                `/_layouts/15/userphoto.aspx?size=M&accountname=${encodeURIComponent(username)}`,
+                `/_layouts/15/userphoto.aspx?size=S&username=${encodeURIComponent(username)}`
+            ];
+            
+            for (const photoUrl of photoUrls) {
+                try {
+                    // Test if the URL loads successfully
+                    const response = await fetch(photoUrl, { method: 'HEAD' });
+                    if (response.ok) {
+                        console.log('getProfilePhotoUrl: Using working photo URL:', photoUrl);
+                        return photoUrl;
+                    }
+                } catch (urlError) {
+                    console.warn(`Photo URL failed: ${photoUrl}`, urlError);
+                }
+            }
+            
             // Fallback to initials if no picture URL is available
-            console.log('getProfilePhotoUrl: No PictureURL found, using initials');
+            console.log('getProfilePhotoUrl: No working photo URL found, using initials');
             const match = medewerker && medewerker.Naam ? String(medewerker.Naam).match(/\b\w/g) : null;
             const initials = match ? match.join('') : '?';
             return `${fallbackAvatar}${initials}`;
@@ -745,7 +765,15 @@ const ProfielKaarten = (() => {
         const viewportWidth = window.innerWidth;
         
         // Render the card to get its dimensions
-        ReactDOM.render(cardElement, cardContainer);
+        let cardRoot = null;
+        if (window.ReactDOM && window.ReactDOM.createRoot) {
+            // Use React 18 createRoot if available
+            cardRoot = ReactDOM.createRoot(cardContainer);
+            cardRoot.render(cardElement);
+        } else {
+            // Fallback to legacy ReactDOM.render
+            ReactDOM.render(cardElement, cardContainer);
+        }
         document.body.appendChild(cardContainer);
         
         const cardRect = cardContainer.getBoundingClientRect();
@@ -778,7 +806,7 @@ const ProfielKaarten = (() => {
         });
         
         cardContainer.addEventListener('mouseleave', () => {
-            cardTimeout = setTimeout(hideProfileCard, 300);
+            cardTimeout = setTimeout(hideProfileCard, 200);
         });
         
         activeCard = cardContainer;
@@ -791,7 +819,14 @@ const ProfielKaarten = (() => {
         if (activeCard) {
             try {
                 // Safely unmount React component
-                ReactDOM.unmountComponentAtNode(activeCard);
+                if (activeCard._reactRoot) {
+                    // Use React 18 createRoot unmount
+                    activeCard._reactRoot.unmount();
+                    delete activeCard._reactRoot;
+                } else if (window.ReactDOM && window.ReactDOM.unmountComponentAtNode) {
+                    // Fallback to legacy unmount
+                    ReactDOM.unmountComponentAtNode(activeCard);
+                }
                 
                 // Remove the element if it's still in the DOM
                 if (document.body.contains(activeCard)) {
@@ -809,7 +844,7 @@ const ProfielKaarten = (() => {
      * Apply profile card hover behavior to elements
      * @param {string} selector - CSS selector for elements to apply hover behavior to
      */
-    const init = (selector = '.medewerker-naam, .medewerker-avatar') => {
+    const init = (selector = '.medewerker-kolom') => {
         console.log(`ProfielKaarten: Initializing with selector "${selector}"`);
         
         // Apply immediately for existing elements
@@ -854,7 +889,7 @@ const ProfielKaarten = (() => {
                         clearTimeout(cardTimeout);
                     }
                     
-                    // Set a delay before showing the card
+                    // Set a shorter delay before showing the card
                     cardTimeout = setTimeout(async () => {
                         try {
                             // First, verify the element is still in the DOM
@@ -891,7 +926,7 @@ const ProfielKaarten = (() => {
                             });
                             
                             cardContainer.addEventListener('mouseleave', () => {
-                                cardTimeout = setTimeout(hideProfileCard, 300);
+                                cardTimeout = setTimeout(hideProfileCard, 200);
                             });
                             
                             // Now fetch data asynchronously
@@ -930,7 +965,20 @@ const ProfielKaarten = (() => {
                             }
                             
                             // Render the content into our container
-                            ReactDOM.render(cardElement, cardContainer);
+                            let cardRoot = null;
+                            if (window.ReactDOM && window.ReactDOM.createRoot) {
+                                // Use React 18 createRoot if available
+                                if (cardContainer._reactRoot) {
+                                    cardContainer._reactRoot.render(cardElement);
+                                } else {
+                                    cardRoot = ReactDOM.createRoot(cardContainer);
+                                    cardContainer._reactRoot = cardRoot;
+                                    cardRoot.render(cardElement);
+                                }
+                            } else {
+                                // Fallback to legacy ReactDOM.render
+                                ReactDOM.render(cardElement, cardContainer);
+                            }
                             
                             // Reposition the card now that we know its size
                             const cardRect = cardContainer.getBoundingClientRect();
@@ -957,7 +1005,7 @@ const ProfielKaarten = (() => {
                             console.error('Error showing profile card:', error);
                             hideProfileCard();
                         }
-                    }, 500);
+                    }, 300);
                 });
                 
                 element.addEventListener('mouseleave', () => {
@@ -966,7 +1014,7 @@ const ProfielKaarten = (() => {
                         cardTimeout = null;
                     }
                     
-                    cardTimeout = setTimeout(hideProfileCard, 300);
+                    cardTimeout = setTimeout(hideProfileCard, 200);
                 });
                 
                 // Mark as initialized
